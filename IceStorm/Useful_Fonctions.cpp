@@ -16,6 +16,7 @@ void main_event_loop()
 	int out = 0;
 	while (out == 0)
 	{
+
 		if (SDL_PollEvent(&e) != 0)
 		{
 			if (e.type == SDL_QUIT)
