@@ -28,7 +28,6 @@ void main_event_loop()
 		SDL_RenderClear(Renderer::g_Renderer);
 		Textures_Manager::blitStuff();
 		SDL_RenderPresent(Renderer::g_Renderer);
-
 	}
 }
 
