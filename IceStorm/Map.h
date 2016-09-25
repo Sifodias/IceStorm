@@ -8,8 +8,8 @@
 #include "Useful_Fonctions.h"
 
 //Grid map
-#define GRID_W 240
-#define GRID_H 240
+#define GRID_W 120
+#define GRID_H 120
 
 class Map {
 public : 
