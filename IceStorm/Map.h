@@ -17,15 +17,15 @@ public :
 	~Map();
 	static void loadLevel();
 
-	static int getX();			//obtenir le nombre de x du level.txt
-	static int getY();			//obtenir le nombre de y du level.txt
+	static int getX();			//get the x of the matrix in the stream currentlevel
+	static int getY();			//same for y
 
-	static void checkMate();		//écrire dans la console la matrice actuelle
+	static void checkMate();		//print in the console the current loaded matrix
 
-	static void loadMatrix();	//charger la matrice a partir du flux
+	static void loadMatrix();	//load a matrix from a stream
 
-	static std::ifstream currentLevel;	//le flux contenant le niveau
-	static char **matrix;	//la matrice du niveau
-	static int x;		//le nombre de x du level.txt
-	static int y;		//le nombre de y du level.txt
+	static std::ifstream currentLevel;	//the stream containing the level
+	static char **matrix;	//the matrix of the level
+	static int x;		//the x of the matrix in the stream currentlevel
+	static int y;		//same for y
 };

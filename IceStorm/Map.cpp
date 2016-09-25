@@ -5,7 +5,6 @@ int Map::x = NULL;
 int Map::y = NULL;
 std::ifstream Map::currentLevel;
 
-
 void Map::loadLevel()
 {
 	currentLevel = loadFromTxt(Paths::levelPath);

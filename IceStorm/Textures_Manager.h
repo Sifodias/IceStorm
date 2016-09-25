@@ -17,9 +17,9 @@ public:
 	static SDL_Texture* loadTexture(std::string path);
 	static void blitStuff();
 
-	static std::vector<SDL_Texture*> textureList;	//le tableau contenant toutes les sdl_textures
-	static std::vector<SDL_Texture*> texturesListInit();	//charger toutes les textures dans le tableau a partir du txt
-	static void TMInit();	//initialize le texture manager
+	static std::vector<SDL_Texture*> textureList;	//The table containing the textures
+	static std::vector<SDL_Texture*> texturesListInit();	//Load the textures from a txt containing the names of the files
+	static void TMInit();	//Initialize the textures manager
 
 	static C_Rect camera;
 };

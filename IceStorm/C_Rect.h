@@ -7,8 +7,8 @@ public:
 	int x, y;
 	int w, h;
 
-	//Posay
-	int px, py;		//px, py les x et y relatifs a la matrice, mx, my -> manqueX, manqueY
+	//Test
+	int px, py;
 	int mx, my;
 	~C_Rect();
 };
