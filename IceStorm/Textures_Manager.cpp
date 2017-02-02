@@ -20,7 +20,7 @@ std::vector<SDL_Texture*> Textures_Manager::texturesListInit()
 	while (!tempStream.eof()) {
 		getline(tempStream, catcher);
 		catcher.insert(0, "./Textures/");
-		std::cout << catcher;
+		std::cout << catcher << endl;
 		textTemp = loadTexture(catcher);
 		tempVec.push_back(textTemp);
 	}
