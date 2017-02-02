@@ -1,5 +1,5 @@
 # IceStorm
-A 2D Adventure-Action-Platformer Game Engine
+A 2D Adventure-Action Game Engine
 
 Language: C++
 
