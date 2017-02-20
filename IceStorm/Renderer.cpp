@@ -47,11 +47,6 @@ void Renderer::initAll()
 }
 
 
-void Renderer::renderObjects()
-{
-
-}
-
 void Renderer::quitAll()
 {
 	SDL_DestroyWindow(g_Window);

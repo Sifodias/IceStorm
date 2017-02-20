@@ -15,11 +15,10 @@ class Textures_Manager {
 public:
 
 	static SDL_Texture* loadTexture(std::string path);
-	static void blitStuff();
+	static void blitStuff(); //blits according to the matrix, the textures and the grid
+	static std::vector<SDL_Texture*> texturesListInit();	//Loads the textures from a txt containing the names of the files
+	static void TMInit();	//Initializes the textures manager
 
 	static std::vector<SDL_Texture*> textureList;	//The table containing the textures
-	static std::vector<SDL_Texture*> texturesListInit();	//Load the textures from a txt containing the names of the files
-	static void TMInit();	//Initialize the textures manager
-
 	static C_Rect camera;
 };

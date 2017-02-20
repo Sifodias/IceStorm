@@ -1,3 +1,9 @@
+//TODO :
+//Finish textures engine
+//Physics engine
+//Dialogues engine
+//GH engine
+
 #include "Useful_Fonctions.h"
 
 int main(int argc, char* argv[])

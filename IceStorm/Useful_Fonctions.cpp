@@ -34,9 +34,8 @@ std::ifstream loadFromTxt(std::string path)
 {
 	std::ifstream level_stream;
 	level_stream.open(path.c_str());
-	if (!level_stream)
-	{
-		std::cout << "Can't load the stream\n";
+	if (!level_stream) {
+		std::cout << "Can't load the stream at path : "<< path << std::endl;
 	}
 	return level_stream;
 }

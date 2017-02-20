@@ -17,12 +17,12 @@ public :
 	~Map();
 	static void loadLevel();
 
-	static int getX();			//get the x of the matrix in the stream currentlevel
+	static int getX();			//gets the x of the matrix in the stream currentlevel
 	static int getY();			//same for y
 
-	static void checkMate();		//print in the console the current loaded matrix
+	static void checkMate();		//prints in the console the current loaded matrix
 
-	static void loadMatrix();	//load a matrix from a stream
+	static void loadMatrix();	//loads a matrix from a stream
 
 	static std::ifstream currentLevel;	//the stream containing the level
 	static char **matrix;	//the matrix of the level
