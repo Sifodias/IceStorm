@@ -1,2 +1,3 @@
+x
 wall1.png
 bite.jpg

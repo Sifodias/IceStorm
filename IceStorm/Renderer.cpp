@@ -31,18 +31,18 @@ void Renderer::initAll()
 	}
 	*/
 
-	g_Window = SDL_CreateWindow("FireStorm Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN /*| SDL_WINDOW_FULLSCREEN*/);
-	if (g_Window == NULL)
-	{
+	g_Window = SDL_CreateWindow("FireStorm Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 960, SDL_WINDOW_SHOWN);
+	if (g_Window == NULL) {
 		printf("Can't create the window : %s\n", SDL_GetError());
 	}
 
 	g_Renderer = SDL_CreateRenderer(g_Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (g_Renderer == NULL)
-	{
+	if (g_Renderer == NULL) {
 		printf("Cant create the renderer : %s\n", SDL_GetError());
 	}
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
+	//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
+	//SDL_RenderSetScale(g_Renderer, 2,2);
+	//SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "1");
 	SDL_RenderSetLogicalSize(g_Renderer, 320, 240);
 }
 

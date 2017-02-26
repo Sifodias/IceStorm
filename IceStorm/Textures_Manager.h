@@ -18,7 +18,7 @@ public:
 	static void blitStuff(); //blits according to the matrix, the textures and the grid
 	static std::vector<SDL_Texture*> texturesListInit();	//Loads the textures from a txt containing the names of the files
 	static void TMInit();	//Initializes the textures manager
-
+	static void C_RenderCopy(SDL_Texture* text, C_Rect rect);
 	static std::vector<SDL_Texture*> textureList;	//The table containing the textures
 	static C_Rect camera;
 };

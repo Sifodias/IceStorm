@@ -12,6 +12,6 @@ int main(int argc, char* argv[])
 
 	main_event_loop();
 
-	system("pause");
+	//system("pause");
 	return 0;
 }
