@@ -49,30 +49,42 @@ void Map::loadMatrix() {
 
 bool Map::isItSolid(C_Rect reqt)
 {
-	int rx1 = 0, rx2 = 0, ry1 = 0, ry2 = 0;
-	if (reqt.x != 0) {
-		rx1 = (int)(reqt.x / GRID_W);
-		rx2 = (int)((reqt.x + reqt.w) / GRID_W);
-	}
-	if (reqt.y != 0) {
-		ry1 = (int)(reqt.y / GRID_H);
-		ry2 = (int)((reqt.y + reqt.h) / GRID_H);
-	}
-	if (rx1 < 0 || ry1 < 0 || rx2 > x || ry2 > y) {
-		//std::cout << "S";
-		return true;
+	//faire une grille gridh x gridw
+	//tester pour chaque pt de la grille que pas solide
+	int factory = 0, factorx = 0;
+	/*if (reqt.h%GRID_H)
+		factory++;
+	if (reqt.w%GRID_W)
+		factorx++;*/
+	for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
+		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
+			if (matrix[(int)(reqt.y / GRID_H) + iy][(int)(reqt.x / GRID_W) + ix]) {
+				//std::cout << "X: "<< (int)(reqt.x / GRID_W) + ix << " Y: "<<(int)(reqt.y / GRID_H) + iy<<endl;
+				return true;
+			}
+			if (ix+1>(int)(reqt.w / GRID_W)){
+				if (matrix[(int)(reqt.y/ GRID_H)][(int)((reqt.x+reqt.w) / GRID_W)])
+					return true;
+			}
+		}
+		if (iy+1>(int)(reqt.h / GRID_H)){
+			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
+				if (matrix[(int)((reqt.y+reqt.h) / GRID_H)][(int)(reqt.x / GRID_W) + ix]) {
+					//std::cout << "X: "<< (int)(reqt.x / GRID_W) + ix << " Y: "<<(int)(reqt.y / GRID_H) + iy<<endl;
+					return true;
+				}
+				if (ix + 1>(int)(reqt.w / GRID_W)) {
+					if (matrix[(int)((reqt.y + reqt.h) / GRID_H)][(int)((reqt.x + reqt.w) / GRID_W)])
+						return true;
+				}
+			}
+		}
 	}
 
-	//implement list of solid objects
-	if (!matrix[ry1][rx1])
-		if (!matrix[ry1][rx2])
-			if (!matrix[ry2][rx1])
-				if (!matrix[ry2][rx2]) {
-					//std::cout << "N";
-					return false;
-				}
-	//std::cout << "S";
-	return true;
+
+
+	//std::cout << "N";
+	return false;
 }
 
 void Map::findOccurrence(int charry, double * ix, double * iy)

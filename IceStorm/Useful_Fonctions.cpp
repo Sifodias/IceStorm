@@ -26,7 +26,18 @@ void main_event_loop()
 		}
 		Character::move(e);
 		SDL_RenderClear(Renderer::g_Renderer);
+
+		for (int y = 0; y < Map::y*GRID_H; y += GRID_H) {
+			for (int x = 0; x < Map::x*GRID_W; x += GRID_W) {
+				SDL_SetRenderDrawColor(Renderer::g_Renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+				SDL_RenderDrawLine(Renderer::g_Renderer, x, y, x + (GRID_W*Map::x), y);
+				SDL_RenderDrawLine(Renderer::g_Renderer, x, y, x, y+(GRID_H*Map::y));
+			}
+		}
+		//system("cls");
+		//std::cout << Character::hitBox.x << " | " << Character::hitBox.y + CHAR_H;
 		Textures_Manager::blitStuff();
+		SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderPresent(Renderer::g_Renderer);
 	}
 }

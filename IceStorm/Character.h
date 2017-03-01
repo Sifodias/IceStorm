@@ -4,7 +4,9 @@
 #include <SDL.h>
 #define CSPEED 150
 #define CHAR_H 30
-#define CHAR_W 30
+#define CHAR_W 20
+//#define CHAR_HITBOX_H 15
+//#define CHAR_HITBOX_W 20
 class Character
 {
 public:

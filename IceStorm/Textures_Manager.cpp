@@ -56,9 +56,9 @@ void Textures_Manager::C_RenderCopy(SDL_Texture * text, C_Rect rect)
 {
 	SDL_Rect tempRect;
 	tempRect.x = (int)rect.x;
-	tempRect.y = (int)rect.y;
-	tempRect.h = (int)rect.h;
-	tempRect.w = (int)rect.w;
+	tempRect.y = (int)rect.y; // -CHAR_HITBOX_H;
+	tempRect.h = rect.h; // CHAR_H;
+	tempRect.w = rect.w; //CHAR_W;
 	SDL_RenderCopy(Renderer::g_Renderer, text, NULL, &tempRect);
 }
 

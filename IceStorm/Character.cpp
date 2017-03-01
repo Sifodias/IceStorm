@@ -122,6 +122,13 @@ void Character::doMoves()
 				out = 1;
 			}
 		}
+		//if (!out && tempDistance != 0){
+		//	tempReqt.x = (hitBox.x / GRID_W)*(GRID_W + 1);
+		//	if (!Map::isItSolid(tempReqt)) {
+		//		hitBox.x = tempReqt.x;
+		//		std::cout << "jaja";
+		//	}
+		//}
 	}
 	else if (!speedX) {
 		double tempDistance = t*speedY;
@@ -211,5 +218,5 @@ void Character::initialize()
 	hitBox.h = CHAR_H;
 	hitBox.w = CHAR_W;
 	Map::findOccurrence(69, &hitBox.x, &hitBox.y);
-	texture = Textures_Manager::loadTexture("./Textures/bite.jpg");
+	texture = Textures_Manager::loadTexture("./Textures/testc.png");
 }
