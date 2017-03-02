@@ -2,6 +2,13 @@
 #include <string>
 #include <iostream>
 #include "Character.h"
+#include "Renderer.h"
+#include <iostream>
+#include "Paths.h"
+#include "Map.h"
+#include <SDL_image.h>
+#include "Useful_Fonctions.h"
+
 std::vector<SDL_Texture*> Textures_Manager::textureList;
 C_Rect Textures_Manager::camera;
 

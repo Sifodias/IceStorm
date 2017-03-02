@@ -1,5 +1,7 @@
 #include "Map.h"
-
+#include <iostream>
+#include "Paths.h"
+#include "Useful_Fonctions.h"
 
 std::vector<std::vector<int>> Map::matrix;
 int Map::x = 0;

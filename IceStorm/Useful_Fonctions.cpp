@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "Textures_Manager.h"
 #include "Character.h"
+#include <iostream>
 
 void initialize_game()
 {

@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include <SDL.h>
 void initialize_game();
 
 void main_event_loop();

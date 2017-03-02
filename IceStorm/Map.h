@@ -1,12 +1,11 @@
 #pragma once
-#include <iostream>
+
 #include <fstream>
 #include <SDL.h>
-#include <string>
 #include <vector>
-#include "Paths.h"
-#include "Useful_Fonctions.h"
+#include <string>
 #include "C_Rect.h"
+
 //Grid map
 #define GRID_W 20
 #define GRID_H 20

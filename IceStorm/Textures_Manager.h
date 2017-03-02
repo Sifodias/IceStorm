@@ -1,15 +1,9 @@
 #pragma once
 #include <vector>
 #include <SDL.h>
-#include <SDL_image.h>
-#include <fstream>
-#include "Useful_Fonctions.h"
 #include <string>
-#include "Renderer.h"
-#include <iostream>
-#include "Paths.h"
 #include "C_Rect.h"
-#include "Map.h"
+
 
 class Textures_Manager {
 public:
