@@ -1,5 +1,5 @@
 #pragma once
-
+#include <SDL.h>
 class C_Rect
 {
 public:
@@ -13,6 +13,11 @@ public:
 	}
 	bool operator==(C_Rect reqt){
 		return x == reqt.x && y == reqt.y && w == reqt.w && h == reqt.h;
+	}
+
+	operator SDL_Rect(){
+		SDL_Rect returned = { (int)x, (int)y, w,h };
+		return returned;
 	}
 	double x, y;
 	int w, h;

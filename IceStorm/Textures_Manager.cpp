@@ -52,15 +52,15 @@ void Textures_Manager::TMInit()
 	camera.y = 0;
 }
 
-void Textures_Manager::C_RenderCopy(SDL_Texture * text, C_Rect rect)
-{
-	SDL_Rect tempRect;
-	tempRect.x = (int)rect.x;
-	tempRect.y = (int)rect.y; // -CHAR_HITBOX_H;
-	tempRect.h = rect.h; // CHAR_H;
-	tempRect.w = rect.w; //CHAR_W;
-	SDL_RenderCopy(Renderer::g_Renderer, text, NULL, &tempRect);
-}
+//void Textures_Manager::C_RenderCopy(SDL_Texture * text, C_Rect rect)
+//{
+//	SDL_Rect tempRect;
+//	tempRect.x = (int)rect.x;
+//	tempRect.y = (int)rect.y; // -CHAR_HITBOX_H;
+//	tempRect.h = rect.h; // CHAR_H;
+//	tempRect.w = rect.w; //CHAR_W;
+//	SDL_RenderCopy(Renderer::g_Renderer, text, NULL, &tempRect);
+//}
 
 void Textures_Manager::blitStuff()
 {
@@ -76,5 +76,5 @@ void Textures_Manager::blitStuff()
 			SDL_RenderCopy(Renderer::g_Renderer, textureList[Map::matrix[y][x]], NULL, &blitty);
 		}
 	}
-	C_RenderCopy(Character::texture, Character::hitBox);
+	SDL_RenderCopy(Renderer::g_Renderer, Character::texture, NULL, &(SDL_Rect)Character::hitBox);
 }

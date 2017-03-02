@@ -69,8 +69,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Documents\Visual Studio 2015\SDL\SDL2_image-2.0.1\include;D:\Documents\Visual Studio 2015\SDL\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Documents\Visual Studio 2015\SDL\SDL2_image-2.0.1\lib\x64;D:\Documents\Visual Studio 2015\SDL\SDL2-2.0.5\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Documents\Visual Studio 2015\SDL\SDL2_ttf-2.0.14\include;D:\Documents\Visual Studio 2015\SDL\SDL2_image-2.0.1\include;D:\Documents\Visual Studio 2015\SDL\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Documents\Visual Studio 2015\SDL\SDL2_ttf-2.0.14\lib\x64;D:\Documents\Visual Studio 2015\SDL\SDL2_image-2.0.1\lib\x64;D:\Documents\Visual Studio 2015\SDL\SDL2-2.0.5\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -86,7 +86,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
