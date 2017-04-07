@@ -17,8 +17,7 @@ std::vector<SDL_Texture*> Textures_Manager::texturesListInit()
 	std::ifstream tempStream = loadFromTxt(Paths::texturesListPath);
 	std::vector<SDL_Texture*> tempVec;
 
-	if (!tempStream)
-	{
+	if (!tempStream) {
 		printf("ERROR texturelist not loaded\n");
 		return tempVec;
 	}

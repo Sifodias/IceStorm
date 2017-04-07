@@ -7,4 +7,5 @@ class Paths {
 public :
 	static string levelPath;
 	static string texturesListPath;
+	static string asciiPath;
 };
