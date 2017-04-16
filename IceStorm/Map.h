@@ -12,7 +12,6 @@
 
 class Map {
 public : 
-	
 	~Map();
 	static void loadLevel();
 

@@ -1,4 +1,4 @@
-﻿#include "Useful_Fonctions.h"
+﻿#include "Engine_Manager.h"
 #include "Renderer.h"
 #include "Map.h"
 #include "Textures_Manager.h"
@@ -44,15 +44,15 @@ void main_event_loop()
 		SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 
 		SDL_Rect blitty;
-		blitty.h = 10; blitty.x = 30;
-		blitty.w = 10; blitty.y = 30;
+		blitty.h = 8; blitty.x = 30;
+		blitty.w = 8; blitty.y = 30;
 
-		Text_Printer::printText("Vive le jaja !", 1, blitty);
+		Text_Printer::printText("TEXT", 1, blitty);
 		SDL_RenderPresent(Renderer::g_Renderer);
 	}
 }
 
-std::ifstream loadFromTxt(std::string path)
+std::ifstream loadFile(std::string path)
 {
 	std::ifstream level_stream;
 	level_stream.open(path.c_str());

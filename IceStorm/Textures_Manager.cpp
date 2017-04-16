@@ -7,14 +7,14 @@
 #include "Paths.h"
 #include "Map.h"
 #include <SDL_image.h>
-#include "Useful_Fonctions.h"
+#include "Engine_Manager.h"
 
 std::vector<SDL_Texture*> Textures_Manager::textureList;
 C_Rect Textures_Manager::camera;
 
 std::vector<SDL_Texture*> Textures_Manager::texturesListInit()
 {
-	std::ifstream tempStream = loadFromTxt(Paths::texturesListPath);
+	std::ifstream tempStream = loadFile(Paths::texturesListPath);
 	std::vector<SDL_Texture*> tempVec;
 
 	if (!tempStream) {
@@ -58,16 +58,6 @@ void Textures_Manager::TMInit()
 	camera.y = 0;
 }
 
-//void Textures_Manager::C_RenderCopy(SDL_Texture * text, C_Rect rect)
-//{
-//	SDL_Rect tempRect;
-//	tempRect.x = (int)rect.x;
-//	tempRect.y = (int)rect.y; // -CHAR_HITBOX_H;
-//	tempRect.h = rect.h; // CHAR_H;
-//	tempRect.w = rect.w; //CHAR_W;
-//	SDL_RenderCopy(Renderer::g_Renderer, text, NULL, &tempRect);
-//}
-
 void Textures_Manager::blitStuff()
 {
 	SDL_Rect blitty;
@@ -75,10 +65,8 @@ void Textures_Manager::blitStuff()
 	blitty.w = GRID_W;
 	blitty.x = (int) camera.x;
 	blitty.y = (int) camera.y;
-	for (int y = 0; y < Map::y; y++, blitty.x = 0, blitty.y += blitty.h)
-	{
-		for (int x = 0; x < Map::x; x++, blitty.x += blitty.w)
-		{
+	for (int y = 0; y < Map::y; y++, blitty.x = 0, blitty.y += blitty.h) {
+		for (int x = 0; x < Map::x; x++, blitty.x += blitty.w) {
 			SDL_RenderCopy(Renderer::g_Renderer, textureList[Map::matrix[y][x]], NULL, &blitty);
 		}
 	}

@@ -4,7 +4,7 @@
 #include <SDL_ttf.h>
 #include <string>
 #include <ostream>
-#include "Useful_Fonctions.h"
+#include "Engine_Manager.h"
 #include <iostream>
 #include "Textures_Manager.h"
 #include "Renderer.h"
@@ -16,9 +16,9 @@ class Text_Printer {
 public:
 	//static void addPolice(std::string name);
 	static void Init() {
-		std::ifstream tempStream = loadFromTxt(Paths::asciiPath);
+		std::ifstream tempStream = loadFile(Paths::asciiPath);
 		if (!tempStream) {
-			printf("ERROR policeList not loaded\n");
+			printf("ERROR : policeList not loaded\n");
 			return;
 		}
 

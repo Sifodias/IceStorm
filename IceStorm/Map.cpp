@@ -1,7 +1,7 @@
 #include "Map.h"
 #include <iostream>
 #include "Paths.h"
-#include "Useful_Fonctions.h"
+#include "Engine_Manager.h"
 
 std::vector<std::vector<int>> Map::matrix;
 int Map::x = 0;
@@ -10,7 +10,7 @@ std::ifstream Map::currentLevel;
 
 void Map::loadLevel()
 {
-	currentLevel = loadFromTxt(Paths::levelPath);
+	currentLevel = loadFile(Paths::levelPath);
 	x = getX();
 	y = getY();
 
@@ -34,8 +34,7 @@ void Map::loadMatrix() {
 			h++;
 			continue;
 		}
-		if (reader == ',')
-		{
+		if (reader == ',') {
 			matrix[h].push_back(temp);
 			temp = 0;
 			currentLevel.get(reader);
@@ -54,38 +53,28 @@ bool Map::isItSolid(C_Rect reqt)
 	//faire une grille gridh x gridw
 	//tester pour chaque pt de la grille que pas solide
 	int factory = 0, factorx = 0;
-	/*if (reqt.h%GRID_H)
-		factory++;
-	if (reqt.w%GRID_W)
-		factorx++;*/
 	for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
 		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
 			if (matrix[(int)(reqt.y / GRID_H) + iy][(int)(reqt.x / GRID_W) + ix]) {
-				//std::cout << "X: "<< (int)(reqt.x / GRID_W) + ix << " Y: "<<(int)(reqt.y / GRID_H) + iy<<endl;
 				return true;
 			}
-			if (ix+1>(int)(reqt.w / GRID_W)){
-				if (matrix[(int)(reqt.y/ GRID_H)][(int)((reqt.x+reqt.w) / GRID_W)])
+			if (ix + 1 > (int)(reqt.w / GRID_W)) {
+				if (matrix[(int)(reqt.y / GRID_H)][(int)((reqt.x + reqt.w) / GRID_W)])
 					return true;
 			}
 		}
-		if (iy+1>(int)(reqt.h / GRID_H)){
+		if (iy + 1 > (int)(reqt.h / GRID_H)) {
 			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-				if (matrix[(int)((reqt.y+reqt.h) / GRID_H)][(int)(reqt.x / GRID_W) + ix]) {
-					//std::cout << "X: "<< (int)(reqt.x / GRID_W) + ix << " Y: "<<(int)(reqt.y / GRID_H) + iy<<endl;
+				if (matrix[(int)((reqt.y + reqt.h) / GRID_H)][(int)(reqt.x / GRID_W) + ix]) {
 					return true;
 				}
-				if (ix + 1>(int)(reqt.w / GRID_W)) {
+				if (ix + 1 > (int)(reqt.w / GRID_W)) {
 					if (matrix[(int)((reqt.y + reqt.h) / GRID_H)][(int)((reqt.x + reqt.w) / GRID_W)])
 						return true;
 				}
 			}
 		}
 	}
-
-
-
-	//std::cout << "N";
 	return false;
 }
 
@@ -135,10 +124,8 @@ int Map::getX()
 
 void Map::checkMate()
 {
-	for (int h = 0; h < y; h++)
-	{
-		for (int w = 0; w < x; w++)
-		{
+	for (int h = 0; h < y; h++) {
+		for (int w = 0; w < x; w++) {
 			printf("%d ", matrix[h][w]);
 		}
 		std::cout << std::endl;

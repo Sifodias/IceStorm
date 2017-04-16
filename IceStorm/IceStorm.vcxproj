@@ -129,17 +129,19 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Textures_Manager.cpp" />
     <ClCompile Include="Text_Printer.cpp" />
-    <ClCompile Include="Useful_Fonctions.cpp" />
+    <ClCompile Include="Engine_Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
     <ClInclude Include="C_Rect.h" />
+    <ClInclude Include="Generic_Object.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Objects_Manager.h" />
     <ClInclude Include="Paths.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Textures_Manager.h" />
     <ClInclude Include="Text_Printer.h" />
-    <ClInclude Include="Useful_Fonctions.h" />
+    <ClInclude Include="Engine_Manager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
