@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Paths.h"
 #include "Engine_Manager.h"
+#include "Objects_Manager.h"
 
 std::vector<std::vector<int>> Map::matrix;
 int Map::x = 0;
@@ -55,21 +56,25 @@ bool Map::isItSolid(C_Rect reqt)
 	int factory = 0, factorx = 0;
 	for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
 		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-			if (matrix[(int)(reqt.y / GRID_H) + iy][(int)(reqt.x / GRID_W) + ix]) {
+			if (Objects_Manager::objects[matrix[(int)(reqt.y / GRID_H) + iy]
+				[(int)(reqt.x / GRID_W) + ix]].solid) {
 				return true;
 			}
 			if (ix + 1 > (int)(reqt.w / GRID_W)) {
-				if (matrix[(int)(reqt.y / GRID_H)][(int)((reqt.x + reqt.w) / GRID_W)])
+				if (Objects_Manager::objects[matrix[(int)(reqt.y / GRID_H)]
+					[(int)((reqt.x + reqt.w) / GRID_W)]].solid)
 					return true;
 			}
 		}
 		if (iy + 1 > (int)(reqt.h / GRID_H)) {
 			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-				if (matrix[(int)((reqt.y + reqt.h) / GRID_H)][(int)(reqt.x / GRID_W) + ix]) {
+				if (Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h) / GRID_H)]
+					[(int)(reqt.x / GRID_W) + ix]].solid) {
 					return true;
 				}
 				if (ix + 1 > (int)(reqt.w / GRID_W)) {
-					if (matrix[(int)((reqt.y + reqt.h) / GRID_H)][(int)((reqt.x + reqt.w) / GRID_W)])
+					if (Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h) / GRID_H)]
+						[(int)((reqt.x + reqt.w) / GRID_W)]].solid)
 						return true;
 				}
 			}

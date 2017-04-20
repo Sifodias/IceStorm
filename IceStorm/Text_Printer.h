@@ -14,7 +14,6 @@
 
 class Text_Printer {
 public:
-	//static void addPolice(std::string name);
 	static void Init() {
 		std::ifstream tempStream = loadFile(Paths::asciiPath);
 		if (!tempStream) {
@@ -30,7 +29,7 @@ public:
 			getline(tempStream, catcher);
 			catcher.insert(0, "./Polices/");
 			std::cout << catcher << std::endl;
-			tempVec.push_back(TTF_OpenFont(catcher.c_str(), 200)); //28 ?
+			tempVec.push_back(TTF_OpenFont(catcher.c_str(), 200));
 		}
 
 		char tempStr[2] = "A";

@@ -8,4 +8,5 @@ public :
 	static string levelPath;
 	static string texturesListPath;
 	static string asciiPath;
+	static string objectsDatabasePath;
 };
