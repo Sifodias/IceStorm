@@ -15,7 +15,7 @@ void initialize_game()
 	Text_Printer::Init();
 }
 
-void printGrid(){
+void printGrid() {
 	for (int y = 0; y < Map::y*GRID_H; y += GRID_H) {
 		for (int x = 0; x < Map::x*GRID_W; x += GRID_W) {
 			SDL_SetRenderDrawColor(Renderer::g_Renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
@@ -25,8 +25,23 @@ void printGrid(){
 	}
 }
 
+void handleRoutines(SDL_Event e) {
+	Character::move(e);
+	SDL_RenderClear(Renderer::g_Renderer);
+	
+	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	
+	Text_Printer::handleRoutine();
+	
+	Textures_Manager::blitStuff();
+	
+	SDL_RenderPresent(Renderer::g_Renderer);
+}
+
 void main_event_loop()
 {
+	Text_Printer::addToQueue("J'aime le jaja");
+
 	SDL_Event e;
 	int out = 0;
 	while (out == 0) {
@@ -37,18 +52,7 @@ void main_event_loop()
 				break;
 			}
 		}
-		Character::move(e);
-		SDL_RenderClear(Renderer::g_Renderer);
-		//printGrid();
-		Textures_Manager::blitStuff();
-		SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-
-		SDL_Rect blitty;
-		blitty.h = 8; blitty.x = 30;
-		blitty.w = 8; blitty.y = 30;
-
-		Text_Printer::printText("<Insert text>", 1, blitty);
-		SDL_RenderPresent(Renderer::g_Renderer);
+		handleRoutines(e);
 	}
 }
 
@@ -61,3 +65,4 @@ std::ifstream loadFile(std::string path)
 	}
 	return level_stream;
 }
+
