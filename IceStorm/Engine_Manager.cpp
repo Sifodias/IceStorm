@@ -27,21 +27,20 @@ void printGrid() {
 
 void handleRoutines(SDL_Event e) {
 	Character::move(e);
+
 	SDL_RenderClear(Renderer::g_Renderer);
 	
 	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	
-	Text_Printer::handleRoutine();
-	
 	Textures_Manager::blitStuff();
+	
+	Text_Printer::handleRoutine(e);
 	
 	SDL_RenderPresent(Renderer::g_Renderer);
 }
 
 void main_event_loop()
 {
-	Text_Printer::addToQueue("J'aime le jaja");
-
 	SDL_Event e;
 	int out = 0;
 	while (out == 0) {

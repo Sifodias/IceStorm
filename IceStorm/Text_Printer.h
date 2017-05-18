@@ -11,32 +11,33 @@
 #include "Paths.h"
 #include <array>
 
-#define PRINT_SPEED 100
+#define PRINT_SPEED 20
 
 typedef struct t_nodequeue {
 	std::string str;
 	SDL_Rect rect;
 	int policeID;
 	int iterator;
-	bool hold;
+	SDL_Rect container;
+	bool lock;
 } NodeQueue;
 
 class Text_Printer {
 public:
 	static void Init();
-	static void printText(NodeQueue& node);
-
-
-	static void addToQueue(std::string, 
-		SDL_Rect* rect = NULL, int policeID = 1, bool hold = 1);
-	static void handleRoutine();
+	static void addToQueue(std::string str, 
+		SDL_Rect* container = NULL, int policeID = 1, SDL_Rect* rect = NULL);
+	static void handleRoutine(SDL_Event e);
 
 	static std::vector<std::array<SDL_Texture*, 127>> lettersVec;
 	static std::vector<NodeQueue> queue;
 
-
+private:
+	static void printText(NodeQueue& node);
 	static Uint32 timerA;
 	static Uint32 timerB;
 	static SDL_Rect defaultRect;
+	static SDL_Rect defaultContainer;
+	static int flagOverflow;
 };
 
