@@ -53,6 +53,7 @@ void Text_Printer::addToQueue(std::string str,
 			flagOverflow = 1;
 			std::cout << "Beaucoup trop de texte en queue : " << queue.size() << std::endl;
 		}
+		return;
 	}
 	else flagOverflow = 0;
 	if (rect == NULL) rect = &defaultRect;

@@ -1,2 +1,1 @@
-dosapp.fon
 vgaoem.fon

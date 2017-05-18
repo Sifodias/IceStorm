@@ -5,6 +5,7 @@
 #include "Character.h"
 #include <iostream>
 #include "Text_Printer.h"
+#include "Objects_Manager.h"
 
 void initialize_game()
 {
@@ -13,6 +14,7 @@ void initialize_game()
 	Textures_Manager::TMInit();
 	Character::initialize();
 	Text_Printer::Init();
+	Objects_Manager::init_OM();
 }
 
 void printGrid() {

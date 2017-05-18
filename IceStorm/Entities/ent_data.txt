@@ -1,0 +1,55 @@
+ID: 0
+target: void
+targetnames: void
+texture: 0
+type: 
+flags: 
+crect: 20, 20
+content: "Vive la bite"
+
+ID: 1
+target: wall_test
+targetnames: wall_test
+texture: 3
+type: 
+flags: SOLID
+crect: 20, 20
+content: "Vive la bite"
+
+ID: 2
+target: wall_test
+targetnames: wall_test
+texture: 3
+type: 
+flags: SOLID
+crect: 20, 20
+content: "Gros jaja"
+
+ID: 3
+target: wall_test
+targetnames: wall_test
+texture: 3
+type: 
+flags: SOLID
+crect: 20, 20
+content: "Vive la bite"
+
+ID: 4
+target: wall_test
+targetnames: wall_test
+texture: 3
+type: 
+flages: SOLID
+crect: 20, 20
+content: "Vive la bite"
+
+ID: 5
+target: wall_test
+targetnames: wall_test
+texture: 3
+type: 
+flages: SOLID
+crect: 20, 20
+content: "Vive la bite"
+
+EOF

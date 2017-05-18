@@ -30,6 +30,7 @@ typedef enum t_type {
 
 class GObject {
 public:
+	GObject() : solid(0) {};
 	int ID;
 	std::string target;
 	std::vector<std::string> targetnames;
