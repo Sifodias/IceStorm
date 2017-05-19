@@ -10,6 +10,7 @@ double Character::speedX = 0;
 double Character::speedY = 0;
 std::vector<int> Character::movesX;
 std::vector<int> Character::movesY;
+int Character::mainDirection = 2;
 std::vector<int> Character::direction;
 Uint32 Character::timerA = SDL_GetTicks();
 Uint32 Character::timerB = SDL_GetTicks();
@@ -57,6 +58,42 @@ void Character::handleMoves()
 			break;
 		}
 	}
+
+	out = 0;
+	while (!out && direction.size()) {
+		switch (direction.back()) {
+		case -1:
+			if (state[SDL_SCANCODE_W]) {
+				mainDirection = -1;
+				out = 1;
+			}
+			else direction.pop_back();
+			break;
+
+		case 1:
+			if (state[SDL_SCANCODE_S]) {
+				mainDirection = 1;
+				out = 1;
+			}
+			else direction.pop_back();
+			break;
+
+		case 2:
+			if (state[SDL_SCANCODE_D]) {
+				mainDirection = 2;
+				out = 1;
+			}
+			else direction.pop_back();
+			break;
+		case -2:
+			if (state[SDL_SCANCODE_A]) {
+				mainDirection = -2;
+				out = 1;
+			}
+			else direction.pop_back();
+			break;
+		}
+	}
 	if (!movesX.size()) {
 		speedX = 0;
 	}
@@ -65,7 +102,6 @@ void Character::handleMoves()
 	}
 }
 
-//! stack overflow avec vector ?
 void Character::addMoves(SDL_Event & e)
 {
 	if (e.type == SDL_KEYDOWN)
@@ -77,24 +113,40 @@ void Character::addMoves(SDL_Event & e)
 				movesY.push_back(-1);
 			else if (movesY.back() != -1)
 				movesY.push_back(-1);
+			if (!direction.size())
+				direction.push_back(-1);
+			else if (direction.back() != -1)
+				direction.push_back(-1);
 			break;
 		case SDLK_s:
 			if (!movesY.size())
 				movesY.push_back(1);
 			else if (movesY.back() != 1)
 				movesY.push_back(1);
+			if (!direction.size())
+				direction.push_back(1);
+			else if (direction.back() != 1)
+				direction.push_back(1);
 			break;
 		case SDLK_d:
 			if (!movesX.size())
 				movesX.push_back(2);
 			else if (movesX.back() != 2)
 				movesX.push_back(2);
+			if (!direction.size())
+				direction.push_back(2);
+			else if (direction.back() != 2)
+				direction.push_back(2);
 			break;
 		case SDLK_a:
 			if (!movesX.size())
 				movesX.push_back(-2);
 			else if (movesX.back() != -2)
 				movesX.push_back(-2);
+			if (!direction.size())
+				direction.push_back(-2);
+			else if (direction.back() != -2)
+				direction.push_back(-2);
 			break;
 		}
 	}
@@ -122,13 +174,6 @@ void Character::doMoves()
 				out = 1;
 			}
 		}
-		//if (!out && tempDistance != 0){
-		//	tempReqt.x = (hitBox.x / GRID_W)*(GRID_W + 1);
-		//	if (!Map::isItSolid(tempReqt)) {
-		//		hitBox.x = tempReqt.x;
-		//		std::cout << "jaja";
-		//	}
-		//}
 	}
 	else if (!speedX) {
 		double tempDistance = t*speedY;
@@ -210,7 +255,6 @@ void Character::move(SDL_Event & e)
 	addMoves(e);
 	handleMoves();
 	doMoves();
-	//std::cout << "x: " << hitBox.x << " | y: " << hitBox.y << std::endl;
 }
 
 void Character::initialize()

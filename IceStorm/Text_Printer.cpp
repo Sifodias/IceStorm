@@ -9,6 +9,8 @@ Uint32 Text_Printer::timerB;
 SDL_Rect Text_Printer::defaultRect;
 SDL_Rect Text_Printer::defaultContainer;
 int Text_Printer::flagOverflow;
+SDL_Texture* Text_Printer::dialogBox = NULL;
+SDL_Rect Text_Printer::dialogRect;
 
 void Text_Printer::printText(NodeQueue& node) {
 	SDL_Rect blitRect = node.container;
@@ -92,6 +94,9 @@ void Text_Printer::handleRoutine(SDL_Event e)
 
 		if (queue[0].iterator == queue[0].str.size())
 			queue.erase(queue.begin(), queue.begin() + 1);
+
+		SDL_RenderCopy(Renderer::g_Renderer, dialogBox,
+			NULL, &dialogRect);
 	}
 }
 
@@ -134,4 +139,7 @@ void Text_Printer::Init() {
 	defaultContainer.h = 28; defaultContainer.x = 79;
 	defaultContainer.w = 220; defaultContainer.y = 206;
 	flagOverflow = 0;
+	dialogBox = Textures_Manager::findTexture("dialogBox");
+	dialogRect.x = 0; dialogRect.y = 200;
+	dialogRect.h = 40; dialogRect.w = 320;
 }

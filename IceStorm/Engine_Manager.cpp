@@ -43,6 +43,7 @@ void handleRoutines(SDL_Event e) {
 
 void main_event_loop()
 {
+	Text_Printer::addToQueue("JAJAAA");
 	SDL_Event e;
 	int out = 0;
 	while (out == 0) {

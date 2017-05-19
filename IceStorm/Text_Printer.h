@@ -39,5 +39,7 @@ private:
 	static SDL_Rect defaultRect;
 	static SDL_Rect defaultContainer;
 	static int flagOverflow;
+	static SDL_Texture* dialogBox;
+	static SDL_Rect dialogRect;
 };
 
