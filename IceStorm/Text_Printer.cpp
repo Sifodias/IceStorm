@@ -131,7 +131,7 @@ void Text_Printer::Init() {
 	timerA = timerB = SDL_GetTicks();
 	defaultRect.h = 8; defaultRect.x = 30;
 	defaultRect.w = 8; defaultRect.y = 30;
-	defaultContainer.h = 24; defaultContainer.x = 50;
-	defaultContainer.w = 120; defaultContainer.y = 150;
+	defaultContainer.h = 28; defaultContainer.x = 79;
+	defaultContainer.w = 220; defaultContainer.y = 206;
 	flagOverflow = 0;
 }

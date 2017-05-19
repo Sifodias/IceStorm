@@ -18,8 +18,8 @@ public:
 
 	static std::vector<int> movesX;
 	static std::vector<int> movesY;	
-	static int mainDirection;	//1 = down	| -1 = up
-								//2 = right | -2 = left
+	static std::vector<int> direction;	//1 = down	| -1 = up
+										//2 = right | -2 = left
 	static double speedX;
 	static double speedY;
 	static C_Rect hitBox;

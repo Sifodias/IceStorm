@@ -10,7 +10,7 @@ double Character::speedX = 0;
 double Character::speedY = 0;
 std::vector<int> Character::movesX;
 std::vector<int> Character::movesY;
-int Character::mainDirection = 2;
+std::vector<int> Character::direction;
 Uint32 Character::timerA = SDL_GetTicks();
 Uint32 Character::timerB = SDL_GetTicks();
 //

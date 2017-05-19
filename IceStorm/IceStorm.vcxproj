@@ -123,6 +123,7 @@
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="C_Rect.cpp" />
+    <ClCompile Include="Generic_Object.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Objects_Manager.cpp" />
     <ClCompile Include="Paths.cpp" />

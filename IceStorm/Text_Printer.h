@@ -26,7 +26,7 @@ class Text_Printer {
 public:
 	static void Init();
 	static void addToQueue(std::string str, 
-		SDL_Rect* container = NULL, int policeID = 1, SDL_Rect* rect = NULL);
+		SDL_Rect* container = NULL, int policeID = 0, SDL_Rect* rect = NULL);
 	static void handleRoutine(SDL_Event e);
 
 	static std::vector<std::array<SDL_Texture*, 127>> lettersVec;

@@ -14,15 +14,17 @@ public:
 		init_OM();
 	}
 
-	void init_OM();
+	static void init_OM();
 
-	GObject* find(string target) {
+	static GObject* find(string target) {
 		for (auto i = objects.begin(); i != objects.end(); ++i) {
 			if (!(*i)->target.compare(target))
 				return *i;
 		}
 		return NULL;
 	}
+
+	static bool identify(string target, string wanted);
 
 	static vector<GObject*> objects;
 };

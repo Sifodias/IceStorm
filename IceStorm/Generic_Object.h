@@ -15,13 +15,14 @@ Each object has :
 . ...	)
 All objects are stored in a .txt, which is loaded into a vector of objects
 
-Each object has a TRIGGER function !!!!!
+Each object has a TRIGGER function 
 */
-
 #include <string>
 #include <SDL.h>
 #include "C_Rect.h"
 #include <vector>
+#include "Text_Printer.h"
+
 typedef enum t_type {
 	BUTTON,
 	DIALOG
@@ -38,18 +39,6 @@ public:
 	SDL_Texture* texture;
 	C_Rect rect;
 	bool solid;
-	void trigger() {	//trigger every targetnames + print the content
-		for (int i = 0; i < targetnames.size(); i++) {
-			//find targets
-			//trigger
-		}
-		switch (type) {
-		case BUTTON:
-			break;
-		case DIALOG:
-			//print content
-			break;
-		}
-	}
+	void trigger();
 	std::string content;
 };
