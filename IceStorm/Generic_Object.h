@@ -25,13 +25,16 @@ Each object has a TRIGGER function
 
 typedef enum t_type {
 	BUTTON,
-	DIALOG
+	DIALOG,
+	BREAKABLE,
+	DOOR,
+	GENERIC
 	//...
 } OTYPE;
 
 class GObject {
 public:
-	GObject() : solid(0) {};
+	GObject() : ID(0), solid(0), type(GENERIC), texture(NULL) {};
 	int ID;
 	std::string target;
 	std::vector<std::string> targetnames;
@@ -39,6 +42,9 @@ public:
 	SDL_Texture* texture;
 	C_Rect rect;
 	bool solid;
-	void trigger();
 	std::string content;
+
+	bool flagTrigger; //prevent infinite trigger
+
+	void trigger();
 };

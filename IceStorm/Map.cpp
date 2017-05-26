@@ -53,7 +53,6 @@ bool Map::isItSolid(C_Rect reqt)
 {
 	//faire une grille gridh x gridw
 	//tester pour chaque pt de la grille que pas solide
-	int factory = 0, factorx = 0;
 	for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
 		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
 			if (Objects_Manager::objects[matrix[(int)(reqt.y / GRID_H) + iy]
@@ -81,6 +80,87 @@ bool Map::isItSolid(C_Rect reqt)
 		}
 	}
 	return false;
+}
+
+void Map::trigger(C_Rect reqt, int direction)
+{
+	switch (direction) {
+	case 2:
+		for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
+			if (matrix[(int)(reqt.y / GRID_H) + iy]
+				[(int)((reqt.x + reqt.w+1) / GRID_W)]) {
+				Objects_Manager::objects[matrix[(int)(reqt.y / GRID_H) + iy]
+					[(int)((reqt.x + reqt.w + 1) / GRID_W)]]->trigger();
+				return;
+			}
+		}
+		if (reqt.h%GRID_H) {
+			if (matrix[(int)((reqt.y + reqt.h) / GRID_H)]
+				[(int)((reqt.x + reqt.w+1) / GRID_W)]) {
+				Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h) / GRID_H)]
+					[(int)((reqt.x + reqt.w+1) / GRID_W)]]->trigger();
+				return;
+			}
+		}
+		break;
+
+		case -2:
+			for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
+				if (matrix[(int)(reqt.y / GRID_H) + iy]
+					[(int)((reqt.x  - 1) / GRID_W)]) {
+					Objects_Manager::objects[matrix[(int)(reqt.y / GRID_H) + iy]
+						[(int)((reqt.x - 1) / GRID_W)]]->trigger();
+					return;
+				}
+			}
+			if (reqt.h%GRID_H) {
+				if (matrix[(int)((reqt.y + reqt.h) / GRID_H)]
+					[(int)((reqt.x - 1) / GRID_W)]) {
+					Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h) / GRID_H)]
+						[(int)((reqt.x - 1) / GRID_W)]]->trigger();
+					return;
+				}
+			}
+			break;
+
+		case 1:
+			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
+				if (matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
+					[(int)((reqt.x) / GRID_W) + ix]) {
+					Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
+						[(int)((reqt.x) / GRID_W) + ix]]->trigger();
+					return;
+				}
+			}
+			if (reqt.h%GRID_H) {
+				if (matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
+					[(int)((reqt.x + reqt.w) / GRID_W)]) {
+					Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
+						[(int)((reqt.x + reqt.w) / GRID_W)]]->trigger();
+					return;
+				}
+			}
+			break;
+
+		case -1:
+			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
+				if (matrix[(int)((reqt.y - 1) / GRID_H)]
+					[(int)((reqt.x) / GRID_W) + ix]) {
+					Objects_Manager::objects[matrix[(int)((reqt.y - 1) / GRID_H)]
+						[(int)((reqt.x) / GRID_W) + ix]]->trigger();
+					return;
+				}
+			}
+			if (reqt.h%GRID_H) {
+				if (matrix[(int)((reqt.y - 1) / GRID_H)]
+					[(int)((reqt.x + reqt.w) / GRID_W)]) {
+					Objects_Manager::objects[matrix[(int)((reqt.y - 1) / GRID_H)]
+						[(int)((reqt.x + reqt.w) / GRID_W)]]->trigger();
+					return;
+				}
+			}
+			break;
+	}
 }
 
 void Map::findOccurrence(int charry, double * ix, double * iy)

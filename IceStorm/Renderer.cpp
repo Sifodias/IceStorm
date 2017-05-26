@@ -20,12 +20,12 @@ void Renderer::initAll()
 	}
 
 	if (TTF_Init() == -1) {
-		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+		printf("SDL_ttf could not Init! SDL_ttf Error: %s\n", TTF_GetError());
 	}
 
 	//if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	//{
-	//	printf("SDL_mixer couldn't initialize : %s\n", Mix_GetError());
+	//	printf("SDL_mixer couldn't Init : %s\n", Mix_GetError());
 	//}
 
 	Uint32 flags = SDL_WINDOW_SHOWN;// | SDL_WINDOW_FULLSCREEN;

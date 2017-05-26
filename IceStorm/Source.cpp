@@ -1,14 +1,10 @@
 //TODO :
-//Finish textures engine
-//Physics engine
-//Dialogues engine
-//GH engine
-//#include <SDL.h>
+//mettre des securités sur les vectors
 #include "Engine_Manager.h"
 
 int main(int argc, char* argv[])
 {
-	initialize_game();
+	Init_game();
 
 	main_event_loop();
 

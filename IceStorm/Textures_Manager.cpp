@@ -55,7 +55,7 @@ SDL_Texture* Textures_Manager::loadTexture(std::string path)
 	return newTexture;
 }
 
-void Textures_Manager::TMInit()
+void Textures_Manager::Init()
 {
 	textureList = texturesListInit();
 	camera.x = 0;
@@ -85,5 +85,8 @@ void Textures_Manager::blitStuff()
 				Objects_Manager::objects[Map::matrix[y][x]]->texture, NULL, &blitty);
 		}
 	}
-	SDL_RenderCopy(Renderer::g_Renderer, Character::texture, NULL, &(SDL_Rect)Character::hitBox);
+	blitty = (SDL_Rect)Character::hitBox;
+	blitty.y -= CHAR_H - CHAR_HITBOX_H;
+	blitty.h = CHAR_H;
+	SDL_RenderCopy(Renderer::g_Renderer, Character::texture, NULL, &blitty);
 }

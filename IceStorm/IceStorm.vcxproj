@@ -141,6 +141,7 @@
     <ClInclude Include="Objects_Manager.h" />
     <ClInclude Include="Paths.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Sprites_Handler.h" />
     <ClInclude Include="Textures_Manager.h" />
     <ClInclude Include="Text_Printer.h" />
     <ClInclude Include="Engine_Manager.h" />

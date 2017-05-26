@@ -5,7 +5,7 @@ class Renderer {
 public:
 	//Renderer();
 
-	static void initAll();		//Initializes SDL modules
+	static void initAll();		//Inits SDL modules
 	static void quitAll();		//Closes SDL modules
 	
 	static SDL_Renderer* g_Renderer;	//Renderer of the engine

@@ -7,13 +7,13 @@
 #include "Text_Printer.h"
 #include "Objects_Manager.h"
 
-void initialize_game()
+void Init_game()
 {
 	Renderer::initAll();
 	Map::loadLevel();
-	Textures_Manager::TMInit();
-	Character::initialize();
-	Objects_Manager::init_OM();
+	Textures_Manager::Init();
+	Character::Init();
+	Objects_Manager::Init();
 	Text_Printer::Init();
 }
 
@@ -28,7 +28,7 @@ void printGrid() {
 }
 
 void handleRoutines(SDL_Event e) {
-	Character::move(e);
+	Character::characterRoutine(e);
 
 	SDL_RenderClear(Renderer::g_Renderer);
 	
@@ -43,7 +43,6 @@ void handleRoutines(SDL_Event e) {
 
 void main_event_loop()
 {
-	Text_Printer::addToQueue("JAJAAA");
 	SDL_Event e;
 	int out = 0;
 	while (out == 0) {

@@ -14,7 +14,9 @@ int Character::mainDirection = 2;
 std::vector<int> Character::direction;
 Uint32 Character::timerA = SDL_GetTicks();
 Uint32 Character::timerB = SDL_GetTicks();
+bool Character::jumpLock = 0;
 //
+
 void Character::handleMoves()
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -22,8 +24,12 @@ void Character::handleMoves()
 	while (!out && movesY.size()) {
 		switch (movesY.back()) {
 		case -1:
-			if (state[SDL_SCANCODE_W]) {
-				speedY = -CSPEED;
+			if (state[SDL_SCANCODE_W] && !jumpLock) {
+				if (GRAVITY_ENABLED) {
+					speedY = -JSPEED;
+					jumpLock = 1;
+				}
+				else speedY = -CSPEED;
 				out = 1;
 			}
 			else movesY.pop_back();
@@ -97,8 +103,21 @@ void Character::handleMoves()
 	if (!movesX.size()) {
 		speedX = 0;
 	}
-	if (!movesY.size()) {
+	if (!GRAVITY_ENABLED) {
+		if (!movesY.size()) {
+			speedY = 0;
+		}
+		return;
+	}
+	//else if gravity is enabled
+	if (speedY <= 300)
+		speedY += GRAVITY;
+	C_Rect temprect = hitBox;
+	temprect.y += 1;
+	if (Map::isItSolid(temprect) && speedY > 0) {
 		speedY = 0;
+		if (!state[SDL_SCANCODE_W])
+			jumpLock = 0;
 	}
 }
 
@@ -161,40 +180,30 @@ void Character::doMoves()
 	int out = 0;
 	if (!speedY) {
 		double tempDistance = t*speedX;
-		while (!out && tempDistance != 0) {
+		while (!out && tempDistance*speedX >= 0) {
 			tempReqt.x = hitBox.x + tempDistance;
 			if (!Map::isItSolid(tempReqt)) {
 				hitBox.x += tempDistance;
 				out = 1;
 			}
-			else {
-				tempDistance += (-1)*(speedX / abs(speedX));
-			}
-			if ((tempDistance > 0 && speedX < 0) || (tempDistance < 0 && speedX > 0)) {
-				out = 1;
-			}
+			else tempDistance += (-1)*(speedX / abs(speedX));
 		}
 	}
 	else if (!speedX) {
 		double tempDistance = t*speedY;
-		while (!out && tempDistance != 0) {
+		while (!out && tempDistance*speedY >= 0) {
 			tempReqt.y = hitBox.y + tempDistance;
 			if (!Map::isItSolid(tempReqt)) {
 				hitBox.y += tempDistance;
 				out = 1;
 			}
-			else {
-				tempDistance += (-1)*(speedY / abs(speedY));
-			}
-			if ((tempDistance > 0 && speedY < 0) || (tempDistance < 0 && speedY > 0)) {
-				out = 1;
-			}
+			else tempDistance += (-1)*(speedY / abs(speedY));
 		}
 	}
 	else {
 		double tempDistanceY = t*speedY;
 		double tempDistanceX = t*speedX;
-		while (!out && tempDistanceX != 0 && tempDistanceY != 0) {
+		while (!out && tempDistanceX*speedX >= 0 && tempDistanceY*speedY >= 0) {
 			tempReqt.x = hitBox.x + tempDistanceX;
 			tempReqt.y = hitBox.y + tempDistanceY;
 			if (!Map::isItSolid(tempReqt)) {
@@ -206,43 +215,31 @@ void Character::doMoves()
 				tempDistanceX += (-1)*(speedX / abs(speedX));
 				tempDistanceY += (-1)*(speedY / abs(speedY));
 			}
-			if ((tempDistanceY > 0 && speedY < 0) || (tempDistanceY < 0 && speedY > 0)) {
-				out = 1;
-			}
+
 		}
 		if (backup == hitBox) {
 			out = 0;
 			double tempDistance = t*speedX;
-			while (!out && tempDistance != 0) {
+			while (!out && tempDistance*speedX >= 0) {
 				tempReqt.x = hitBox.x + tempDistance;
 				tempReqt.y = hitBox.y;
 				if (!Map::isItSolid(tempReqt)) {
 					hitBox.x += tempDistance;
 					out = 1;
 				}
-				else {
-					tempDistance += (-1)*(speedX / abs(speedX));
-				}
-				if ((tempDistance > 0 && speedX < 0) || (tempDistance < 0 && speedX > 0)) {
-					out = 1;
-				}
+				else tempDistance += (-1)*(speedX / abs(speedX));
 			}
 
 			tempDistance = t*speedY;
 			out = 0;
-			while (!out && tempDistance != 0) {
+			while (!out && tempDistance*speedY >= 0) {
 				tempReqt.y = hitBox.y + tempDistance;
 				tempReqt.x = hitBox.x;
 				if (!Map::isItSolid(tempReqt)) {
 					hitBox.y += tempDistance;
 					out = 1;
 				}
-				else {
-					tempDistance += (-1)*(speedY / abs(speedY));
-				}
-				if ((tempDistance > 0 && speedY < 0) || (tempDistance < 0 && speedY > 0)) {
-					out = 1;
-				}
+				else tempDistance += (-1)*(speedY / abs(speedY));
 			}
 		}
 	}
@@ -257,10 +254,20 @@ void Character::move(SDL_Event & e)
 	doMoves();
 }
 
-void Character::initialize()
+void Character::characterRoutine(SDL_Event & e)
 {
-	hitBox.h = CHAR_H;
-	hitBox.w = CHAR_W;
+	move(e);
+	if (e.type == SDL_KEYDOWN) {
+		if (e.key.keysym.sym == SDLK_j) {
+			Map::trigger(hitBox, mainDirection);
+		}
+	}
+}
+
+void Character::Init()
+{
+	hitBox.h = CHAR_HITBOX_H;
+	hitBox.w = CHAR_HITBOX_W;
 	Map::findOccurrence(69, &hitBox.x, &hitBox.y);
 	texture = Textures_Manager::loadTexture("./Textures/testc.png");
 }

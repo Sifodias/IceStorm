@@ -1,19 +1,17 @@
 ID: 0
-target: void
-targetnames: void
-texture: 0
-type: 
-flags: 
-crect: 20, 20
-content: "Vive la bite"
 
 ID: 1
 target: wall_test
-targetnames: wall_test
-texture: pannel.png
-type: 
+texture: wall2.png
 flags: SOLID
-crect: 20, 20
-content: "Vive la bite"
+
+
+ID: 2
+target: sign
+texture: sign.png
+flags: 
+content: Vive la bite !
+
+
 
 EOF

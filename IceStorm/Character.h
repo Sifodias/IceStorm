@@ -3,10 +3,17 @@
 #include <vector>
 #include <SDL.h>
 #define CSPEED 150
+
+#define JSPEED 500	//jump speed
+#define GRAVITY 40
+#define JUMPLOCK 1
+#define GRAVITY_ENABLED 1
+
 #define CHAR_H 30
 #define CHAR_W 20
-//#define CHAR_HITBOX_H 15
-//#define CHAR_HITBOX_W 20
+#define CHAR_HITBOX_H 30
+#define CHAR_HITBOX_W 20
+
 class Character
 {
 public:
@@ -14,7 +21,8 @@ public:
 	static void addMoves(SDL_Event& e);
 	static void doMoves();
 	static void move(SDL_Event& e);
-	static void initialize();
+	static void characterRoutine(SDL_Event& e);
+	static void Init();
 
 	static std::vector<int> movesX;
 	static std::vector<int> movesY;	
@@ -25,6 +33,8 @@ public:
 	static double speedY;
 	static C_Rect hitBox;
 	static SDL_Texture* texture;
+
+	static bool jumpLock;
 
 	static Uint32 timerA;
 	static Uint32 timerB;

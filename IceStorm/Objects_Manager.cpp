@@ -3,7 +3,7 @@
 
 vector<GObject*> Objects_Manager::objects;
 
-void Objects_Manager::init_OM() {
+void Objects_Manager::Init() {
 	ifstream tempStream = loadFile(Paths::entData);
 	tempStream.seekg(0);
 	std::string buffer;
@@ -49,6 +49,8 @@ void Objects_Manager::init_OM() {
 					continue;
 				}
 				if (identify(buffer, "content: ")) {
+					buffer.erase(buffer.begin(), buffer.begin() + 9);
+					currentObject->content = buffer;
 					std::getline(tempStream, buffer);
 					continue;
 				}

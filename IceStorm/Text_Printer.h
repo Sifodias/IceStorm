@@ -11,7 +11,7 @@
 #include "Paths.h"
 #include <array>
 
-#define PRINT_SPEED 20
+#define PRINT_SPEED 0
 
 typedef struct t_nodequeue {
 	std::string str;

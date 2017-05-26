@@ -1,5 +1,3 @@
-//ajouter des timers supplémentaires en fonction de la ponctuation
-
 #include "Text_Printer.h"
 
 std::vector<std::array<SDL_Texture*, 127>> Text_Printer::lettersVec;
@@ -50,7 +48,8 @@ void Text_Printer::printText(NodeQueue& node) {
 void Text_Printer::addToQueue(std::string str,
 	SDL_Rect* container, int policeID, SDL_Rect* rect)
 {
-	if (queue.size() > 1000) {
+	if (!str.size()) return;
+	if (queue.size() > 10000) {
 		if (!flagOverflow) {
 			flagOverflow = 1;
 			std::cout << "Beaucoup trop de texte en queue : " << queue.size() << std::endl;
@@ -72,6 +71,8 @@ void Text_Printer::handleRoutine(SDL_Event e)
 {
 	timerB = SDL_GetTicks();
 	if (queue.size() > 0) {
+		SDL_RenderCopy(Renderer::g_Renderer, dialogBox,
+			NULL, &dialogRect);
 		printText(queue[0]);
 		if (queue[0].lock) {
 			//print a ->
@@ -82,6 +83,8 @@ void Text_Printer::handleRoutine(SDL_Event e)
 					queue[0].str.erase(0, queue[0].iterator);
 					queue[0].lock = 0;
 					queue[0].iterator = 0;
+					if (queue[0].iterator == queue[0].str.size())
+						queue.erase(queue.begin(), queue.begin() + 1);
 				}
 			}
 			return;
@@ -91,12 +94,6 @@ void Text_Printer::handleRoutine(SDL_Event e)
 			timerA = timerB = SDL_GetTicks();
 			return;
 		}
-
-		if (queue[0].iterator == queue[0].str.size())
-			queue.erase(queue.begin(), queue.begin() + 1);
-
-		SDL_RenderCopy(Renderer::g_Renderer, dialogBox,
-			NULL, &dialogRect);
 	}
 }
 
@@ -137,9 +134,9 @@ void Text_Printer::Init() {
 	defaultRect.h = 8; defaultRect.x = 30;
 	defaultRect.w = 8; defaultRect.y = 30;
 	defaultContainer.h = 28; defaultContainer.x = 79;
-	defaultContainer.w = 220; defaultContainer.y = 206;
+	defaultContainer.w = 220; defaultContainer.y = 208;
 	flagOverflow = 0;
-	dialogBox = Textures_Manager::findTexture("dialogBox");
+	dialogBox = Textures_Manager::findTexture("dialog_box.png");
 	dialogRect.x = 0; dialogRect.y = 200;
 	dialogRect.h = 40; dialogRect.w = 320;
 }

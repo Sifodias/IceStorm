@@ -11,10 +11,10 @@ using namespace std;
 class Objects_Manager {
 public:
 	Objects_Manager() {
-		init_OM();
+		Init();
 	}
 
-	static void init_OM();
+	static void Init();
 
 	static GObject* find(string target) {
 		for (auto i = objects.begin(); i != objects.end(); ++i) {
@@ -39,4 +39,15 @@ type: <string type>
 flags: <strings flags>
 crect: <h, w>
 content: <string content>
+
+Example :
+
+ID: 0
+target: wall_test
+targetnames: wall_test
+texture: pannel.png
+type: BUTTON
+flags: SOLID
+crect: 20, 20
+content: Vive la bite !
 */

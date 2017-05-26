@@ -24,6 +24,8 @@ public :
 
 	static bool isItSolid(C_Rect reqt); //checks if the element at the given coord is solid
 
+	static void trigger(C_Rect reqt, int direction);
+
 	static void findOccurrence(int charry, double* ix, double* iy);
 
 	static std::ifstream currentLevel;	//the stream containing the level
