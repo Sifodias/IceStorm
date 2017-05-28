@@ -48,6 +48,12 @@ void Map::loadMatrix() {
 	}
 	matrix[h].push_back(temp);
 }
+int Map::getIdObject(int ay, int iy, int ax, int ix) {
+	if ((ay / GRID_H) + iy < y && (ax / GRID_W) + ix < x)
+		return matrix[(int)(ay / GRID_H) + iy]
+		[(int)(ax / GRID_W) + ix];
+	return 1;
+}
 
 bool Map::isItSolid(C_Rect reqt)
 {
@@ -55,25 +61,25 @@ bool Map::isItSolid(C_Rect reqt)
 	//tester pour chaque pt de la grille que pas solide
 	for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
 		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-			if (Objects_Manager::objects[matrix[(int)(reqt.y / GRID_H) + iy]
-				[(int)(reqt.x / GRID_W) + ix]]->solid) {
+			if (Objects_Manager::objects[getIdObject(reqt.y, iy,
+				reqt.x, ix)]->checkFlag("SOLID")) {
 				return true;
 			}
 			if (ix + 1 > (int)(reqt.w / GRID_W)) {
-				if (Objects_Manager::objects[matrix[(int)(reqt.y / GRID_H)]
-					[(int)((reqt.x + reqt.w) / GRID_W)]]->solid)
+				if (Objects_Manager::objects[getIdObject(reqt.y, 0,
+					reqt.x + reqt.w, 0)]->checkFlag("SOLID"))
 					return true;
 			}
 		}
 		if (iy + 1 > (int)(reqt.h / GRID_H)) {
 			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-				if (Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h) / GRID_H)]
-					[(int)(reqt.x / GRID_W) + ix]]->solid) {
+				if (Objects_Manager::objects[getIdObject(reqt.y + reqt.h, 0, reqt.x, ix)
+				]->checkFlag("SOLID")) {
 					return true;
 				}
 				if (ix + 1 > (int)(reqt.w / GRID_W)) {
-					if (Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h) / GRID_H)]
-						[(int)((reqt.x + reqt.w) / GRID_W)]]->solid)
+					if (Objects_Manager::objects[getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w, 0)
+					]->checkFlag("SOLID"))
 						return true;
 				}
 			}
@@ -88,7 +94,7 @@ void Map::trigger(C_Rect reqt, int direction)
 	case 2:
 		for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
 			if (matrix[(int)(reqt.y / GRID_H) + iy]
-				[(int)((reqt.x + reqt.w+1) / GRID_W)]) {
+				[(int)((reqt.x + reqt.w + 1) / GRID_W)]) {
 				Objects_Manager::objects[matrix[(int)(reqt.y / GRID_H) + iy]
 					[(int)((reqt.x + reqt.w + 1) / GRID_W)]]->trigger();
 				return;
@@ -96,70 +102,70 @@ void Map::trigger(C_Rect reqt, int direction)
 		}
 		if (reqt.h%GRID_H) {
 			if (matrix[(int)((reqt.y + reqt.h) / GRID_H)]
-				[(int)((reqt.x + reqt.w+1) / GRID_W)]) {
+				[(int)((reqt.x + reqt.w + 1) / GRID_W)]) {
 				Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h) / GRID_H)]
-					[(int)((reqt.x + reqt.w+1) / GRID_W)]]->trigger();
+					[(int)((reqt.x + reqt.w + 1) / GRID_W)]]->trigger();
 				return;
 			}
 		}
 		break;
 
-		case -2:
-			for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
-				if (matrix[(int)(reqt.y / GRID_H) + iy]
-					[(int)((reqt.x  - 1) / GRID_W)]) {
-					Objects_Manager::objects[matrix[(int)(reqt.y / GRID_H) + iy]
-						[(int)((reqt.x - 1) / GRID_W)]]->trigger();
-					return;
-				}
+	case -2:
+		for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
+			if (matrix[(int)(reqt.y / GRID_H) + iy]
+				[(int)((reqt.x - 1) / GRID_W)]) {
+				Objects_Manager::objects[matrix[(int)(reqt.y / GRID_H) + iy]
+					[(int)((reqt.x - 1) / GRID_W)]]->trigger();
+				return;
 			}
-			if (reqt.h%GRID_H) {
-				if (matrix[(int)((reqt.y + reqt.h) / GRID_H)]
-					[(int)((reqt.x - 1) / GRID_W)]) {
-					Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h) / GRID_H)]
-						[(int)((reqt.x - 1) / GRID_W)]]->trigger();
-					return;
-				}
+		}
+		if (reqt.h%GRID_H) {
+			if (matrix[(int)((reqt.y + reqt.h) / GRID_H)]
+				[(int)((reqt.x - 1) / GRID_W)]) {
+				Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h) / GRID_H)]
+					[(int)((reqt.x - 1) / GRID_W)]]->trigger();
+				return;
 			}
-			break;
+		}
+		break;
 
-		case 1:
-			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-				if (matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
-					[(int)((reqt.x) / GRID_W) + ix]) {
-					Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
-						[(int)((reqt.x) / GRID_W) + ix]]->trigger();
-					return;
-				}
+	case 1:
+		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
+			if (matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
+				[(int)((reqt.x) / GRID_W) + ix]) {
+				Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
+					[(int)((reqt.x) / GRID_W) + ix]]->trigger();
+				return;
 			}
-			if (reqt.h%GRID_H) {
-				if (matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
-					[(int)((reqt.x + reqt.w) / GRID_W)]) {
-					Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
-						[(int)((reqt.x + reqt.w) / GRID_W)]]->trigger();
-					return;
-				}
+		}
+		if (reqt.h%GRID_H) {
+			if (matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
+				[(int)((reqt.x + reqt.w) / GRID_W)]) {
+				Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
+					[(int)((reqt.x + reqt.w) / GRID_W)]]->trigger();
+				return;
 			}
-			break;
+		}
+		break;
 
-		case -1:
-			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-				if (matrix[(int)((reqt.y - 1) / GRID_H)]
-					[(int)((reqt.x) / GRID_W) + ix]) {
-					Objects_Manager::objects[matrix[(int)((reqt.y - 1) / GRID_H)]
-						[(int)((reqt.x) / GRID_W) + ix]]->trigger();
-					return;
-				}
+	case -1:
+		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
+			if (matrix[(int)((reqt.y - 1) / GRID_H)]
+				[(int)((reqt.x) / GRID_W) + ix]) {
+				Objects_Manager::objects[matrix[(int)((reqt.y - 1) / GRID_H)]
+					[(int)((reqt.x) / GRID_W) + ix]]->trigger();
+				return;
 			}
-			if (reqt.h%GRID_H) {
-				if (matrix[(int)((reqt.y - 1) / GRID_H)]
-					[(int)((reqt.x + reqt.w) / GRID_W)]) {
-					Objects_Manager::objects[matrix[(int)((reqt.y - 1) / GRID_H)]
-						[(int)((reqt.x + reqt.w) / GRID_W)]]->trigger();
-					return;
-				}
+		}
+		if (reqt.h%GRID_H) {
+			if (matrix[(int)((reqt.y - 1) / GRID_H)]
+				[(int)((reqt.x + reqt.w) / GRID_W)]) {
+				Objects_Manager::objects[matrix[(int)((reqt.y - 1) / GRID_H)]
+					[(int)((reqt.x + reqt.w) / GRID_W)]]->trigger();
+				return;
 			}
-			break;
+		}
+		break;
 	}
 }
 
@@ -215,9 +221,4 @@ void Map::checkMate()
 		}
 		std::cout << std::endl;
 	}
-}
-
-Map::~Map()
-{
-
 }

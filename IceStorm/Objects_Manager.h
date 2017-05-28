@@ -16,7 +16,7 @@ public:
 
 	static void Init();
 
-	static GObject* find(string target) {
+	static GObject* findObject(string target) {
 		for (auto i = objects.begin(); i != objects.end(); ++i) {
 			if (!(*i)->target.compare(target))
 				return *i;

@@ -1,6 +1,6 @@
 #pragma once
 #include "Objects_Manager.h"
-
+#include <sstream>
 vector<GObject*> Objects_Manager::objects;
 
 void Objects_Manager::Init() {
@@ -12,7 +12,6 @@ void Objects_Manager::Init() {
 	while (buffer.compare("EOF")) {
 		if (identify(buffer, "ID: ")) {
 			currentObject = new GObject;
-			objects.push_back(currentObject);
 			buffer.erase(buffer.begin(), buffer.begin() + 4);
 			currentObject->ID = std::stoi(buffer);
 			std::getline(tempStream, buffer);
@@ -21,10 +20,19 @@ void Objects_Manager::Init() {
 				if (identify(buffer, "target: ")) {
 					buffer.erase(buffer.begin(), buffer.begin() + 8);
 					currentObject->target = buffer;
+					if (findObject(buffer) != NULL)
+						std::cout << "Objects with the same target : " << buffer <<
+						". Can result in unexpected behavior" << std::endl;
 					std::getline(tempStream, buffer);
 					continue;
 				}
 				if (identify(buffer, "targetnames: ")) {
+					buffer.erase(buffer.begin(), buffer.begin() + 13);
+					istringstream iss(buffer);
+					string word;
+					while (iss >> word) {
+						currentObject->targetnames.push_back(word);
+					}
 					std::getline(tempStream, buffer);
 					continue;
 				}
@@ -35,12 +43,18 @@ void Objects_Manager::Init() {
 					continue;
 				}
 				if (identify(buffer, "type: ")) {
+					buffer.erase(buffer.begin(), buffer.begin() + 6);
+					currentObject->type = buffer;
 					std::getline(tempStream, buffer);
 					continue;
 				}
 				if (identify(buffer, "flags: ")) {
 					buffer.erase(buffer.begin(), buffer.begin() + 7);
-					if (!buffer.compare("SOLID")) currentObject->solid = 1;
+					istringstream iss(buffer);
+					string word;
+					while (iss >> word) {
+						currentObject->flags.push_back(word);
+					}
 					std::getline(tempStream, buffer);
 					continue;
 				}
@@ -56,6 +70,7 @@ void Objects_Manager::Init() {
 				}
 				else std::getline(tempStream, buffer);
 			}
+			objects.push_back(currentObject);
 		}
 	}
 }

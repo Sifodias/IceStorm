@@ -4,7 +4,7 @@
 #include "Textures_Manager.h"
 
 //static definitions
-SDL_Texture* Character::texture = NULL;
+//SDL_Texture* Character::texture = NULL;
 C_Rect Character::hitBox;
 double Character::speedX = 0;
 double Character::speedY = 0;
@@ -15,6 +15,7 @@ std::vector<int> Character::direction;
 Uint32 Character::timerA = SDL_GetTicks();
 Uint32 Character::timerB = SDL_GetTicks();
 bool Character::jumpLock = 0;
+SpritesHandler Character::textures;
 //
 
 void Character::handleMoves()
@@ -110,8 +111,6 @@ void Character::handleMoves()
 		return;
 	}
 	//else if gravity is enabled
-	if (speedY <= 300)
-		speedY += GRAVITY;
 	C_Rect temprect = hitBox;
 	temprect.y += 1;
 	if (Map::isItSolid(temprect) && speedY > 0) {
@@ -177,6 +176,8 @@ void Character::doMoves()
 	C_Rect backup(hitBox);
 	timerB = SDL_GetTicks();
 	double t = (double)(timerB - timerA)*0.001;
+	if (speedY <= 300 && GRAVITY_ENABLED)
+		speedY += (int)(GRAVITY*t);
 	int out = 0;
 	if (!speedY) {
 		double tempDistance = t*speedX;
@@ -269,5 +270,5 @@ void Character::Init()
 	hitBox.h = CHAR_HITBOX_H;
 	hitBox.w = CHAR_HITBOX_W;
 	Map::findOccurrence(69, &hitBox.x, &hitBox.y);
-	texture = Textures_Manager::loadTexture("./Textures/testc.png");
+	textures.Init("testc.png", "default");
 }

@@ -5,13 +5,14 @@ target: wall_test
 texture: wall2.png
 flags: SOLID
 
-
 ID: 2
 target: sign
 texture: sign.png
-flags: 
-content: Vive la bite !
+flags: SOLID
+targetnames: dummymsg
 
-
-
+ID: 3
+target: dummymsg
+type: DIALOG
+content: Ola que tal !
 EOF

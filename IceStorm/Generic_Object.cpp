@@ -3,14 +3,28 @@
 
 void GObject::trigger()
 {
+	flagTrigger = 1;
 	for (int i = 0; i < targetnames.size(); i++) {
-		Objects_Manager::find(targetnames[i])->trigger();
+		if (!Objects_Manager::findObject(targetnames[i])->flagTrigger)
+			Objects_Manager::findObject(targetnames[i])->trigger();
 	}
-	Text_Printer::addToQueue(content);
-	switch (type) {
-	case BUTTON:
-		break;
-	case DIALOG:
-		break;
+	if (!type.compare("BUTTON")) {
 	}
+
+	if (!type.compare("DIALOG")) {
+		if (!Text_Printer::busy) {
+			Text_Printer::addToQueue(content);
+		}
+
+	}
+	flagTrigger = 0;
+
+}
+
+bool GObject::checkFlag(std::string flag)
+{
+	for (auto i = flags.begin(); i != flags.end(); ++i) {
+		if (!i->compare(flag)) return true;
+	}
+	return false;
 }

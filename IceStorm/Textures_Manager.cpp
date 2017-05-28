@@ -88,5 +88,5 @@ void Textures_Manager::blitStuff()
 	blitty = (SDL_Rect)Character::hitBox;
 	blitty.y -= CHAR_H - CHAR_HITBOX_H;
 	blitty.h = CHAR_H;
-	SDL_RenderCopy(Renderer::g_Renderer, Character::texture, NULL, &blitty);
+	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &blitty);
 }

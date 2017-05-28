@@ -13,8 +13,8 @@ void Init_game()
 	Map::loadLevel();
 	Textures_Manager::Init();
 	Character::Init();
-	Objects_Manager::Init();
 	Text_Printer::Init();
+	Objects_Manager::Init();
 }
 
 void printGrid() {

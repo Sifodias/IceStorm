@@ -1,5 +1,4 @@
 sign.png
-x
 wall2.png
 wall2left.png
 wall2right.png
@@ -7,3 +6,5 @@ wall2down.png
 wall1.png
 bite.jpg
 dialog_box.png
+dialog_box_clean.png
+testc.png

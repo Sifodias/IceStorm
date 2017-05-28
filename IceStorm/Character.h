@@ -2,12 +2,13 @@
 #include "C_Rect.h"
 #include <vector>
 #include <SDL.h>
+#include "Sprites_Handler.h"
 #define CSPEED 150
 
-#define JSPEED 500	//jump speed
-#define GRAVITY 40
+#define JSPEED 350	//jump speed
+#define GRAVITY 1300
 #define JUMPLOCK 1
-#define GRAVITY_ENABLED 1
+#define GRAVITY_ENABLED 0
 
 #define CHAR_H 30
 #define CHAR_W 20
@@ -32,7 +33,8 @@ public:
 	static double speedX;
 	static double speedY;
 	static C_Rect hitBox;
-	static SDL_Texture* texture;
+	//static SDL_Texture* texture;
+	static SpritesHandler textures;
 
 	static bool jumpLock;
 

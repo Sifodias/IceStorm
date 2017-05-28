@@ -32,6 +32,7 @@ public:
 	static std::vector<std::array<SDL_Texture*, 127>> lettersVec;
 	static std::vector<NodeQueue> queue;
 
+	static bool busy;
 private:
 	static void printText(NodeQueue& node);
 	static Uint32 timerA;

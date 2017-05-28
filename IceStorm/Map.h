@@ -12,7 +12,6 @@
 
 class Map {
 public : 
-	~Map();
 	static void loadLevel();
 
 	static int getX();			//gets the x of the matrix in the stream currentlevel
@@ -25,6 +24,8 @@ public :
 	static bool isItSolid(C_Rect reqt); //checks if the element at the given coord is solid
 
 	static void trigger(C_Rect reqt, int direction);
+
+	static int getIdObject(int ay, int iy, int ax, int ix);
 
 	static void findOccurrence(int charry, double* ix, double* iy);
 

@@ -7,7 +7,8 @@ using namespace std;
 
 class SpritesHandler {
 public:
-	SpritesHandler(string str, string names, int ispeed = 5) : speed(ispeed) {
+	void Init(string str, string names, int ispeed = 5) {
+		speed = ispeed;
 		timerA = timerB = SDL_GetTicks();
 		istringstream iss(str);
 		string word;
@@ -17,12 +18,21 @@ public:
 				i++;
 				continue;
 			}
+			if (i == textures.size()) {
+				vector<SDL_Texture*> tempy;
+				textures.push_back(tempy);
+			}
 			textures[i].push_back(Textures_Manager::findTexture(word));
 		}
 		istringstream isb(names);
 		while (isb >> word) {
 			groups.push_back(word);
 		}
+	}
+	SDL_Texture* currentFrame() {
+		//
+		//
+		return textures[0][0];
 	}
 	Uint32 timerA;
 	Uint32 timerB;
