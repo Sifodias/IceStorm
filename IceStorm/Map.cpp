@@ -48,7 +48,7 @@ void Map::loadMatrix() {
 	}
 	matrix[h].push_back(temp);
 }
-int Map::getIdObject(int ay, int iy, int ax, int ix) {
+int Map::getIdObject(double ay, int iy, double ax, int ix) {
 	if ((ay / GRID_H) + iy < y && (ax / GRID_W) + ix < x)
 		return matrix[(int)(ay / GRID_H) + iy]
 		[(int)(ax / GRID_W) + ix];

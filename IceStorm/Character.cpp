@@ -4,7 +4,6 @@
 #include "Textures_Manager.h"
 
 //static definitions
-//SDL_Texture* Character::texture = NULL;
 C_Rect Character::hitBox;
 double Character::speedX = 0;
 double Character::speedY = 0;

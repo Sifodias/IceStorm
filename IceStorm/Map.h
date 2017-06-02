@@ -25,7 +25,7 @@ public :
 
 	static void trigger(C_Rect reqt, int direction);
 
-	static int getIdObject(int ay, int iy, int ax, int ix);
+	static int getIdObject(double ay, int iy, double ax, int ix);
 
 	static void findOccurrence(int charry, double* ix, double* iy);
 
