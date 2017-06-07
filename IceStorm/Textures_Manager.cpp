@@ -78,14 +78,17 @@ void Textures_Manager::blitStuff()
 	blitty.h = GRID_H;
 	blitty.w = GRID_W;
 	blitty.x = (int)camera.x;
+	//blitty.x = Character::hitBox.x-120; blitty.y = Character::hitBox.y-160;
 	blitty.y = (int)camera.y;
-	for (int y = 0; y < Map::y; y++, blitty.x = 0, blitty.y += blitty.h) {
+	for (int y = 0; y < Map::y; y++, blitty.x = 0,
+		blitty.y += blitty.h) {
 		for (int x = 0; x < Map::x; x++, blitty.x += blitty.w) {
 			SDL_RenderCopy(Renderer::g_Renderer, 
 				Objects_Manager::objects[Map::matrix[y][x]]->texture, NULL, &blitty);
 		}
 	}
 	blitty = (SDL_Rect)Character::hitBox;
+	//blitty.x = 100; blitty.y = 100;
 	blitty.y -= CHAR_H - CHAR_HITBOX_H;
 	blitty.h = CHAR_H;
 	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &blitty);

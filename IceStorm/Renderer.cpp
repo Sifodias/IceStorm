@@ -41,7 +41,8 @@ void Renderer::initAll()
 	else {
 		flags = SDL_WINDOW_SHOWN;
 		g_Window = SDL_CreateWindow("The Rising Shadows Engine", SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED, 640, 480, flags);
+			SDL_WINDOWPOS_UNDEFINED, ((int)(current.h / 240)) * 320,
+			((int)(current.h / 240)) * 240, flags);
 	}
 	if (g_Window == NULL) {
 		printf("Can't create the window : %s\n", SDL_GetError());

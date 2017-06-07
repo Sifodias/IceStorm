@@ -39,7 +39,11 @@ void Text_Printer::printText(NodeQueue& node) {
 				}
 			}
 		}
-		SDL_RenderCopy(Renderer::g_Renderer, lettersVec[node.policeID][node.str[i]],
+		if (node.str[i] < 0 || node.str[i] > 127) {
+			SDL_RenderCopy(Renderer::g_Renderer, lettersVec[node.policeID]['?'],
+				NULL, &blitRect);
+		}
+		else SDL_RenderCopy(Renderer::g_Renderer, lettersVec[node.policeID][node.str[i]],
 			NULL, &blitRect);
 		blitRect.x += blitRect.w;
 	}

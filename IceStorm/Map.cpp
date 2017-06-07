@@ -49,9 +49,14 @@ void Map::loadMatrix() {
 	matrix[h].push_back(temp);
 }
 int Map::getIdObject(double ay, int iy, double ax, int ix) {
-	if ((ay / GRID_H) + iy < y && (ax / GRID_W) + ix < x)
-		return matrix[(int)(ay / GRID_H) + iy]
-		[(int)(ax / GRID_W) + ix];
+	if ((ay / GRID_H) + iy < y && (ax / GRID_W) + ix < x) {
+		if (matrix[(int)(ay / GRID_H) + iy]
+			[(int)(ax / GRID_W) + ix] >= 0
+			&& matrix[(int)(ay / GRID_H) + iy]
+			[(int)(ax / GRID_W) + ix] < Objects_Manager::objects.size())
+			return matrix[(int)(ay / GRID_H) + iy]
+			[(int)(ax / GRID_W) + ix];
+	}
 	return 1;
 }
 

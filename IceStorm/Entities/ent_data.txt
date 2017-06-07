@@ -14,6 +14,6 @@ targetnames: dummymsg
 ID: 3
 target: dummymsg
 type: DIALOG
-content: Boujour je suis tres heureux de vous acceuillir a cette episode cet episode est concerne a sauver une fille charmante allez mes amis on va se placer pour le jeu a deux minutes !
+content: Vive les grosses bites aué saucisson sec !
 
 EOF
