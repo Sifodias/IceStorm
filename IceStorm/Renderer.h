@@ -1,5 +1,7 @@
 #pragma once
 #include <SDL.h>
+#define SCREEN_W 320
+#define SCREEN_H 240
 
 class Renderer {
 public:

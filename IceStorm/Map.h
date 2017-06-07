@@ -10,6 +10,7 @@
 #define GRID_W 20
 #define GRID_H 20
 
+
 class Map {
 public : 
 	static void loadLevel();

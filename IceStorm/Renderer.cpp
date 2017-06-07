@@ -41,8 +41,8 @@ void Renderer::initAll()
 	else {
 		flags = SDL_WINDOW_SHOWN;
 		g_Window = SDL_CreateWindow("The Rising Shadows Engine", SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED, ((int)(current.h / 240)) * 320,
-			((int)(current.h / 240)) * 240, flags);
+			SDL_WINDOWPOS_UNDEFINED, ((int)(current.h / SCREEN_H)) * SCREEN_W,
+			((int)(current.h / SCREEN_H)) * SCREEN_H, flags);
 	}
 	if (g_Window == NULL) {
 		printf("Can't create the window : %s\n", SDL_GetError());
@@ -53,7 +53,7 @@ void Renderer::initAll()
 		printf("Can't create the renderer : %s\n", SDL_GetError());
 	}
 
-	SDL_RenderSetLogicalSize(g_Renderer, 320, 240);
+	SDL_RenderSetLogicalSize(g_Renderer, SCREEN_W, SCREEN_H);
 }
 
 

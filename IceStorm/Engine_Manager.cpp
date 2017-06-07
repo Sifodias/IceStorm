@@ -6,6 +6,7 @@
 #include <iostream>
 #include "Text_Printer.h"
 #include "Objects_Manager.h"
+#include "Camera.h"
 
 void Init_game()
 {
@@ -15,6 +16,7 @@ void Init_game()
 	Character::Init();
 	Text_Printer::Init();
 	Objects_Manager::Init();
+	Camera::Init();
 }
 
 void printGrid() {

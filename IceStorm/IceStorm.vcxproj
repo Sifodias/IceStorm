@@ -121,6 +121,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="C_Rect.cpp" />
     <ClCompile Include="Generic_Object.cpp" />
@@ -134,6 +135,7 @@
     <ClCompile Include="Engine_Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="C_Rect.h" />
     <ClInclude Include="Generic_Object.h" />

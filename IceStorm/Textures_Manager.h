@@ -17,5 +17,4 @@ public:
 
 	static std::vector<SDL_Texture*> textureList;	//The table containing the textures
 	static std::vector<std::string> textureNames;
-	static C_Rect camera;
 };

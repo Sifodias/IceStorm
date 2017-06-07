@@ -9,10 +9,10 @@
 #include <SDL_image.h>
 #include "Engine_Manager.h"
 #include "Objects_Manager.h"
+#include "Camera.h"
 
 std::vector<SDL_Texture*> Textures_Manager::textureList;
 std::vector<std::string> Textures_Manager::textureNames;
-C_Rect Textures_Manager::camera;
 
 std::vector<SDL_Texture*> Textures_Manager::texturesListInit()
 {
@@ -58,8 +58,6 @@ SDL_Texture* Textures_Manager::loadTexture(std::string path)
 void Textures_Manager::Init()
 {
 	textureList = texturesListInit();
-	camera.x = 0;
-	camera.y = 0;
 }
 
 SDL_Texture * Textures_Manager::findTexture(std::string name)
@@ -77,18 +75,19 @@ void Textures_Manager::blitStuff()
 	SDL_Rect blitty;
 	blitty.h = GRID_H;
 	blitty.w = GRID_W;
-	blitty.x = (int)camera.x;
+	blitty.x = -(int)Camera::getX();
 	//blitty.x = Character::hitBox.x-120; blitty.y = Character::hitBox.y-160;
-	blitty.y = (int)camera.y;
-	for (int y = 0; y < Map::y; y++, blitty.x = 0,
+	blitty.y = -(int)Camera::Camera::getY();
+	for (int y = 0; y < Map::y; y++, blitty.x = -(int)Camera::getX(),
 		blitty.y += blitty.h) {
 		for (int x = 0; x < Map::x; x++, blitty.x += blitty.w) {
-			SDL_RenderCopy(Renderer::g_Renderer, 
+			SDL_RenderCopy(Renderer::g_Renderer,
 				Objects_Manager::objects[Map::matrix[y][x]]->texture, NULL, &blitty);
 		}
 	}
 	blitty = (SDL_Rect)Character::hitBox;
-	//blitty.x = 100; blitty.y = 100;
+	blitty.x -= Camera::getX();
+	blitty.y -= Camera::getY();
 	blitty.y -= CHAR_H - CHAR_HITBOX_H;
 	blitty.h = CHAR_H;
 	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &blitty);

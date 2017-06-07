@@ -116,6 +116,13 @@ void Character::handleMoves()
 		speedY = 0;
 		if (!state[SDL_SCANCODE_W])
 			jumpLock = 0;
+		return;
+	}
+	temprect.y -= 2;
+	if (Map::isItSolid(temprect) && speedY < 0) {
+		speedY = 0;
+		if (!state[SDL_SCANCODE_W])
+			jumpLock = 0;
 	}
 }
 
