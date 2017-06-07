@@ -14,6 +14,6 @@ targetnames: dummymsg
 ID: 3
 target: dummymsg
 type: DIALOG
-content: Vive les grosses bites aué saucisson sec !
+content: <Insert an interesting text>
 
 EOF

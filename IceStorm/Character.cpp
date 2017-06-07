@@ -14,6 +14,7 @@ std::vector<int> Character::direction;
 Uint32 Character::timerA = SDL_GetTicks();
 Uint32 Character::timerB = SDL_GetTicks();
 bool Character::jumpLock = 0;
+bool Character::noclip = 0;
 SpritesHandler Character::textures;
 //
 
@@ -184,6 +185,12 @@ void Character::doMoves()
 	double t = (double)(timerB - timerA)*0.001;
 	if (speedY <= 300 && GRAVITY_ENABLED)
 		speedY += (int)(GRAVITY*t);
+	if (noclip) {
+		hitBox.x += t*speedX;
+		hitBox.y += t*speedY;
+		timerA = timerB = SDL_GetTicks();
+		return;
+	}
 	int out = 0;
 	if (!speedY) {
 		double tempDistance = t*speedX;

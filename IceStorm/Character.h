@@ -37,6 +37,7 @@ public:
 	static SpritesHandler textures;
 
 	static bool jumpLock;
+	static bool noclip;
 
 	static Uint32 timerA;
 	static Uint32 timerB;
