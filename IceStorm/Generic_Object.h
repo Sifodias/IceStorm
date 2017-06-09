@@ -34,7 +34,7 @@ typedef enum t_type {
 
 class GObject {
 public:
-	GObject() : ID(0), solid(0), type("GENERIC"), texture(NULL) {};
+	GObject() : ID(0), type("GENERIC"), texture(NULL) {};
 	int ID;
 	std::string target;
 	std::vector<std::string> targetnames;
@@ -42,8 +42,9 @@ public:
 	std::string type;
 	//OTYPE type;
 	SDL_Texture* texture;
+	std::string textureName;
+
 	C_Rect rect;
-	bool solid;
 	std::string content;
 
 	bool flagTrigger; //prevent infinite trigger

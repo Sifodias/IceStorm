@@ -2,6 +2,7 @@
 #include <iostream>
 #include <SDL_image.h>
 //#include <SDL_mixer.h>
+#include "Engine_Manager.h"
 #include <SDL_ttf.h>
 #include <string>
 #define FULLSCREEN 0
@@ -59,6 +60,7 @@ void Renderer::initAll()
 
 void Renderer::quitAll()
 {
+	engineQuit();
 	SDL_DestroyWindow(g_Window);
 	SDL_DestroyRenderer(g_Renderer);
 	IMG_Quit();

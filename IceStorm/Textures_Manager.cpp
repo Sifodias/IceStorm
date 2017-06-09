@@ -86,8 +86,8 @@ void Textures_Manager::blitStuff()
 		}
 	}
 	blitty = (SDL_Rect)Character::hitBox;
-	std::cout << Camera::getX() << " " << Camera::getY() << " " <<
-		Character::hitBox.x << " "<< Character::hitBox.y <<::endl;
+	//std::cout << Camera::getX() << " " << Camera::getY() << " " <<
+		//Character::hitBox.x << " "<< Character::hitBox.y <<::endl;
 	blitty.x -= Camera::getX();
 	blitty.y -= Camera::getY();
 	blitty.y -= CHAR_H - CHAR_HITBOX_H;

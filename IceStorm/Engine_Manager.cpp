@@ -66,3 +66,7 @@ std::ifstream loadFile(std::string path)
 	return level_stream;
 }
 
+void engineQuit() {
+	Map::saveMatrix();
+
+}

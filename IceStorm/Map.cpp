@@ -7,6 +7,8 @@
 std::vector<std::vector<int>> Map::matrix;
 int Map::x = 0;
 int Map::y = 0;
+int Map::cx = 0;
+int Map::cy = 0;
 std::ifstream Map::currentLevel;
 
 void Map::loadLevel()
@@ -182,6 +184,8 @@ void Map::findOccurrence(int charry, double * ix, double * iy)
 			if (matrix[h][w] == charry) {
 				*ix = w*GRID_W;
 				*iy = h*GRID_W;
+				cx = w;
+				cy = h;
 				matrix[h][w] = 0;
 				return;
 			}
@@ -189,6 +193,30 @@ void Map::findOccurrence(int charry, double * ix, double * iy)
 	}
 	*ix = -1;
 	*iy = -1;
+}
+
+void Map::saveMatrix()
+{
+	currentLevel.close();
+	std::ofstream ofs;
+	ofs.open(Paths::levelPath, std::ofstream::out | std::ofstream::trunc);
+	//matrix[cy][cx] = 69;
+	for (int b = 0; b < y; b++) {
+		for (int a = 0; a < x; a++) {
+			if (a == cx && b == cy)
+				ofs.write("69", 2);
+			else
+				ofs.write(to_string(matrix[b][a]).c_str(), 1);
+			if (a == x - 1 && b == y - 1) {
+				ofs.write("-", 1);
+				break;
+			}
+			ofs.write(",", 1);
+		}
+		if (b != y - 1)
+			ofs.write("\n", 1);
+	}
+	ofs.close();
 }
 
 int Map::getY()

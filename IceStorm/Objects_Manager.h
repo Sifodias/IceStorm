@@ -24,7 +24,7 @@ public:
 		return NULL;
 	}
 
-	static bool identify(string target, string wanted);
+	static bool identify(string& target, string wanted);
 
 	static vector<GObject*> objects;
 };

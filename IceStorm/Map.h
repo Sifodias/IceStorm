@@ -30,8 +30,13 @@ public :
 
 	static void findOccurrence(int charry, double* ix, double* iy);
 
+	static void saveMatrix();
+
 	static std::ifstream currentLevel;	//the stream containing the level
 	static std::vector<std::vector<int>> matrix;	//the matrix of the level
 	static int x;		//the x of the matrix in the stream currentlevel
 	static int y;		//same for y
+
+	static int cx;		//the x of the matrix in the stream currentlevel
+	static int cy;
 };
