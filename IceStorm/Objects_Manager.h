@@ -1,11 +1,6 @@
 #pragma once
 #include "Generic_Object.h"
 #include <vector>
-#include <ostream>
-#include "Paths.h"
-#include "Engine_Manager.h"
-#include "Textures_Manager.h"
-#include <vector>
 using namespace std;
 
 class Objects_Manager {
@@ -16,13 +11,7 @@ public:
 
 	static void Init();
 
-	static GObject* findObject(string target) {
-		for (auto i = objects.begin(); i != objects.end(); ++i) {
-			if (!(*i)->target.compare(target))
-				return *i;
-		}
-		return NULL;
-	}
+	static GObject* findObject(string target);
 
 	static bool identify(string& target, string wanted);
 

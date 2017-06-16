@@ -127,6 +127,7 @@
     <ClCompile Include="C_Rect.cpp" />
     <ClCompile Include="Generic_Object.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Moving_Unit.cpp" />
     <ClCompile Include="Objects_Manager.cpp" />
     <ClCompile Include="Paths.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -141,11 +142,12 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="C_Rect.h" />
     <ClInclude Include="Generic_Object.h" />
+    <ClInclude Include="Sprites_Handler.h" />
+    <ClInclude Include="Moving_Unit.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Objects_Manager.h" />
     <ClInclude Include="Paths.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Sprites_Handler.h" />
     <ClInclude Include="Textures_Manager.h" />
     <ClInclude Include="Text_Printer.h" />
     <ClInclude Include="Engine_Manager.h" />

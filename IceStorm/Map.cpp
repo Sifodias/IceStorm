@@ -60,7 +60,7 @@ int Map::getIdObject(double ay, int iy, double ax, int ix) {
 			return matrix[(int)(ay / GRID_H) + iy]
 			[(int)(ax / GRID_W) + ix];
 	}
-	return 1;
+	return 0;
 }
 
 bool Map::isItSolid(C_Rect reqt)
@@ -201,19 +201,19 @@ void Map::saveMatrix()
 	std::ofstream ofs;
 	ofs.open(Paths::levelPath, std::ofstream::out | std::ofstream::trunc);
 	//matrix[cy][cx] = 69;
-	for (int b = 0; b < y; b++) {
-		for (int a = 0; a < x; a++) {
+	for (int b = 0; b < matrix.size(); b++) {
+		for (int a = 0; a < matrix[0].size(); a++) {
 			if (a == cx && b == cy)
 				ofs.write("69", 2);
 			else
 				ofs.write(to_string(matrix[b][a]).c_str(), 1);
-			if (a == x - 1 && b == y - 1) {
+			if (a == matrix[0].size() - 1 && b == matrix.size() - 1) {
 				ofs.write("-", 1);
 				break;
 			}
 			ofs.write(",", 1);
 		}
-		if (b != y - 1)
+		if (b != matrix.size() - 1)
 			ofs.write("\n", 1);
 	}
 	ofs.close();

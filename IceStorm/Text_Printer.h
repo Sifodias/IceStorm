@@ -1,15 +1,9 @@
 #pragma once
 #include <vector>
 #include <SDL.h>
-#include <SDL_ttf.h>
 #include <string>
-#include <ostream>
-#include "Engine_Manager.h"
-#include <iostream>
-#include "Textures_Manager.h"
-#include "Renderer.h"
-#include "Paths.h"
 #include <array>
+
 
 #define PRINT_SPEED 0
 

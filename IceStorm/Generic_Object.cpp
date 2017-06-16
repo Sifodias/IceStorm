@@ -1,5 +1,6 @@
 #include "Objects_Manager.h"
 #include "Generic_Object.h"
+#include "Text_Printer.h"
 
 void GObject::trigger()
 {

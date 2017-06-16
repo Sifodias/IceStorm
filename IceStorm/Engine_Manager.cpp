@@ -14,9 +14,9 @@ void Init_game()
 	Renderer::initAll();
 	Map::loadLevel();
 	Textures_Manager::Init();
+	Objects_Manager::Init();
 	Character::Init();
 	Text_Printer::Init();
-	Objects_Manager::Init();
 	Camera::Init();
 }
 
@@ -33,10 +33,12 @@ void printGrid() {
 void handleRoutines(SDL_Event e) {
 	SDL_RenderClear(Renderer::g_Renderer);
 	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+
 	Character::characterRoutine(e);
 	Builder::routine(e);
 	Textures_Manager::blitStuff();
 	Text_Printer::handleRoutine(e);
+
 	SDL_RenderPresent(Renderer::g_Renderer);
 }
 

@@ -1,6 +1,12 @@
 #pragma once
 #include "Objects_Manager.h"
 #include <sstream>
+#include <ostream>
+#include <iostream>
+#include "Paths.h"
+#include "Engine_Manager.h"
+#include "Textures_Manager.h"
+
 vector<GObject*> Objects_Manager::objects;
 
 void Objects_Manager::Init() {
@@ -78,4 +84,12 @@ bool Objects_Manager::identify(string& target, string wanted)
 		return true;
 	}
 	else return false;
+}
+
+GObject* Objects_Manager::findObject(string target) {
+	for (auto i = objects.begin(); i != objects.end(); ++i) {
+		if (!(*i)->target.compare(target))
+			return *i;
+	}
+	return NULL;
 }

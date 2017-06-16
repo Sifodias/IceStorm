@@ -4,8 +4,24 @@
 #include <exception>
 #include "Map.h"
 #include "Camera.h"
-GObject* Builder::currentObject = NULL;
+#include "Character.h"
+#include <iostream>
+#include "Renderer.h"
 
+GObject* Builder::currentObject = NULL;
+vector<int> Builder::cmdDone(123, 0);
+
+bool Builder::checkKey(int key) {
+	if (key <0 || key > cmdDone.size() - 1) return false;
+	else return cmdDone[key];
+}
+void Builder::setKey(int key) {
+	if (key <0 || key > cmdDone.size() - 1) return;
+	else {
+		if (cmdDone[key]) cmdDone[key] = 0;
+		else cmdDone[key] = 1;
+	}
+}
 GObject* fetchObject(string name) {
 	GObject* printObject;
 	int temp;
@@ -73,15 +89,48 @@ void Builder::printInfo(GObject* printObject)
 void Builder::placeElement(SDL_MouseButtonEvent& e) {
 	if (currentObject == NULL)
 		return;
-	//si dans les dimensions de la mat, le placer
+
 	if ((e.x + Camera::getX()) / GRID_W < 0
 		|| (e.y + Camera::getY()) / GRID_H < 0) return;
-	if ((int)((e.x + Camera::getX()) / GRID_W) < Map::x
-		&& (int)((e.y + Camera::getY()) / GRID_H) < Map::y) {
+	//il y a 3 rakat
+	//y bon mais x trop
+	if (Map::matrix.size() > (int)((e.y + Camera::getY()) / GRID_H)
+		&& Map::matrix[0].size() < (int)((e.x + Camera::getX()) / GRID_W)) {
+
+	}
+	//x bon mais y trop
+	if (Map::matrix.size() > (int)((e.y + Camera::getY()) / GRID_H)
+		&& Map::matrix[0].size() < (int)((e.x + Camera::getX()) / GRID_W)) {
+
+	}
+	//x trop y trop
+	if (Map::matrix.size() > (int)((e.y + Camera::getY()) / GRID_H)
+		&& Map::matrix[0].size() < (int)((e.x + Camera::getX()) / GRID_W)) {
+
+	}
+
+	int i = 0;
+	while (Map::matrix.size() <= (int)((e.y + Camera::getY()) / GRID_H)) {
+		while (Map::matrix[i].size() <= (int)((e.x + Camera::getX()) / GRID_W))
+		{
+			Map::matrix[i++].push_back(0);
+		}
+		i = 0;
+		std::vector<int> jaja(Map::matrix[0].size(), 0);
+		Map::matrix.push_back(jaja);
+	}
+	for (int i = 0; i < Map::matrix.size(); i++) {
+		while (Map::matrix[i].size() <= (int)((e.x + Camera::getX()) / GRID_W)) {
+			Map::matrix[i].push_back(0);
+		}
+	}
+
+	//si dans les dimensions de la mat, le placer
+	if ((int)((e.x + Camera::getX()) / GRID_W) < Map::matrix[i].size()
+		&& (int)((e.y + Camera::getY()) / GRID_H) < Map::matrix.size()) {
 		Map::matrix[(int)((e.y + Camera::getY()) / GRID_H)]
 			[(int)((e.x + Camera::getX()) / GRID_W)] = currentObject->ID;
 	}
-	//sinon, resizer la mat
 }
 
 void Builder::routine(SDL_Event & e)
@@ -91,7 +140,19 @@ void Builder::routine(SDL_Event & e)
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_t:
+			Character::movingUnit.lockMovements();
 			fetch();
+			break;
+		case SDLK_p:
+			zoom(1);
+			break;
+		case SDLK_o:
+			zoom(-1);
+			break;
+		case SDLK_i:
+			Character::movingUnit.noclip = !checkKey(SDLK_i);
+			Camera::FREEDOM = !checkKey(SDLK_i);
+			setKey(SDLK_i);
 			break;
 		}
 	}
@@ -99,3 +160,23 @@ void Builder::routine(SDL_Event & e)
 		placeElement((SDL_MouseButtonEvent&)e);
 	}
 }
+void::Builder::zoom(int focus) {
+	if (focus == -1) {
+		Camera::outerRect.h *= 2;
+		Camera::outerRect.w *= 2;
+	}
+	if (focus == 1) {
+		Camera::outerRect.h /= 2;
+		Camera::outerRect.w /= 2;
+	}
+	SDL_RenderSetLogicalSize(Renderer::g_Renderer, Camera::outerRect.w, Camera::outerRect.h);
+}
+
+
+/*
+Key mapping :
+t = console mode
+o = zoom out
+p = zoom in
+i = freedom cam + noclip
+*/

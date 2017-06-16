@@ -21,7 +21,7 @@ Each object has a TRIGGER function
 #include <SDL.h>
 #include "C_Rect.h"
 #include <vector>
-#include "Text_Printer.h"
+
 
 typedef enum t_type {
 	BUTTON,

@@ -1,4 +1,11 @@
 #include "Text_Printer.h"
+#include <SDL_ttf.h>
+#include <ostream>
+#include <iostream>
+#include "Engine_Manager.h"
+#include "Textures_Manager.h"
+#include "Renderer.h"
+#include "Paths.h"
 
 std::vector<std::array<SDL_Texture*, 127>> Text_Printer::lettersVec;
 std::vector<NodeQueue> Text_Printer::queue;
