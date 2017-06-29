@@ -8,7 +8,7 @@ flags: SOLID
 ID: 2
 target: sign
 texture: sign.png
-flags: SOLID
+flags: 
 targetnames: dummymsg
 
 ID: 3

@@ -154,20 +154,27 @@ void Builder::routine(SDL_Event & e)
 			Camera::FREEDOM = !checkKey(SDLK_i);
 			setKey(SDLK_i);
 			break;
+		case SDLK_0:
+			currentObject = fetchObject("0");
+			break;
+		case SDLK_1:
+			currentObject = fetchObject("1");
+			break;
 		}
 	}
+
 	if (e.type == SDL_MOUSEBUTTONDOWN) {
 		placeElement((SDL_MouseButtonEvent&)e);
 	}
 }
 void::Builder::zoom(int focus) {
 	if (focus == -1) {
-		Camera::outerRect.h *= 2;
-		Camera::outerRect.w *= 2;
+		Renderer::SCREEN_H = Camera::outerRect.h *= 2;
+		Renderer::SCREEN_W = Camera::outerRect.w *= 2;
 	}
 	if (focus == 1) {
-		Camera::outerRect.h /= 2;
-		Camera::outerRect.w /= 2;
+		Renderer::SCREEN_H = Camera::outerRect.h /= 2;
+		Renderer::SCREEN_W = Camera::outerRect.w /= 2;
 	}
 	SDL_RenderSetLogicalSize(Renderer::g_Renderer, Camera::outerRect.w, Camera::outerRect.h);
 }

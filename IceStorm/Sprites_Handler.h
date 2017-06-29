@@ -7,7 +7,8 @@
 
 class SpritesHandler {
 public:
-	void init(std::string str, std::string names, int ispeed = 5){
+	void init(std::string str, std::string names, int ispeed = 5) {
+		currentGroup = NULL;
 		speed = ispeed;
 		timerA = timerB = SDL_GetTicks();
 		std::istringstream iss(str);
@@ -30,11 +31,22 @@ public:
 		}
 	}
 	SDL_Texture* currentFrame() {
-		return textures[0][0];
+		if (currentGroup == NULL)
+			return textures[0][0];
+		return (*currentGroup)[0];
 	}
-
+	void setCurrentGroup(std::string group) {
+		int y = 0;
+		for (auto i = groups.begin(); i != groups.end(); ++i, y++) {
+			if (!i->compare(group)) {
+				currentGroup = &textures[y];
+				break;
+			}
+		}
+	}
 	Uint32 timerA;
 	Uint32 timerB;
+	std::vector<SDL_Texture*>* currentGroup;
 	std::vector<std::vector<SDL_Texture*>> textures;
 	std::vector<std::string> groups;
 	int speed;

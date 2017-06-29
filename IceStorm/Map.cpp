@@ -5,21 +5,17 @@
 #include "Objects_Manager.h"
 
 std::vector<std::vector<int>> Map::matrix;
-int Map::x = 0;
-int Map::y = 0;
 int Map::cx = 0;
 int Map::cy = 0;
 std::ifstream Map::currentLevel;
-
+bool Map::changed = 1;
 void Map::loadLevel()
 {
 	currentLevel = loadFile(Paths::levelPath);
-	x = getX();
-	y = getY();
 
 	loadMatrix();
 
-	checkMate();
+	//checkMate();
 }
 
 void Map::loadMatrix() {
@@ -51,7 +47,7 @@ void Map::loadMatrix() {
 	matrix[h].push_back(temp);
 }
 int Map::getIdObject(double ay, int iy, double ax, int ix) {
-	if ((ay / GRID_H) + iy < y && (ax / GRID_W) + ix < x
+	if ((ay / GRID_H) + iy < matrix.size() && (ax / GRID_W) + ix < matrix[0].size()
 		&& (ay / GRID_H) + iy >= 0 && (ax / GRID_W) + ix >= 0) {
 		if (matrix[(int)(ay / GRID_H) + iy]
 			[(int)(ax / GRID_W) + ix] >= 0
@@ -179,8 +175,8 @@ void Map::trigger(C_Rect reqt, int direction)
 
 void Map::findOccurrence(int charry, double * ix, double * iy)
 {
-	for (int h = 0; h < y; h++) {
-		for (int w = 0; w < x; w++) {
+	for (int h = 0; h < matrix.size(); h++) {
+		for (int w = 0; w < matrix[0].size(); w++) {
 			if (matrix[h][w] == charry) {
 				*ix = w*GRID_W;
 				*iy = h*GRID_W;
@@ -200,7 +196,6 @@ void Map::saveMatrix()
 	currentLevel.close();
 	std::ofstream ofs;
 	ofs.open(Paths::levelPath, std::ofstream::out | std::ofstream::trunc);
-	//matrix[cy][cx] = 69;
 	for (int b = 0; b < matrix.size(); b++) {
 		for (int a = 0; a < matrix[0].size(); a++) {
 			if (a == cx && b == cy)
@@ -219,38 +214,10 @@ void Map::saveMatrix()
 	ofs.close();
 }
 
-int Map::getY()
-{
-	currentLevel.clear();
-	currentLevel.seekg(0);
-	int lines = 0;
-	std::string line;
-	while (!currentLevel.eof()) {
-		getline(currentLevel, line);
-		lines++;
-	}
-	return lines;
-}
-
-int Map::getX()
-{
-	currentLevel.clear();
-	currentLevel.seekg(0);
-	int cols = 0;
-	char reader = 0;
-	while (reader != '\n')
-	{
-		if (reader == ',')
-			cols++;
-		currentLevel.get(reader);
-	}
-	return cols;
-}
-
 void Map::checkMate()
 {
-	for (int h = 0; h < y; h++) {
-		for (int w = 0; w < x; w++) {
+	for (int h = 0; h < matrix.size(); h++) {
+		for (int w = 0; w < matrix[0].size(); w++) {
 			printf("%d ", matrix[h][w]);
 		}
 		std::cout << std::endl;

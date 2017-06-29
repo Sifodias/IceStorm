@@ -88,6 +88,7 @@ void Moving_Unit::handleMoves()
 		speedX = 0;
 	}
 	if (!GRAVITY_ENABLED) {
+		jumpLock = 0;
 		if (!movesY.size()) {
 			speedY = 0;
 		}

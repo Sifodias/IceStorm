@@ -14,7 +14,7 @@ public:
 	static void Init();	//Inits the textures manager
 	static SDL_Texture* findTexture(std::string name);
 	static void printContinue();
-
 	static std::vector<SDL_Texture*> textureList;	//The table containing the textures
 	static std::vector<std::string> textureNames;
+	static SDL_Texture* levelScreenshot;
 };

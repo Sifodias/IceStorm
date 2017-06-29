@@ -21,11 +21,11 @@ void Init_game()
 }
 
 void printGrid() {
-	for (int y = 0; y < Map::y*GRID_H; y += GRID_H) {
-		for (int x = 0; x < Map::x*GRID_W; x += GRID_W) {
+	for (int y = 0; y < Map::matrix.size()*GRID_H; y += GRID_H) {
+		for (int x = 0; x < Map::matrix[0].size()*GRID_W; x += GRID_W) {
 			SDL_SetRenderDrawColor(Renderer::g_Renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-			SDL_RenderDrawLine(Renderer::g_Renderer, x, y, x + (GRID_W*Map::x), y);
-			SDL_RenderDrawLine(Renderer::g_Renderer, x, y, x, y + (GRID_H*Map::y));
+			SDL_RenderDrawLine(Renderer::g_Renderer, x, y, x + (GRID_W*(int)Map::matrix[0].size()), y);
+			SDL_RenderDrawLine(Renderer::g_Renderer, x, y, x, y + (GRID_H*(int)Map::matrix.size()));
 		}
 	}
 }
@@ -34,8 +34,8 @@ void handleRoutines(SDL_Event e) {
 	SDL_RenderClear(Renderer::g_Renderer);
 	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 
-	Character::characterRoutine(e);
 	Builder::routine(e);
+	Character::characterRoutine(e);
 	Textures_Manager::blitStuff();
 	Text_Printer::handleRoutine(e);
 

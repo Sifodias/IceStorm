@@ -15,9 +15,6 @@ class Map {
 public : 
 	static void loadLevel();
 
-	static int getX();			//gets the x of the matrix in the stream currentlevel
-	static int getY();			//same for y
-
 	static void checkMate();		//prints in the console the current loaded matrix
 
 	static void loadMatrix();	//loads a matrix from a stream
@@ -32,10 +29,9 @@ public :
 
 	static void saveMatrix();
 
+	static bool changed;
 	static std::ifstream currentLevel;	//the stream containing the level
 	static std::vector<std::vector<int>> matrix;	//the matrix of the level
-	static int x;		//the x of the matrix in the stream currentlevel
-	static int y;		//same for y
 
 	static int cx;		//the x of the matrix in the stream currentlevel
 	static int cy;

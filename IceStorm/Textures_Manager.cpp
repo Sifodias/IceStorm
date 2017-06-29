@@ -13,6 +13,7 @@
 
 std::vector<SDL_Texture*> Textures_Manager::textureList;
 std::vector<std::string> Textures_Manager::textureNames;
+SDL_Texture* Textures_Manager::levelScreenshot = NULL;
 
 std::vector<SDL_Texture*> Textures_Manager::texturesListInit()
 {
@@ -75,16 +76,37 @@ void Textures_Manager::blitStuff()
 	SDL_Rect blitty;
 	blitty.h = GRID_H;
 	blitty.w = GRID_W;
-	blitty.x = -(int)Camera::getX();
+	blitty.x = -Camera::getX();
 	//blitty.x = Character::hitBox.x-120; blitty.y = Character::hitBox.y-160;
-	blitty.y = -(int)Camera::Camera::getY();
-	for (int y = 0; y < Map::matrix.size(); y++, blitty.x = -(int)Camera::getX(),
-		blitty.y += blitty.h) {
-		for (int x = 0; x < Map::matrix[y].size(); x++, blitty.x += blitty.w) {
-			SDL_RenderCopy(Renderer::g_Renderer,
-				Objects_Manager::objects[Map::matrix[y][x]]->texture, NULL, &blitty);
+	blitty.y = -Camera::getY();
+	//if (Map::changed) {
+	int maxy = ((Camera::getY() + Camera::outerRect.h)/ GRID_H) + 1;
+	int maxx = ((Camera::getX() + Camera::outerRect.w) / GRID_W) + 1;
+	if (((Camera::getY() + Camera::outerRect.h) / GRID_H) + 1 > Map::matrix.size())
+		maxy = (int)Map::matrix.size();
+	if (((Camera::getX() + Camera::outerRect.w) / GRID_W) + 1 > Map::matrix[0].size())
+		maxx = (int)Map::matrix[0].size();
+	int miny = (int)(Camera::getY() / GRID_H);
+	int minx = (int)(Camera::getX() / GRID_W);
+	if (--miny < 0) miny = 0;
+	if (--minx < 0) minx = 0;
+	blitty.y += miny*GRID_H;
+	for (int y = miny; y < maxy; y++, blitty.x = -Camera::getX()+minx*GRID_W, blitty.y += blitty.h) {
+		for (int x = minx; x < maxx; x++, blitty.x += blitty.w) {
+			if (blitty.x > -GRID_W && blitty.x < Renderer::SCREEN_W &&
+				blitty.y > -GRID_H && blitty.y < Renderer::SCREEN_H)
+				SDL_RenderCopy(Renderer::g_Renderer,
+					Objects_Manager::objects[Map::matrix[y][x]]->texture, NULL, &blitty);
 		}
 	}
+	//	Renderer::saveScreenshotBMP("./levels/mappy.bmp");
+	//	levelScreenshot = loadTexture("./levels/mappy.bmp");
+	//	Map::changed = 0;
+	//}
+	//else {
+	//	blitty.h = SCREEN_H; blitty.w = SCREEN_W;
+	//	SDL_RenderCopy(Renderer::g_Renderer, levelScreenshot, NULL, &blitty);
+	//}
 	blitty = (SDL_Rect)Character::movingUnit.hitBox;
 	//std::cout << Camera::getX() << " " << Camera::getY() << " " <<
 		//Character::hitBox.x << " "<< Character::hitBox.y <<::endl;

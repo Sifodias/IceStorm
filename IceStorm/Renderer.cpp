@@ -5,11 +5,13 @@
 #include "Engine_Manager.h"
 #include <SDL_ttf.h>
 #include <string>
+#include "Map.h"
 #define FULLSCREEN 0
 
 SDL_Renderer* Renderer::g_Renderer = NULL;
 SDL_Window* Renderer::g_Window = NULL;
-
+int Renderer::SCREEN_W = 320;
+int Renderer::SCREEN_H = 240;
 
 void Renderer::initAll()
 {
@@ -57,6 +59,44 @@ void Renderer::initAll()
 	SDL_RenderSetLogicalSize(g_Renderer, SCREEN_W, SCREEN_H);
 }
 
+bool Renderer::saveScreenshotBMP(std::string filepath) {
+	SDL_Surface* saveSurface = NULL;
+	SDL_Surface* infoSurface = NULL;
+	infoSurface = SDL_GetWindowSurface(g_Window);
+
+
+	if (infoSurface == NULL) {
+		std::cerr << "Failed to create info surface from window in saveScreenshotBMP(string), SDL_GetError() - " << SDL_GetError() << "\n";
+	}
+	else {
+		unsigned char * pixels = new (std::nothrow) unsigned char[infoSurface->w * infoSurface->h * infoSurface->format->BytesPerPixel];
+		if (pixels == 0) {
+			std::cerr << "Unable to allocate memory for screenshot pixel data buffer!\n";
+			return false;
+		}
+		else {
+			if (SDL_RenderReadPixels(g_Renderer, &infoSurface->clip_rect, infoSurface->format->format, pixels, infoSurface->w * infoSurface->format->BytesPerPixel) != 0) {
+				std::cerr << "Failed to read pixel data from SDL_Renderer object. SDL_GetError() - " << SDL_GetError() << "\n";
+				pixels = NULL;
+				return false;
+			}
+			else {
+				saveSurface = SDL_CreateRGBSurfaceFrom(pixels, infoSurface->w, infoSurface->h, infoSurface->format->BitsPerPixel, infoSurface->w * infoSurface->format->BytesPerPixel, infoSurface->format->Rmask, infoSurface->format->Gmask, infoSurface->format->Bmask, infoSurface->format->Amask);
+				if (saveSurface == NULL) {
+					std::cerr << "Couldn't create SDL_Surface from renderer pixel data. SDL_GetError() - " << SDL_GetError() << "\n";
+					return false;
+				}
+				SDL_SaveBMP(saveSurface, filepath.c_str());
+				SDL_FreeSurface(saveSurface);
+				saveSurface = NULL;
+			}
+			delete[] pixels;
+		}
+		SDL_FreeSurface(infoSurface);
+		infoSurface = NULL;
+	}
+	return true;
+}
 
 void Renderer::quitAll()
 {

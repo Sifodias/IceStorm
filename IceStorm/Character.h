@@ -13,10 +13,10 @@
 #define JUMPLOCK 1
 #define GRAVITY_ENABLED 1
 
-#define CHAR_H 30
-#define CHAR_W 20
-#define CHAR_HITBOX_H 30
-#define CHAR_HITBOX_W 20
+#define CHAR_H 32
+#define CHAR_W 24
+#define CHAR_HITBOX_H 32
+#define CHAR_HITBOX_W 24
 
 
 class Character

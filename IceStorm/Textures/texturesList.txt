@@ -8,3 +8,7 @@ bite.jpg
 dialog_box.png
 dialog_box_clean.png
 testc.png
+lucas.png
+lucas2.png
+lucasL.png
+lucasR.png
