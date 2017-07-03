@@ -16,14 +16,7 @@ void Character::characterRoutine(SDL_Event & e)
 	if (movingUnit.mainDirection == 2) {
 		textures.setCurrentGroup("right");
 	}
-	/*if (movingUnit.direction.size() > 0) {
-		if (movingUnit.direction[0] == -2) {
-			textures.setCurrentGroup("left");
-		}
-		if (movingUnit.direction[0] == 2) {
-			textures.setCurrentGroup("right");
-		}
-	}*/
+
 	if (e.type == SDL_KEYDOWN) {
 		if (e.key.keysym.sym == SDLK_j) {
 			Map::trigger(movingUnit.hitBox, movingUnit.mainDirection);
