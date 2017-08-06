@@ -9,13 +9,12 @@ int Map::cx = 0;
 int Map::cy = 0;
 std::ifstream Map::currentLevel;
 bool Map::changed = 1;
+
 void Map::loadLevel()
 {
 	currentLevel = loadFile(Paths::levelPath);
 
 	loadMatrix();
-
-	//checkMate();
 }
 
 void Map::loadMatrix() {
@@ -46,9 +45,10 @@ void Map::loadMatrix() {
 	}
 	matrix[h].push_back(temp);
 }
+
 int Map::getIdObject(double ay, int iy, double ax, int ix) {
-	if ((ay / GRID_H) + iy < matrix.size() && (ax / GRID_W) + ix < matrix[0].size()
-		&& (ay / GRID_H) + iy >= 0 && (ax / GRID_W) + ix >= 0) {
+	if ((int)(ay / GRID_H) + iy < matrix.size() && (int)(ax / GRID_W) + ix < matrix[0].size()
+		&& (int)(ay / GRID_H) + iy >= 0 && (int)(ax / GRID_W) + ix >= 0) {
 		if (matrix[(int)(ay / GRID_H) + iy]
 			[(int)(ax / GRID_W) + ix] >= 0
 			&& matrix[(int)(ay / GRID_H) + iy]
@@ -70,7 +70,7 @@ bool Map::isItSolid(C_Rect reqt)
 				return true;
 			}
 			if (ix + 1 > (int)(reqt.w / GRID_W)) {
-				if (Objects_Manager::objects[getIdObject(reqt.y, 0,
+				if (Objects_Manager::objects[getIdObject(reqt.y, iy,
 					reqt.x + reqt.w, 0)]->checkFlag("SOLID"))
 					return true;
 			}

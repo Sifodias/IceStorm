@@ -1,5 +1,6 @@
 #include "Moving_Unit.h"
 #include "Map.h"
+#include <iostream>
 
 void Moving_Unit::handleMoves()
 {
@@ -249,8 +250,8 @@ void Moving_Unit::move(SDL_Event & e)
 {
 	if (movementsLock == 0) {
 		if (noclip)
-			GRAVITY_ENABLED = 0;
-		else GRAVITY_ENABLED = 1;
+			xGRAVITY_ENABLED = 0;
+		else xGRAVITY_ENABLED = 1;
 		addMoves(e);
 		handleMoves();
 		doMoves();
@@ -259,6 +260,7 @@ void Moving_Unit::move(SDL_Event & e)
 		movementsLock = 0;
 		timerA = timerB = SDL_GetTicks();
 	}
+	//std::cout << Map::isItSolid(hitBox);
 }
 
 void Moving_Unit::lockMovements()

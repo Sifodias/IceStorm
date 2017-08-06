@@ -3,9 +3,7 @@
 #include <SDL.h>
 #include <string>
 #include <array>
-
-
-#define PRINT_SPEED 0
+#include "Global_Flags.h"
 
 typedef struct t_nodequeue {
 	std::string str;

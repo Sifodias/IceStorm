@@ -6,9 +6,7 @@
 #include <string>
 #include "C_Rect.h"
 
-//Grid map
-#define GRID_W 20
-#define GRID_H 20
+#include "Global_Flags.h"
 
 
 class Map {

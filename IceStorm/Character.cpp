@@ -29,5 +29,5 @@ void Character::Init()
 	C_Rect hitty(0, 0, CHAR_HITBOX_W, CHAR_HITBOX_H);
 	movingUnit.init(hitty);
 	Map::findOccurrence(69, &movingUnit.hitBox.x, &movingUnit.hitBox.y);
-	textures.init("lucasL.png | lucasR.png", "left right");
+	textures.init("testc.png | testc.png", "left right");
 }

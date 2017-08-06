@@ -77,9 +77,9 @@ void Textures_Manager::blitStuff()
 	blitty.h = GRID_H;
 	blitty.w = GRID_W;
 	blitty.x = -Camera::getX();
-	//blitty.x = Character::hitBox.x-120; blitty.y = Character::hitBox.y-160;
+
 	blitty.y = -Camera::getY();
-	//if (Map::changed) {
+	
 	int maxy = ((Camera::getY() + Camera::outerRect.h)/ GRID_H) + 1;
 	int maxx = ((Camera::getX() + Camera::outerRect.w) / GRID_W) + 1;
 	if (((Camera::getY() + Camera::outerRect.h) / GRID_H) + 1 > Map::matrix.size())
@@ -99,17 +99,9 @@ void Textures_Manager::blitStuff()
 					Objects_Manager::objects[Map::matrix[y][x]]->texture, NULL, &blitty);
 		}
 	}
-	//	Renderer::saveScreenshotBMP("./levels/mappy.bmp");
-	//	levelScreenshot = loadTexture("./levels/mappy.bmp");
-	//	Map::changed = 0;
-	//}
-	//else {
-	//	blitty.h = SCREEN_H; blitty.w = SCREEN_W;
-	//	SDL_RenderCopy(Renderer::g_Renderer, levelScreenshot, NULL, &blitty);
-	//}
+
 	blitty = (SDL_Rect)Character::movingUnit.hitBox;
-	//std::cout << Camera::getX() << " " << Camera::getY() << " " <<
-		//Character::hitBox.x << " "<< Character::hitBox.y <<::endl;
+
 	blitty.x -= Camera::getX();
 	blitty.y -= Camera::getY();
 	blitty.y -= CHAR_H - CHAR_HITBOX_H;

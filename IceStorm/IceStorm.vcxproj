@@ -124,7 +124,6 @@
     <ClCompile Include="Builder.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Character.cpp" />
-    <ClCompile Include="C_Rect.cpp" />
     <ClCompile Include="Generic_Object.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Moving_Unit.cpp" />
@@ -142,6 +141,7 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="C_Rect.h" />
     <ClInclude Include="Generic_Object.h" />
+    <ClInclude Include="Global_Flags.h" />
     <ClInclude Include="Sprites_Handler.h" />
     <ClInclude Include="Moving_Unit.h" />
     <ClInclude Include="Map.h" />
