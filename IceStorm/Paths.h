@@ -9,4 +9,5 @@ public :
 	static string texturesListPath;
 	static string asciiPath;
 	static string entData;
+	static string dialogs;
 };

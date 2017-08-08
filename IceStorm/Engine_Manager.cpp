@@ -37,6 +37,7 @@ void handleRoutines(SDL_Event e) {
 	Builder::routine(e);
 	Character::characterRoutine(e);
 	Textures_Manager::blitStuff();
+	
 	Text_Printer::handleRoutine(e);
 
 	SDL_RenderPresent(Renderer::g_Renderer);

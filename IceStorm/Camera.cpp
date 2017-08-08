@@ -26,7 +26,7 @@ int Camera::getX() {
 		outerRect.x = innerRect.x - Renderer::SCREEN_W / 3;
 	}
 	else {
-		outerRect.x = Character::movingUnit.hitBox.x - (outerRect.w / 2);
+		outerRect.x = (int)Character::movingUnit.hitBox.x - (int)(outerRect.w / 2);
 	}
 	if (outerRect.x < 0)
 		return 0;
@@ -43,7 +43,7 @@ int Camera::getY() {
 		outerRect.y = innerRect.y - Renderer::SCREEN_H / 3;
 	}
 	else {
-		outerRect.y = Character::movingUnit.hitBox.y - (outerRect.h / 2);
+		outerRect.y = (int)Character::movingUnit.hitBox.y - (int)(outerRect.h / 2);
 	}
 	if (outerRect.y < 0)
 		return 0;

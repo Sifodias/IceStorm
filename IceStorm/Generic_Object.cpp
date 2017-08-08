@@ -1,7 +1,7 @@
 #include "Objects_Manager.h"
 #include "Generic_Object.h"
 #include "Text_Printer.h"
-
+#include "Dialog_Engine.h"
 void GObject::trigger()
 {
 	flagTrigger = 1;
@@ -14,12 +14,14 @@ void GObject::trigger()
 
 	if (!type.compare("DIALOG")) {
 		if (!Text_Printer::busy) {
-			Text_Printer::addToQueue(content);
+			if (content[0] == '|') {
+				DialogEngine::dialogSelector(content);
+			}
+			else
+				Text_Printer::addToQueue(content);
 		}
-
 	}
 	flagTrigger = 0;
-
 }
 
 bool GObject::checkFlag(std::string flag)

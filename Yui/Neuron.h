@@ -1,5 +1,0 @@
-class Neuron {
-	Neuron& next;
-
-};
-

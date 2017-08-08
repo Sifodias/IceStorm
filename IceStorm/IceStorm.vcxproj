@@ -124,6 +124,7 @@
     <ClCompile Include="Builder.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Dialog_Engine.cpp" />
     <ClCompile Include="Generic_Object.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Moving_Unit.cpp" />
@@ -140,8 +141,10 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="C_Rect.h" />
+    <ClInclude Include="Dialog_Engine.h" />
     <ClInclude Include="Generic_Object.h" />
     <ClInclude Include="Global_Flags.h" />
+    <ClInclude Include="Mode_Handler.h" />
     <ClInclude Include="Sprites_Handler.h" />
     <ClInclude Include="Moving_Unit.h" />
     <ClInclude Include="Map.h" />
@@ -151,6 +154,9 @@
     <ClInclude Include="Textures_Manager.h" />
     <ClInclude Include="Text_Printer.h" />
     <ClInclude Include="Engine_Manager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Dialogs\dialog.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

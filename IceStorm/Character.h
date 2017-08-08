@@ -12,7 +12,7 @@ class Character
 public:
 	static void characterRoutine(SDL_Event& e);
 	static void Init();
-	
+
 	static SpritesHandler textures;
 	static Moving_Unit movingUnit;
 };

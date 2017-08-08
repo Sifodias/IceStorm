@@ -5,6 +5,8 @@
 #include <array>
 #include "Global_Flags.h"
 
+#define print(a) Text_Printer::addToQueue(a)
+
 typedef struct t_nodequeue {
 	std::string str;
 	SDL_Rect rect;
@@ -24,7 +26,11 @@ public:
 	static std::vector<std::array<SDL_Texture*, 127>> lettersVec;
 	static std::vector<NodeQueue> queue;
 
+	static void flush();
+
+	static bool standStill;	//the last sentence in queue will stay printed
 	static bool busy;
+
 private:
 	static void printText(NodeQueue& node);
 	static Uint32 timerA;

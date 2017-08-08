@@ -17,6 +17,7 @@ int Text_Printer::flagOverflow;
 SDL_Texture* Text_Printer::dialogBox = NULL;
 SDL_Rect Text_Printer::dialogRect;
 bool Text_Printer::busy = 0;
+bool Text_Printer::standStill = 0;
 
 void Text_Printer::printText(NodeQueue& node) {
 	SDL_Rect blitRect = node.container;
@@ -89,7 +90,7 @@ void Text_Printer::handleRoutine(SDL_Event e)
 		printText(queue[0]);
 		if (queue[0].lock) {
 			//print a ->
-			if (e.type == SDL_KEYDOWN) {
+			if (e.type == SDL_KEYDOWN && (!standStill || queue.size()>1)) {
 				if (e.key.keysym.sym == SDLK_j) {
 					while (queue[0].str[queue[0].iterator] == ' ')
 						queue[0].iterator++;
@@ -109,6 +110,12 @@ void Text_Printer::handleRoutine(SDL_Event e)
 		}
 	}
 	else busy = 0;
+}
+
+void Text_Printer::flush()
+{
+	queue.erase(queue.begin(), queue.end());
+	standStill = 0;
 }
 
 void Text_Printer::Init() {

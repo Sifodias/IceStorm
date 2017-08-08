@@ -106,5 +106,6 @@ void Textures_Manager::blitStuff()
 	blitty.y -= Camera::getY();
 	blitty.y -= CHAR_H - CHAR_HITBOX_H;
 	blitty.h = CHAR_H;
+	blitty.w = CHAR_W;
 	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &blitty);
 }
