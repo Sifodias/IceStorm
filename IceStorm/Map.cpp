@@ -197,7 +197,7 @@ void Map::saveMatrix()
 	std::ofstream ofs;
 	ofs.open(Paths::levelPath, std::ofstream::out | std::ofstream::trunc);
 	for (int b = 0; b < matrix.size(); b++) {
-		for (int a = 0; a < matrix[0].size(); a++) {
+		for (int a = 0; a < matrix[b].size(); a++) {
 			if (a == cx && b == cy)
 				ofs.write("69", 2);
 			else
@@ -205,7 +205,7 @@ void Map::saveMatrix()
 			if (a == matrix[0].size() - 1 && b == matrix.size() - 1) {
 				ofs.write("-", 1);
 				break;
-			}
+		}
 			ofs.write(",", 1);
 		}
 		if (b != matrix.size() - 1)

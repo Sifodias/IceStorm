@@ -37,7 +37,7 @@ void handleRoutines(SDL_Event e) {
 	Builder::routine(e);
 	Character::characterRoutine(e);
 	Textures_Manager::blitStuff();
-	
+
 	Text_Printer::handleRoutine(e);
 
 	SDL_RenderPresent(Renderer::g_Renderer);
@@ -70,6 +70,7 @@ std::ifstream loadFile(std::string path)
 }
 
 void engineQuit() {
-	Map::saveMatrix();
+	if (SAVE_ENABLED)
+		Map::saveMatrix();
 
 }

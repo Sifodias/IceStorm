@@ -9,6 +9,7 @@
 
 std::vector<std::array<SDL_Texture*, 127>> Text_Printer::lettersVec;
 std::vector<NodeQueue> Text_Printer::queue;
+std::vector<NodeQueue> Text_Printer::imQueue;
 Uint32 Text_Printer::timerA;
 Uint32 Text_Printer::timerB;
 SDL_Rect Text_Printer::defaultRect;
@@ -59,7 +60,7 @@ void Text_Printer::printText(NodeQueue& node) {
 }
 
 void Text_Printer::addToQueue(std::string str,
-	SDL_Rect* container, int policeID, SDL_Rect* rect)
+	SDL_Rect* container, int immediate, int policeID, SDL_Rect* rect)
 {
 	if (!str.size()) return;
 	if (queue.size() > 10000) {
@@ -77,45 +78,60 @@ void Text_Printer::addToQueue(std::string str,
 		return;
 	}
 	NodeQueue tempNode{ str, *rect, policeID, 0 , *container, 0 };
-	queue.push_back(tempNode);
+	if (!immediate)
+		queue.push_back(tempNode);
+	else imQueue.push_back(tempNode);
 }
-
+void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue>& iQueue) {
+	if (iQueue.size() > 0) {
+		if (&iQueue == &queue)
+			busy = 1;
+		for (int i = 0; i < iQueue.size(); i++) {
+			printText(iQueue[i]);
+			if (iQueue[i].lock) {
+				if (e.type == SDL_KEYDOWN && (&iQueue == &queue) &&
+					(!standStill  || iQueue.size() > 1)) {
+					if (e.key.keysym.sym == SDLK_j) {
+						while (iQueue[i].str[iQueue[i].iterator] == ' ')
+							iQueue[i].iterator++;
+						iQueue[i].str.erase(i, iQueue[i].iterator);
+						iQueue[i].lock = i;
+						iQueue[i].iterator = i;
+						if (iQueue[i].iterator == iQueue[i].str.size())
+							iQueue.erase(iQueue.begin(), iQueue.begin() + 1);
+					}
+				}
+				if (&iQueue == &queue) return;
+				continue;
+			}
+			if (timerB - timerA > PRINT_SPEED && iQueue[i].iterator != iQueue[i].str.size()) {
+				iQueue[i].iterator++;
+				//timerA = timerB = SDL_GetTicks();
+			}
+			if (&iQueue == &queue) return;
+		}
+	}
+	else if (&iQueue == &queue) busy = 0;
+}
 void Text_Printer::handleRoutine(SDL_Event e)
 {
 	timerB = SDL_GetTicks();
-	if (queue.size() > 0) {
-		busy = 1;
+	if (queue.size() > 0)
 		SDL_RenderCopy(Renderer::g_Renderer, dialogBox,
 			NULL, &dialogRect);
-		printText(queue[0]);
-		if (queue[0].lock) {
-			//print a ->
-			if (e.type == SDL_KEYDOWN && (!standStill || queue.size()>1)) {
-				if (e.key.keysym.sym == SDLK_j) {
-					while (queue[0].str[queue[0].iterator] == ' ')
-						queue[0].iterator++;
-					queue[0].str.erase(0, queue[0].iterator);
-					queue[0].lock = 0;
-					queue[0].iterator = 0;
-					if (queue[0].iterator == queue[0].str.size())
-						queue.erase(queue.begin(), queue.begin() + 1);
-				}
-			}
-			return;
-		}
-		if (timerB - timerA > PRINT_SPEED && queue[0].iterator != queue[0].str.size()) {
-			queue[0].iterator++;
-			timerA = timerB = SDL_GetTicks();
-			return;
-		}
-	}
-	else busy = 0;
+	keepGoin(e, queue);
+	keepGoin(e, imQueue);
 }
 
-void Text_Printer::flush()
+void Text_Printer::flush(int i)
 {
-	queue.erase(queue.begin(), queue.end());
-	standStill = 0;
+	if (i == 1) {
+		queue.erase(queue.begin(), queue.end());
+		standStill = 0;
+	}
+	if (i == 2) {
+		imQueue.erase(imQueue.begin(), imQueue.end());
+	}
 }
 
 void Text_Printer::Init() {

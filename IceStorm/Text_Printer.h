@@ -20,13 +20,15 @@ class Text_Printer {
 public:
 	static void Init();
 	static void addToQueue(std::string str, 
-		SDL_Rect* container = NULL, int policeID = 0, SDL_Rect* rect = NULL);
+		SDL_Rect* container = NULL, int immediate = 0, int policeID = 0, SDL_Rect* rect = NULL);
 	static void handleRoutine(SDL_Event e);
+	void static keepGoin(SDL_Event e, std::vector<NodeQueue>& iQueue);
 
 	static std::vector<std::array<SDL_Texture*, 127>> lettersVec;
 	static std::vector<NodeQueue> queue;
+	static std::vector<NodeQueue> imQueue;
 
-	static void flush();
+	static void flush(int i); //1 for regular queue, 2 for immediate
 
 	static bool standStill;	//the last sentence in queue will stay printed
 	static bool busy;
