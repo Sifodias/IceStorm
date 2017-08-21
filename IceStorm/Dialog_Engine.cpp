@@ -20,8 +20,7 @@ void DialogEngine::dialogSelector(string desu)
 
 	Character::movingUnit.unlockMovements();
 }
-//prevent choice before last print done
-//print choices
+
 int DialogEngine::choiceMode(string a, string b, string c = "", string d = "")
 {
 	Text_Printer::standStill = 1;
@@ -77,4 +76,20 @@ void DialogEngine::firstTalk()
 		else if (B)
 			print("See you next time <3");
 	}
+}
+
+void intro() {
+	print("Well, here we are");
+	print("Mistakes can't be fixed, can they ?");
+	print("It's now time to take responsabilities");
+	print("I wish you the best of luck ...");
+}
+
+void genny1() {
+	print("You're new here, aren't you ?");
+	print("I wonder how you get there ...");
+	print("But it doesn't matter now");
+	print("You shall try to make some friends, if you don't wanna disappear ...");
+	print("But keep in mind that it's all lies, in order to stay sane");
+	print("I'm out for now");
 }

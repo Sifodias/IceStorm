@@ -86,6 +86,10 @@ void Builder::printInfo(GObject* printObject)
 	cout << "-------------" << endl;
 }
 
+void Builder::createObject()
+{
+}
+
 void Builder::placeElement(SDL_MouseButtonEvent& e) {
 	if (currentObject == NULL)
 		return;
