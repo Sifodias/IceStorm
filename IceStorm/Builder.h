@@ -18,9 +18,10 @@ public:
 	static void trace();
 	static void nearby();
 	static void createObject();
+	static void editObject();
 	static void placeElement(SDL_MouseButtonEvent& e);
 	static void saveLevel(std::string name);
-	static void newLevel();
+	static void newLevel(std::string name);
 	static void loadLevel(std::string name);
 	static void printInfo(GObject* printObject);
 	static void routine(SDL_Event& e);

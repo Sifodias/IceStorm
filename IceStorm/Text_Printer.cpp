@@ -135,7 +135,7 @@ void Text_Printer::flush(int i)
 }
 
 void Text_Printer::Init() {
-	std::ifstream tempStream = loadFile(Paths::asciiPath);
+	std::ifstream* tempStream = loadFile(Paths::asciiPath);
 	if (!tempStream) {
 		printf("ERROR : policeList not loaded\n");
 		return;
@@ -143,10 +143,10 @@ void Text_Printer::Init() {
 
 	std::string catcher;
 	std::vector<TTF_Font*> tempVec;
-	tempStream.clear();
-	tempStream.seekg(0);
-	while (!tempStream.eof()) {
-		getline(tempStream, catcher);
+	tempStream->clear();
+	tempStream->seekg(0);
+	while (!tempStream->eof()) {
+		getline(*tempStream, catcher);
 		catcher.insert(0, "./Polices/");
 		std::cout << catcher << std::endl;
 		tempVec.push_back(TTF_OpenFont(catcher.c_str(), 200));

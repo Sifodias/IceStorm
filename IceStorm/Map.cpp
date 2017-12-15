@@ -7,7 +7,7 @@
 std::vector<std::vector<int>> Map::matrix;
 int Map::cx = 0;
 int Map::cy = 0;
-std::ifstream Map::currentLevel;
+std::ifstream* Map::currentLevel;
 bool Map::changed = 1;
 
 void Map::loadLevel()
@@ -19,15 +19,15 @@ void Map::loadLevel()
 
 void Map::loadMatrix() {
 	char reader = '0';
-	currentLevel.clear();
-	currentLevel.seekg(0);
+	currentLevel->clear();
+	currentLevel->seekg(0);
 	std::vector<int> jammy;
 	matrix.push_back(jammy);
 	int h = 0, temp = 0;
-	currentLevel.get(reader);
+	currentLevel->get(reader);
 	while (reader != '-') {
 		if (reader == '\n') {
-			currentLevel.get(reader);
+			currentLevel->get(reader);
 			matrix.push_back(jammy);
 			h++;
 			continue;
@@ -35,19 +35,22 @@ void Map::loadMatrix() {
 		if (reader == ',') {
 			matrix[h].push_back(temp);
 			temp = 0;
-			currentLevel.get(reader);
+			currentLevel->get(reader);
 			continue;
 
 		}
 		temp *= 10;
 		temp += reader - 48;
-		currentLevel.get(reader);
+		currentLevel->get(reader);
 	}
 	matrix[h].push_back(temp);
 }
 
+//doubles for absolute x and y,
+//ints for relative x and y
+//double and ints will be additionned
 int Map::getIdObject(double ay, int iy, double ax, int ix) {
-	if ((int)(ay / GRID_H) + iy < matrix.size() && (int)(ax / GRID_W) + ix < matrix[0].size()
+	if ((int)(ay / GRID_H) + iy < matrix.size() && (int)(ax / GRID_W) + ix < matrix[(int)(ay / GRID_H) + iy].size()
 		&& (int)(ay / GRID_H) + iy >= 0 && (int)(ax / GRID_W) + ix >= 0) {
 		if (matrix[(int)(ay / GRID_H) + iy]
 			[(int)(ax / GRID_W) + ix] >= 0
@@ -58,7 +61,13 @@ int Map::getIdObject(double ay, int iy, double ax, int ix) {
 	}
 	return 0;
 }
-
+int Map::getID(int ix, int iy) {
+	if (iy < matrix.size())
+		if (ix < matrix[iy].size()) {
+			return matrix[iy][ix];
+		}
+	return 0;
+}
 bool Map::isItSolid(C_Rect reqt)
 {
 	//faire une grille gridh x gridw
@@ -97,18 +106,14 @@ void Map::trigger(C_Rect reqt, int direction)
 	switch (direction) {
 	case 2:
 		for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
-			if (matrix[(int)(reqt.y / GRID_H) + iy]
-				[(int)((reqt.x + reqt.w + 1) / GRID_W)]) {
-				Objects_Manager::objects[matrix[(int)(reqt.y / GRID_H) + iy]
-					[(int)((reqt.x + reqt.w + 1) / GRID_W)]]->trigger();
+			if (getIdObject(reqt.y, iy, reqt.x + reqt.w + 1, 0)) {
+				Objects_Manager::objects[getIdObject(reqt.y, iy, reqt.x + reqt.w + 1, 0)]->trigger();
 				return;
 			}
 		}
 		if (reqt.h%GRID_H) {
-			if (matrix[(int)((reqt.y + reqt.h) / GRID_H)]
-				[(int)((reqt.x + reqt.w + 1) / GRID_W)]) {
-				Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h) / GRID_H)]
-					[(int)((reqt.x + reqt.w + 1) / GRID_W)]]->trigger();
+			if (getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w + 1, 0)) {
+				Objects_Manager::objects[getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w + 1, 0)]->trigger();
 				return;
 			}
 		}
@@ -116,18 +121,14 @@ void Map::trigger(C_Rect reqt, int direction)
 
 	case -2:
 		for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
-			if (matrix[(int)(reqt.y / GRID_H) + iy]
-				[(int)((reqt.x - 1) / GRID_W)]) {
-				Objects_Manager::objects[matrix[(int)(reqt.y / GRID_H) + iy]
-					[(int)((reqt.x - 1) / GRID_W)]]->trigger();
+			if (getIdObject(reqt.y, iy, reqt.x - 1, 0)) {
+				Objects_Manager::objects[getIdObject(reqt.y, iy, reqt.x - 1, 0)]->trigger();
 				return;
 			}
 		}
 		if (reqt.h%GRID_H) {
-			if (matrix[(int)((reqt.y + reqt.h) / GRID_H)]
-				[(int)((reqt.x - 1) / GRID_W)]) {
-				Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h) / GRID_H)]
-					[(int)((reqt.x - 1) / GRID_W)]]->trigger();
+			if (getIdObject(reqt.y + reqt.h, 0, reqt.x - 1, 0)) {
+				Objects_Manager::objects[getIdObject(reqt.y + reqt.h, 0, reqt.x - 1, 0)]->trigger();
 				return;
 			}
 		}
@@ -135,18 +136,14 @@ void Map::trigger(C_Rect reqt, int direction)
 
 	case 1:
 		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-			if (matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
-				[(int)((reqt.x) / GRID_W) + ix]) {
-				Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
-					[(int)((reqt.x) / GRID_W) + ix]]->trigger();
+			if (getIdObject(reqt.y + reqt.h + 1, 0, reqt.x, ix)) {
+				Objects_Manager::objects[getIdObject(reqt.y + reqt.h + 1, 0, reqt.x, ix)]->trigger();
 				return;
 			}
 		}
 		if (reqt.h%GRID_H) {
-			if (matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
-				[(int)((reqt.x + reqt.w) / GRID_W)]) {
-				Objects_Manager::objects[matrix[(int)((reqt.y + reqt.h + 1) / GRID_H)]
-					[(int)((reqt.x + reqt.w) / GRID_W)]]->trigger();
+			if (getIdObject(reqt.y + reqt.h + 1, 0, reqt.x + reqt.w, 0)) {
+				Objects_Manager::objects[getIdObject(reqt.y + reqt.h + 1, 0, reqt.x + reqt.w, 0)]->trigger();
 				return;
 			}
 		}
@@ -154,18 +151,14 @@ void Map::trigger(C_Rect reqt, int direction)
 
 	case -1:
 		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-			if (matrix[(int)((reqt.y - 1) / GRID_H)]
-				[(int)((reqt.x) / GRID_W) + ix]) {
-				Objects_Manager::objects[matrix[(int)((reqt.y - 1) / GRID_H)]
-					[(int)((reqt.x) / GRID_W) + ix]]->trigger();
+			if (getIdObject(reqt.y - 1, 0, reqt.x, ix)) {
+				Objects_Manager::objects[getIdObject(reqt.y - 1, 0, reqt.x, ix)]->trigger();
 				return;
 			}
 		}
 		if (reqt.h%GRID_H) {
-			if (matrix[(int)((reqt.y - 1) / GRID_H)]
-				[(int)((reqt.x + reqt.w) / GRID_W)]) {
-				Objects_Manager::objects[matrix[(int)((reqt.y - 1) / GRID_H)]
-					[(int)((reqt.x + reqt.w) / GRID_W)]]->trigger();
+			if (getIdObject(reqt.y - 1, 0, reqt.x + reqt.w, 0)) {
+				Objects_Manager::objects[getIdObject(reqt.y - 1, 0, reqt.x + reqt.w, 0)]->trigger();
 				return;
 			}
 		}
@@ -176,7 +169,7 @@ void Map::trigger(C_Rect reqt, int direction)
 void Map::findOccurrence(int charry, double * ix, double * iy)
 {
 	for (int h = 0; h < matrix.size(); h++) {
-		for (int w = 0; w < matrix[0].size(); w++) {
+		for (int w = 0; w < matrix[h].size(); w++) {
 			if (matrix[h][w] == charry) {
 				*ix = w*GRID_W;
 				*iy = h*GRID_W;
@@ -193,7 +186,7 @@ void Map::findOccurrence(int charry, double * ix, double * iy)
 
 void Map::saveMatrix()
 {
-	currentLevel.close();
+	currentLevel->close();
 	std::ofstream ofs;
 	ofs.open(Paths::levelPath, std::ofstream::out | std::ofstream::trunc);
 	for (int b = 0; b < matrix.size(); b++) {
@@ -202,18 +195,17 @@ void Map::saveMatrix()
 				ofs.write("69", 2);
 			else
 				ofs.write(to_string(matrix[b][a]).c_str(), 1);
-			if (a == matrix[0].size() - 1 && b == matrix.size() - 1) {
-				ofs.write("-", 1);
-				break;
-		}
+
 			ofs.write(",", 1);
 		}
 		if (b != matrix.size() - 1)
 			ofs.write("\n", 1);
 	}
+	ofs.write("-", 1);
 	ofs.close();
 }
 
+/*
 void Map::checkMate()
 {
 	for (int h = 0; h < matrix.size(); h++) {
@@ -223,3 +215,4 @@ void Map::checkMate()
 		std::cout << std::endl;
 	}
 }
+*/

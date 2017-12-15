@@ -17,7 +17,7 @@ SDL_Texture* Textures_Manager::levelScreenshot = NULL;
 
 std::vector<SDL_Texture*> Textures_Manager::texturesListInit()
 {
-	std::ifstream tempStream = loadFile(Paths::texturesListPath);
+	std::ifstream* tempStream = loadFile(Paths::texturesListPath);
 	std::vector<SDL_Texture*> tempVec;
 
 	if (!tempStream) {
@@ -27,10 +27,10 @@ std::vector<SDL_Texture*> Textures_Manager::texturesListInit()
 	std::string catcher;
 	SDL_Texture* textTemp;
 
-	tempStream.clear();
-	tempStream.seekg(0);
-	while (!tempStream.eof()) {
-		getline(tempStream, catcher);
+	tempStream->clear();
+	tempStream->seekg(0);
+	while (!tempStream->eof()) {
+		getline(*tempStream, catcher);
 		textureNames.push_back(catcher);
 		catcher.insert(0, "./Textures/");
 		std::cout << catcher << endl;
@@ -96,7 +96,7 @@ void Textures_Manager::blitStuff()
 			if (blitty.x > -GRID_W && blitty.x < Renderer::SCREEN_W &&
 				blitty.y > -GRID_H && blitty.y < Renderer::SCREEN_H)
 				SDL_RenderCopy(Renderer::g_Renderer,
-					Objects_Manager::objects[Map::matrix[y][x]]->texture, NULL, &blitty);
+					Objects_Manager::objects[Map::getID(x,y)]->texture, NULL, &blitty);
 		}
 	}
 

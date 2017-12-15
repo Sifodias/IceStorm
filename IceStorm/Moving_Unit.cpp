@@ -168,6 +168,11 @@ void Moving_Unit::doMoves()
 	C_Rect backup(hitBox);
 	timerB = SDL_GetTicks();
 	double t = (double)(timerB - timerA)*0.001;
+	if (t > 0.100) {
+		t = 0;
+		timerA = timerB = SDL_GetTicks();
+		return;
+	}
 	if (noclip) {
 		hitBox.x += t*speedX;
 		hitBox.y += t*speedY;

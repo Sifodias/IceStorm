@@ -20,6 +20,7 @@ void Init_game()
 	Camera::Init();
 }
 
+
 void printGrid() {
 	for (int y = 0; y < Map::matrix.size()*GRID_H; y += GRID_H) {
 		for (int x = 0; x < Map::matrix[0].size()*GRID_W; x += GRID_W) {
@@ -59,12 +60,13 @@ void main_event_loop()
 	}
 }
 
-std::ifstream loadFile(std::string path)
+std::ifstream* loadFile(std::string path)
 {
-	std::ifstream level_stream;
-	level_stream.open(path.c_str());
-	if (!level_stream) {
+	std::ifstream* level_stream = new ifstream;
+	level_stream->open(path.c_str());
+	if (!(*level_stream)) {
 		std::cout << "Can't load the stream at path : " << path << std::endl;
+		level_stream = NULL;
 	}
 	return level_stream;
 }

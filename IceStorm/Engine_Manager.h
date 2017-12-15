@@ -5,6 +5,6 @@ void Init_game();
 
 void main_event_loop();
 
-std::ifstream loadFile(std::string path);	//Load stream from txt
+std::ifstream* loadFile(std::string path);	//Load stream from txt
 
 void engineQuit();

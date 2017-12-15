@@ -88,6 +88,21 @@ void Builder::printInfo(GObject* printObject)
 
 void Builder::createObject()
 {
+
+}
+
+void Builder::editObject()
+{
+
+}
+void Builder::newLevel(std::string name)
+{
+
+}
+
+void Builder::loadLevel(std::string name)
+{
+
 }
 
 void Builder::placeElement(SDL_MouseButtonEvent& e) {
@@ -98,6 +113,7 @@ void Builder::placeElement(SDL_MouseButtonEvent& e) {
 		|| (e.y + Camera::getY()) / GRID_H < 0) return;
 	//il y a 3 rakat
 	//y bon mais x trop
+	/*
 	if (Map::matrix.size() > (int)((e.y + Camera::getY()) / GRID_H)
 		&& Map::matrix[0].size() < (int)((e.x + Camera::getX()) / GRID_W)) {
 
@@ -112,18 +128,22 @@ void Builder::placeElement(SDL_MouseButtonEvent& e) {
 		&& Map::matrix[0].size() < (int)((e.x + Camera::getX()) / GRID_W)) {
 
 	}
-
+	*/
 	int i = 0;
 	while (Map::matrix.size() <= (int)((e.y + Camera::getY()) / GRID_H)) {
 		while (Map::matrix[i].size() <= (int)((e.x + Camera::getX()) / GRID_W))
 		{
 			Map::matrix[i++].push_back(0);
+			if (i >= Map::matrix.size())
+				break;
 		}
 		i = 0;
 		std::vector<int> jaja(Map::matrix[0].size(), 0);
 		Map::matrix.push_back(jaja);
 	}
 	for (int i = 0; i < Map::matrix.size(); i++) {
+		if (i >= Map::matrix.size())
+			break;
 		while (Map::matrix[i].size() <= (int)((e.x + Camera::getX()) / GRID_W)) {
 			Map::matrix[i].push_back(0);
 		}
