@@ -105,12 +105,12 @@ void Builder::loadLevel(std::string name)
 
 }
 
-void Builder::placeElement(SDL_MouseButtonEvent& e) {
+void Builder::placeElement(int x, int y) {
 	if (currentObject == NULL)
 		return;
 
-	if ((e.x + Camera::getX()) / GRID_W < 0
-		|| (e.y + Camera::getY()) / GRID_H < 0) return;
+	if ((x + Camera::getX()) / GRID_W < 0
+		|| (y + Camera::getY()) / GRID_H < 0) return;
 	//il y a 3 rakat
 	//y bon mais x trop
 	/*
@@ -129,9 +129,9 @@ void Builder::placeElement(SDL_MouseButtonEvent& e) {
 
 	}
 	*/
-	int i = 0;
-	while (Map::matrix.size() <= (int)((e.y + Camera::getY()) / GRID_H)) {
-		while (Map::matrix[i].size() <= (int)((e.x + Camera::getX()) / GRID_W))
+	int i = 0; int flagMod = 0;
+	while (Map::matrix.size() <= (int)((y + Camera::getY()) / GRID_H)) {
+		while (Map::matrix[i].size() <= (int)((x + Camera::getX()) / GRID_W))
 		{
 			Map::matrix[i++].push_back(0);
 			if (i >= Map::matrix.size())
@@ -140,20 +140,23 @@ void Builder::placeElement(SDL_MouseButtonEvent& e) {
 		i = 0;
 		std::vector<int> jaja(Map::matrix[0].size(), 0);
 		Map::matrix.push_back(jaja);
+		flagMod = 1;
 	}
-	for (int i = 0; i < Map::matrix.size(); i++) {
-		if (i >= Map::matrix.size())
-			break;
-		while (Map::matrix[i].size() <= (int)((e.x + Camera::getX()) / GRID_W)) {
-			Map::matrix[i].push_back(0);
+	if (flagMod) {
+		for (int i = 0; i < Map::matrix.size(); i++) {
+			if (i >= Map::matrix.size())
+				break;
+			while (Map::matrix[i].size() <= (int)((x + Camera::getX()) / GRID_W)) {
+				Map::matrix[i].push_back(0);
+			}
 		}
 	}
 
 	//si dans les dimensions de la mat, le placer
-	if ((int)((e.x + Camera::getX()) / GRID_W) < Map::matrix[i].size()
-		&& (int)((e.y + Camera::getY()) / GRID_H) < Map::matrix.size()) {
-		Map::matrix[(int)((e.y + Camera::getY()) / GRID_H)]
-			[(int)((e.x + Camera::getX()) / GRID_W)] = currentObject->ID;
+	if ((int)((x + Camera::getX()) / GRID_W) < Map::matrix[i].size()
+		&& (int)((y + Camera::getY()) / GRID_H) < Map::matrix.size()) {
+		Map::matrix[(int)((y + Camera::getY()) / GRID_H)]
+			[(int)((x + Camera::getX()) / GRID_W)] = currentObject->ID;
 	}
 }
 
@@ -184,12 +187,22 @@ void Builder::routine(SDL_Event & e)
 		case SDLK_1:
 			currentObject = fetchObject("1");
 			break;
+		case SDLK_f:
+			int x = -1; int y = -1;
+			SDL_GetMouseState(&x, &y);
+			int width, height;
+			SDL_GetWindowSize(Renderer::g_Window, &width, &height);
+			x = (double)(x / (double)width)*Renderer::SCREEN_W;
+			y = (double)(y / (double)height)*Renderer::SCREEN_H;
+			std::cout << x << ", " << y << std::endl;
+			placeElement(x, y);
+			break;
 		}
 	}
 
-	if (e.type == SDL_MOUSEBUTTONDOWN) {
-		placeElement((SDL_MouseButtonEvent&)e);
-	}
+	//if (e.type == SDL_MOUSEBUTTONDOWN) {
+	//	placeElement((SDL_MouseButtonEvent&)e);
+	//}
 }
 void::Builder::zoom(int focus) {
 	if (focus == -1) {

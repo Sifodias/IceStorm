@@ -31,6 +31,12 @@ void printGrid() {
 	}
 }
 
+int filterEvents(SDL_Event* e) {
+	if (e->type != SDL_KEYDOWN && SDL_KEYUP && SDL_QUIT && SDL_SYSWMEVENT && SDL_WINDOWEVENT)
+		return 1;	//not cool event
+	return 0;	//cool event
+}
+
 void handleRoutines(SDL_Event e) {
 	SDL_RenderClear(Renderer::g_Renderer);
 	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
@@ -42,6 +48,7 @@ void handleRoutines(SDL_Event e) {
 	Text_Printer::handleRoutine(e);
 
 	SDL_RenderPresent(Renderer::g_Renderer);
+
 }
 
 void main_event_loop()
@@ -50,11 +57,15 @@ void main_event_loop()
 	int out = 0;
 	while (out == 0) {
 		if (SDL_PollEvent(&e) != 0) {
+			//if (filterEvents(&e))
+				//continue;
+			SDL_FlushEvent(SDL_MOUSEMOTION);			//This useless event overloads the event queue
 			if (e.type == SDL_QUIT) {
 				out = 1;
 				Renderer::quitAll();
 				break;
 			}
+
 		}
 		handleRoutines(e);
 	}

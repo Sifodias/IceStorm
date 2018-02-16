@@ -19,7 +19,7 @@ public:
 	static void nearby();
 	static void createObject();
 	static void editObject();
-	static void placeElement(SDL_MouseButtonEvent& e);
+	static void placeElement(int x, int y);
 	static void saveLevel(std::string name);
 	static void newLevel(std::string name);
 	static void loadLevel(std::string name);
