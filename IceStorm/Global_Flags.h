@@ -21,4 +21,4 @@ using namespace std;
 //Text printer
 #define PRINT_SPEED 0
 
-#define SAVE_ENABLED 0
+#define SAVE_ENABLED 1

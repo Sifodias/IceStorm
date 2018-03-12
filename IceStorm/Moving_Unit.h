@@ -1,5 +1,4 @@
 #pragma once
-#include <SDL.h>
 #include "C_Rect.h"
 #include <vector>
 #include "Global_Flags.h"
@@ -19,6 +18,7 @@ public:
 	void move(SDL_Event& e);
 	void lockMovements();
 	void unlockMovements();
+	void teleport(int x, int y);
 
 	double speedX;
 	double speedY;

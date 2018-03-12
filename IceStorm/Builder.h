@@ -15,11 +15,11 @@ class Builder {
 public:
 	static void fetch();
 	static void zoom(int focus);
-	static void trace();
+	static void trace(int set);
 	static void nearby();
 	static void createObject();
 	static void editObject();
-	static void placeElement(int x, int y);
+	static void placeElement(int x, int y, int plan = 0);
 	static void saveLevel(std::string name);
 	static void newLevel(std::string name);
 	static void loadLevel(std::string name);
@@ -27,8 +27,10 @@ public:
 	static void routine(SDL_Event& e);
 	static bool checkKey(int key);
 	static void setKey(int key);
-	static GObject* currentObject;
+	static void loadEnts();
+	static void clean(); //remove the 0 useless in the matrix
 
+	static GObject* currentObject;
 	static vector<int> cmdDone;
 
 };

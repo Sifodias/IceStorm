@@ -8,7 +8,6 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
 /*
 Object manager create object finish implementation
 

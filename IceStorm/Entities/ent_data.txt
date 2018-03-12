@@ -16,4 +16,40 @@ target: dummymsg
 type: DIALOG
 content: |firstTalk
 
+ID: 4
+target: teletest
+type: TELEPORT
+x: 100
+y: 100
+
+ID: 5
+target: conTest
+type: BUTTON
+flags: CONTACT
+targetnames: teletest
+
+ID: 6
+target: patterntest
+texture: inv.png
+type: PATTERN
+
+ID: 7
+texture: wall2down.png
+flags: SOLID
+
+ID: 8
+texture: wall2left.png
+flags: SOLID
+
+ID: 9
+texture: wall2right.png
+flags: SOLID
+
+ID: 10
+target: enemytest
+targetnames: teletest
+flags: CONTACT
+texture: wall2.png
+
+
 EOF

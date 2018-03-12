@@ -107,9 +107,6 @@
     <ClInclude Include="C_Rect.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Mode_Handler.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Dialogs\dialog.txt">

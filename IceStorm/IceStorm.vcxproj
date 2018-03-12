@@ -144,7 +144,6 @@
     <ClInclude Include="Dialog_Engine.h" />
     <ClInclude Include="Generic_Object.h" />
     <ClInclude Include="Global_Flags.h" />
-    <ClInclude Include="Mode_Handler.h" />
     <ClInclude Include="Sprites_Handler.h" />
     <ClInclude Include="Moving_Unit.h" />
     <ClInclude Include="Map.h" />

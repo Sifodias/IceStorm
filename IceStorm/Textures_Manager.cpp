@@ -79,24 +79,26 @@ void Textures_Manager::blitStuff()
 	blitty.x = -Camera::getX();
 
 	blitty.y = -Camera::getY();
-	
-	int maxy = ((Camera::getY() + Camera::outerRect.h)/ GRID_H) + 1;
+
+	int maxy = ((Camera::getY() + Camera::outerRect.h) / GRID_H) + 1;
 	int maxx = ((Camera::getX() + Camera::outerRect.w) / GRID_W) + 1;
-	if (((Camera::getY() + Camera::outerRect.h) / GRID_H) + 1 > Map::matrix.size())
-		maxy = (int)Map::matrix.size();
-	if (((Camera::getX() + Camera::outerRect.w) / GRID_W) + 1 > Map::matrix[0].size())
-		maxx = (int)Map::matrix[0].size();
+	if (((Camera::getY() + Camera::outerRect.h) / GRID_H) + 1 > Map::matrix[0].size())
+		maxy = (int)Map::matrix[0].size();
+	
 	int miny = (int)(Camera::getY() / GRID_H);
 	int minx = (int)(Camera::getX() / GRID_W);
 	if (--miny < 0) miny = 0;
 	if (--minx < 0) minx = 0;
-	blitty.y += miny*GRID_H;
-	for (int y = miny; y < maxy; y++, blitty.x = -Camera::getX()+minx*GRID_W, blitty.y += blitty.h) {
+	blitty.y += miny * GRID_H;
+	blitty.x = -Camera::getX() + minx * GRID_W;
+	for (int y = miny; y < maxy; y++, blitty.x = -Camera::getX() + minx * GRID_W, blitty.y += blitty.h) {
 		for (int x = minx; x < maxx; x++, blitty.x += blitty.w) {
 			if (blitty.x > -GRID_W && blitty.x < Renderer::SCREEN_W &&
-				blitty.y > -GRID_H && blitty.y < Renderer::SCREEN_H)
-				SDL_RenderCopy(Renderer::g_Renderer,
-					Objects_Manager::objects[Map::getID(x,y)]->texture, NULL, &blitty);
+				blitty.y > -GRID_H && blitty.y < Renderer::SCREEN_H) {
+				if (Objects_Manager::objects.size() > Map::getID(x, y))
+					SDL_RenderCopy(Renderer::g_Renderer,
+						Objects_Manager::objects[Map::getID(x, y)]->texture, NULL, &blitty);
+			}
 		}
 	}
 

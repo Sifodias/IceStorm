@@ -12,6 +12,7 @@ ifstream* Objects_Manager::tempStream = NULL;
 
 void Objects_Manager::Init() {
 	tempStream = loadFile(Paths::entData);
+	objects.clear();
 	if (tempStream == NULL) {
 		printf("Couldn't load data objects file");
 		return;
@@ -93,6 +94,16 @@ void Objects_Manager::createObject(int mode, string data)
 				std::getline(*tempStream, buffer);
 				continue;
 			}
+			if (identify(buffer, "x: ")) {
+				currentObject->x = std::stoi(buffer);
+				std::getline(*tempStream, buffer);
+				continue;
+			}
+			if (identify(buffer, "y: ")) {
+				currentObject->y = std::stoi(buffer);
+				std::getline(*tempStream, buffer);
+				continue;
+			}
 			else std::getline(*tempStream, buffer);
 		}
 		objects.push_back(currentObject);
@@ -101,10 +112,27 @@ void Objects_Manager::createObject(int mode, string data)
 	}
 }
 
+void Objects_Manager::objectsRoutine()
+{
+	for (int i = 0; i < objects.size(); i++) {
+		objects[i]->routine();
+	}
+
+}
+
 GObject* Objects_Manager::findObject(string target) {
-	for (auto i = objects.begin(); i != objects.end(); ++i) {
-		if (!(*i)->target.compare(target))
-			return *i;
+	int temp;
+	try {
+		temp = stoi(target);
+		if (temp > Objects_Manager::objects.size()) return NULL;
+		objects[temp];
+	}
+	catch (exception&) {
+		for (auto i = objects.begin(); i != objects.end(); ++i) {
+			if (!(*i)->target.compare(target))
+				return *i;
+		}
 	}
 	return NULL;
 }
+

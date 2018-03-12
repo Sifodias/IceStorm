@@ -16,11 +16,17 @@ public:
 	static bool identify(string& target, string wanted);
 
 	static void createObject(int mode, string data = "");	//mode 0 for creating an object from the string
-															//mode 1 for fetching the data from the datafile (init only)
+															//mode 1 for fetching the data from the datafile
+	static void objectsRoutine();
 
 	static vector<GObject*> objects;
 	static ifstream* tempStream;
 };
+
+
+
+
+
 
 /*
 Data structure of the object database :

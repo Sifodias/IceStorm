@@ -44,16 +44,25 @@ void Builder::fetch()
 		if (Objects_Manager::identify(buffer, "set ")) {
 			currentObject = fetchObject(buffer);
 		}
-		if (Objects_Manager::identify(buffer, "info ")) {
+		else if (Objects_Manager::identify(buffer, "info ")) {
 			printInfo(fetchObject(buffer));
 		}
-		if (Objects_Manager::identify(buffer, "current")) {
+		else if (Objects_Manager::identify(buffer, "current")) {
 			printInfo(currentObject);
 		}
+		else if (Objects_Manager::identify(buffer, "load ents")) {
+			loadEnts();
+		}
+		else if (Objects_Manager::identify(buffer, "load level ")) {
+			loadLevel(buffer);
+		}
+		else std::cout << "Error: Unknown cmd" << std::endl;
 		getline(std::cin, buffer);
 	}
 }
-
+void Builder::loadEnts() {
+	Objects_Manager::Init();
+}
 void Builder::printInfo(GObject* printObject)
 {
 	if (printObject == NULL) return;
@@ -83,6 +92,8 @@ void Builder::printInfo(GObject* printObject)
 		cout << "texture: " << printObject->textureName << endl;
 	if (printObject->content.size())
 		cout << "content: " << printObject->content << endl;
+	if (printObject->x != 0 && printObject->y != 0)
+		cout << "x: " << printObject->x << ", y: " << printObject->y << endl;
 	cout << "-------------" << endl;
 }
 
@@ -99,65 +110,49 @@ void Builder::newLevel(std::string name)
 {
 
 }
-
+void Builder::clean() {
+	int toPop = 0;
+	int flaggy = 0;
+	for (int i = Map::matrix[0].size() - 1; i >= 0; i--) {
+		for (int j = Map::matrix[0][i].size() - 1; j >= 0; j--) {
+			if (Map::matrix[0][i][j] != 0) {
+				flaggy = 1;
+				break;
+			}
+			toPop++;
+		}
+		Map::matrix[0][i].erase(Map::matrix[0][i].end() - toPop, Map::matrix[0][i].end());
+		toPop = 0;
+		if (flaggy == 0) {
+			if (Map::matrix[0][i].size() == 0)
+				Map::matrix[0].erase(Map::matrix[0].begin() + i, Map::matrix[0].begin() + i + 1);
+		}
+	}
+}
 void Builder::loadLevel(std::string name)
 {
-
+	Map::loadLevel(name);
+	Map::findOccurrence(69, &Character::movingUnit.hitBox.x, &Character::movingUnit.hitBox.y);
 }
 
-void Builder::placeElement(int x, int y) {
+void Builder::placeElement(int x, int y, int plan) {
 	if (currentObject == NULL)
 		return;
 
 	if ((x + Camera::getX()) / GRID_W < 0
 		|| (y + Camera::getY()) / GRID_H < 0) return;
-	//il y a 3 rakat
-	//y bon mais x trop
-	/*
-	if (Map::matrix.size() > (int)((e.y + Camera::getY()) / GRID_H)
-		&& Map::matrix[0].size() < (int)((e.x + Camera::getX()) / GRID_W)) {
 
-	}
-	//x bon mais y trop
-	if (Map::matrix.size() > (int)((e.y + Camera::getY()) / GRID_H)
-		&& Map::matrix[0].size() < (int)((e.x + Camera::getX()) / GRID_W)) {
+	std::vector<int> jaja(1, 0);
+	while (Map::matrix[plan].size() <= (int)((y + Camera::getY()) / GRID_H))
+		Map::matrix[plan].push_back(jaja);
 
-	}
-	//x trop y trop
-	if (Map::matrix.size() > (int)((e.y + Camera::getY()) / GRID_H)
-		&& Map::matrix[0].size() < (int)((e.x + Camera::getX()) / GRID_W)) {
 
-	}
-	*/
-	int i = 0; int flagMod = 0;
-	while (Map::matrix.size() <= (int)((y + Camera::getY()) / GRID_H)) {
-		while (Map::matrix[i].size() <= (int)((x + Camera::getX()) / GRID_W))
-		{
-			Map::matrix[i++].push_back(0);
-			if (i >= Map::matrix.size())
-				break;
-		}
-		i = 0;
-		std::vector<int> jaja(Map::matrix[0].size(), 0);
-		Map::matrix.push_back(jaja);
-		flagMod = 1;
-	}
-	if (flagMod) {
-		for (int i = 0; i < Map::matrix.size(); i++) {
-			if (i >= Map::matrix.size())
-				break;
-			while (Map::matrix[i].size() <= (int)((x + Camera::getX()) / GRID_W)) {
-				Map::matrix[i].push_back(0);
-			}
-		}
-	}
+	while (Map::matrix[plan][(int)((y + Camera::getY()) / GRID_H)].size() <= (int)((x + Camera::getX()) / GRID_W))
+		Map::matrix[plan][(int)((y + Camera::getY()) / GRID_H)].push_back(0);
 
-	//si dans les dimensions de la mat, le placer
-	if ((int)((x + Camera::getX()) / GRID_W) < Map::matrix[i].size()
-		&& (int)((y + Camera::getY()) / GRID_H) < Map::matrix.size()) {
-		Map::matrix[(int)((y + Camera::getY()) / GRID_H)]
-			[(int)((x + Camera::getX()) / GRID_W)] = currentObject->ID;
-	}
+	Map::matrix[plan][(int)((y + Camera::getY()) / GRID_H)]
+		[(int)((x + Camera::getX()) / GRID_W)] = currentObject->ID;
+		
 }
 
 void Builder::routine(SDL_Event & e)
@@ -166,45 +161,63 @@ void Builder::routine(SDL_Event & e)
 	{
 		switch (e.key.keysym.sym)
 		{
-		case SDLK_t:
+		case SDLK_t: {
 			Character::movingUnit.lockMovements();
 			fetch();
 			break;
-		case SDLK_p:
+		}
+		case SDLK_p: {
 			zoom(1);
 			break;
-		case SDLK_o:
+		}
+		case SDLK_o: {
 			zoom(-1);
 			break;
-		case SDLK_i:
+		}
+		case SDLK_i: {
 			Character::movingUnit.noclip = !checkKey(SDLK_i);
 			Camera::FREEDOM = !checkKey(SDLK_i);
 			setKey(SDLK_i);
 			break;
-		case SDLK_0:
+		}
+		case SDLK_0: {
 			currentObject = fetchObject("0");
 			break;
-		case SDLK_1:
+		}
+		case SDLK_1: {
 			currentObject = fetchObject("1");
 			break;
-		case SDLK_f:
+		}
+		case SDLK_f: {
 			int x = -1; int y = -1;
 			SDL_GetMouseState(&x, &y);
 			int width, height;
 			SDL_GetWindowSize(Renderer::g_Window, &width, &height);
-			x = (double)(x / (double)width)*Renderer::SCREEN_W;
-			y = (double)(y / (double)height)*Renderer::SCREEN_H;
-			std::cout << x << ", " << y << std::endl;
+			x = (int)((x / (double)width)*Renderer::SCREEN_W);
+			y = (int)((y / (double)height)*Renderer::SCREEN_H);
 			placeElement(x, y);
 			break;
 		}
+		case SDLK_r: {
+			trace(0);
+			break;
+		}
+		case SDLK_q: {
+			trace(1);
+			break;
+		}
+		case SDLK_c: {
+			clean();
+			break;
+		}
+		case SDLK_n: {
+			Map::checkMate();
+			break;
+		}
+		}
 	}
-
-	//if (e.type == SDL_MOUSEBUTTONDOWN) {
-	//	placeElement((SDL_MouseButtonEvent&)e);
-	//}
 }
-void::Builder::zoom(int focus) {
+void Builder::zoom(int focus) {
 	if (focus == -1) {
 		Renderer::SCREEN_H = Camera::outerRect.h *= 2;
 		Renderer::SCREEN_W = Camera::outerRect.w *= 2;
@@ -216,6 +229,52 @@ void::Builder::zoom(int focus) {
 	SDL_RenderSetLogicalSize(Renderer::g_Renderer, Camera::outerRect.w, Camera::outerRect.h);
 }
 
+void Builder::trace(int set)
+{
+	int retObj = 0;
+	switch (Character::movingUnit.mainDirection) {
+	case 1:
+		for (int i = 0; i < 100; i++) {
+			if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0)) {
+				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0);
+				break;
+			}
+		}
+		break;
+
+	case -1:
+		for (int i = 0; i > -100; i--) {
+			if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0)) {
+				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0);
+				break;
+			}
+		}
+		break;
+
+	case 2:
+		for (int i = 0; i < 100; i++) {
+			if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i)) {
+				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i);
+				break;
+			}
+		}
+		break;
+
+	case -2:
+		for (int i = 0; i > -100; i--) {
+			if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i)) {
+				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i);
+				break;
+			}
+		}
+		break;
+	}
+	printInfo(fetchObject(std::to_string(retObj)));
+	if (set) {
+		currentObject = fetchObject(std::to_string(retObj));
+	}
+}
+
 
 /*
 Key mapping :
@@ -223,4 +282,5 @@ t = console mode
 o = zoom out
 p = zoom in
 i = freedom cam + noclip
+r = trace
 */

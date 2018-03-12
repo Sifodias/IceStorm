@@ -277,3 +277,10 @@ void Moving_Unit::unlockMovements()
 {
 	movementsLock = 0;
 }
+
+void Moving_Unit::teleport(int x, int y) 
+{
+	hitBox.x = x;
+	hitBox.y = y;
+
+}

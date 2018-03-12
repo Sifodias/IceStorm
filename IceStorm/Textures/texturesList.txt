@@ -12,3 +12,7 @@ lucas.png
 lucas2.png
 lucasL.png
 lucasR.png
+t1.png
+t2.png
+Untitled.png
+inv.png
