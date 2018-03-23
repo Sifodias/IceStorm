@@ -51,5 +51,13 @@ targetnames: teletest
 flags: CONTACT
 texture: wall2.png
 
+ID: 11
+target: backdoortest
+type: DOOR
+flags: CONTACT
+texture: inv.png
+content: default front 0
+
+
 
 EOF

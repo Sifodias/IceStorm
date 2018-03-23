@@ -64,7 +64,6 @@ void Map::loadMatrix() {
 				temp += line[0] - 48;
 				line.erase(0, 1);
 			}
-			matrix[currentplan][h].push_back(temp);
 
 		}
 		std::getline(*currentLevel, line);

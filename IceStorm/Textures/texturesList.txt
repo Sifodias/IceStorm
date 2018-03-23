@@ -16,3 +16,7 @@ t1.png
 t2.png
 Untitled.png
 inv.png
+right.png
+left.png
+up.png
+down.png

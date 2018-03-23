@@ -12,6 +12,7 @@ Each object has :
 . Message
 . Dialogue instance
 . Activating mechanisms
+. Door : <level> <front/back> <id>
 . ...	)
 All objects are stored in a .txt, which is loaded into a vector of objects
 
@@ -32,6 +33,7 @@ type :
 	GENERIC,
 	TELEPORT,
 	ENEMY,
+	CAMBLOCK,
 	PATTERN  //it's itself a pattern
 
 flags :

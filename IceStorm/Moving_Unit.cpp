@@ -10,7 +10,7 @@ void Moving_Unit::handleMoves()
 		switch (movesY.back()) {
 		case -1:
 			if (state[SDL_SCANCODE_W] && !jumpLock) {
-				if (GRAVITY_ENABLED) {
+				if (xGRAVITY_ENABLED) {
 					speedY = -JSPEED;
 					jumpLock = 1;
 				}
@@ -88,7 +88,7 @@ void Moving_Unit::handleMoves()
 	if (!movesX.size()) {
 		speedX = 0;
 	}
-	if (!GRAVITY_ENABLED) {
+	if (!xGRAVITY_ENABLED) {
 		jumpLock = 0;
 		if (!movesY.size()) {
 			speedY = 0;
@@ -179,7 +179,7 @@ void Moving_Unit::doMoves()
 		timerA = timerB = SDL_GetTicks();
 		return;
 	}
-	if (speedY <= 300 && GRAVITY_ENABLED)
+	if (speedY <= 300 && xGRAVITY_ENABLED)
 		speedY += (int)(GRAVITY*t);
 	int out = 0;
 	if (!speedY) {
@@ -254,9 +254,9 @@ void Moving_Unit::doMoves()
 void Moving_Unit::move(SDL_Event & e)
 {
 	if (movementsLock == 0) {
-		if (noclip)
-			xGRAVITY_ENABLED = 0;
-		else xGRAVITY_ENABLED = 1;
+		//if (noclip)
+	//		xGRAVITY_ENABLED = 0;
+		//else xGRAVITY_ENABLED = 1;
 		addMoves(e);
 		handleMoves();
 		doMoves();

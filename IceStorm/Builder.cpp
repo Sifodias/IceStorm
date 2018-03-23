@@ -7,9 +7,11 @@
 #include "Character.h"
 #include <iostream>
 #include "Renderer.h"
+#include "Paths.h"
 
 GObject* Builder::currentObject = NULL;
 vector<int> Builder::cmdDone(123, 0);
+int Builder::currentPlan = 0;
 
 bool Builder::checkKey(int key) {
 	if (key <0 || key > cmdDone.size() - 1) return false;
@@ -41,25 +43,66 @@ void Builder::fetch()
 	std::string buffer;
 	getline(std::cin, buffer);
 	while (buffer.compare("z")) {
-		if (Objects_Manager::identify(buffer, "set ")) {
-			currentObject = fetchObject(buffer);
+		if (Objects_Manager::identify(buffer, "new ")) {		////
+			if (Objects_Manager::identify(buffer, "level ")) {
+				newLevel(buffer);
+			}
+			else if (Objects_Manager::identify(buffer, "plan ")) {
+				int temp;
+				try {
+					temp = stoi(buffer);
+					newPlan(temp);
+				}
+				catch (exception&) {
+				}
+			}
 		}
+
+		else if (Objects_Manager::identify(buffer, "load ")) {		////
+			if (Objects_Manager::identify(buffer, "ents")) {
+				loadEnts();
+			}
+			else if (Objects_Manager::identify(buffer, "level ")) {
+				loadLevel(buffer);
+			}
+
+		}
+
+		else if (Objects_Manager::identify(buffer, "current ")) {		////
+			if (Objects_Manager::identify(buffer, "obj")) {
+				printInfo(currentObject);
+			}
+			else if (Objects_Manager::identify(buffer, "plan")) {
+				cout << "Current plan : " << currentPlan << endl;
+			}
+
+		}
+
+		else if (Objects_Manager::identify(buffer, "set ")) {			////
+			if (Objects_Manager::identify(buffer, "plan ")) {
+				int temp;
+				try {
+					temp = stoi(buffer);
+					setPlan(temp);
+				}
+				catch (exception&) {
+				}
+			}
+			if (Objects_Manager::identify(buffer, "obj ")) {
+				currentObject = fetchObject(buffer);
+			}
+		}
+
 		else if (Objects_Manager::identify(buffer, "info ")) {
 			printInfo(fetchObject(buffer));
 		}
-		else if (Objects_Manager::identify(buffer, "current")) {
-			printInfo(currentObject);
-		}
-		else if (Objects_Manager::identify(buffer, "load ents")) {
-			loadEnts();
-		}
-		else if (Objects_Manager::identify(buffer, "load level ")) {
-			loadLevel(buffer);
-		}
+
 		else std::cout << "Error: Unknown cmd" << std::endl;
 		getline(std::cin, buffer);
 	}
 }
+
+
 void Builder::loadEnts() {
 	Objects_Manager::Init();
 }
@@ -106,15 +149,34 @@ void Builder::editObject()
 {
 
 }
+
+void Builder::newPlan(int plan) {
+	while (Map::matrix.size() <= plan) {
+		std::vector<std::vector<int>> bitre;
+		Map::matrix.push_back(bitre);
+	}
+}
+
+void Builder::setPlan(int plan) {
+	if (Map::matrix.size() > plan) {
+		currentPlan = plan;
+	}
+	else
+		cout << "Error: The requested plan doesn't exist\n";
+
+}
+
 void Builder::newLevel(std::string name)
 {
-
+	std::ofstream level(Paths::levelPath + name);
+	level << "<0\n-\n\nEOF";
+	level.close();
 }
 void Builder::clean() {
 	int toPop = 0;
 	int flaggy = 0;
-	for (int i = Map::matrix[0].size() - 1; i >= 0; i--) {
-		for (int j = Map::matrix[0][i].size() - 1; j >= 0; j--) {
+	for (int i = (int)Map::matrix[0].size() - 1; i >= 0; i--) {
+		for (int j = (int)Map::matrix[0][i].size() - 1; j >= 0; j--) {
 			if (Map::matrix[0][i][j] != 0) {
 				flaggy = 1;
 				break;
@@ -152,7 +214,7 @@ void Builder::placeElement(int x, int y, int plan) {
 
 	Map::matrix[plan][(int)((y + Camera::getY()) / GRID_H)]
 		[(int)((x + Camera::getX()) / GRID_W)] = currentObject->ID;
-		
+
 }
 
 void Builder::routine(SDL_Event & e)
@@ -175,7 +237,8 @@ void Builder::routine(SDL_Event & e)
 			break;
 		}
 		case SDLK_i: {
-			Character::movingUnit.noclip = !checkKey(SDLK_i);
+			Character::movingUnit.xGRAVITY_ENABLED = checkKey(SDLK_i);
+			Character::movingUnit.noclip = !Character::movingUnit.noclip;
 			Camera::FREEDOM = !checkKey(SDLK_i);
 			setKey(SDLK_i);
 			break;
@@ -195,15 +258,15 @@ void Builder::routine(SDL_Event & e)
 			SDL_GetWindowSize(Renderer::g_Window, &width, &height);
 			x = (int)((x / (double)width)*Renderer::SCREEN_W);
 			y = (int)((y / (double)height)*Renderer::SCREEN_H);
-			placeElement(x, y);
+			placeElement(x, y, currentPlan);
 			break;
 		}
 		case SDLK_r: {
-			trace(0);
+			trace(0, currentPlan);
 			break;
 		}
 		case SDLK_q: {
-			trace(1);
+			trace(1, currentPlan);
 			break;
 		}
 		case SDLK_c: {
@@ -229,14 +292,14 @@ void Builder::zoom(int focus) {
 	SDL_RenderSetLogicalSize(Renderer::g_Renderer, Camera::outerRect.w, Camera::outerRect.h);
 }
 
-void Builder::trace(int set)
+void Builder::trace(int set, int plan)
 {
 	int retObj = 0;
 	switch (Character::movingUnit.mainDirection) {
 	case 1:
 		for (int i = 0; i < 100; i++) {
-			if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0)) {
-				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0);
+			if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan)) {
+				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan);
 				break;
 			}
 		}
@@ -244,8 +307,8 @@ void Builder::trace(int set)
 
 	case -1:
 		for (int i = 0; i > -100; i--) {
-			if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0)) {
-				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0);
+			if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan)) {
+				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan);
 				break;
 			}
 		}
@@ -253,8 +316,8 @@ void Builder::trace(int set)
 
 	case 2:
 		for (int i = 0; i < 100; i++) {
-			if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i)) {
-				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i);
+			if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan)) {
+				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan);
 				break;
 			}
 		}
@@ -262,8 +325,8 @@ void Builder::trace(int set)
 
 	case -2:
 		for (int i = 0; i > -100; i--) {
-			if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i)) {
-				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i);
+			if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan)) {
+				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan);
 				break;
 			}
 		}
@@ -283,4 +346,7 @@ o = zoom out
 p = zoom in
 i = freedom cam + noclip
 r = trace
+q = trace and set as current
+n = checkmate
+c = clean matrice from 0
 */

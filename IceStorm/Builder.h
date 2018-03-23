@@ -15,7 +15,7 @@ class Builder {
 public:
 	static void fetch();
 	static void zoom(int focus);
-	static void trace(int set);
+	static void trace(int set, int plan = 0);
 	static void nearby();
 	static void createObject();
 	static void editObject();
@@ -28,9 +28,12 @@ public:
 	static bool checkKey(int key);
 	static void setKey(int key);
 	static void loadEnts();
+	static void newPlan(int plan);
+	static void setPlan(int plan);
 	static void clean(); //remove the 0 useless in the matrix
 
 	static GObject* currentObject;
+	static int currentPlan;
 	static vector<int> cmdDone;
 
 };

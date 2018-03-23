@@ -4,6 +4,7 @@
 #include "Dialog_Engine.h"
 #include "Character.h"
 #include "Map.h"
+using namespace std;
 
 void GObject::routine()
 {
@@ -39,6 +40,24 @@ void GObject::routine()
 	//movingUnit.move();
 }
 
+string getNextWord(string str) {
+	while (str[0] == ' ')
+		str.erase(0, 1);
+
+	string word = "";
+	int i = 0;
+	while (str[i] != ' ' && i < str.size()) {
+		word += str[i];
+		i++;
+	}
+	str.erase(0, i);
+
+	while (str[0] == ' ')
+		str.erase(0, 1);
+
+	return word;
+}
+
 void GObject::trigger()
 {
 	flagTrigger = 1;
@@ -48,7 +67,7 @@ void GObject::trigger()
 	}
 	if (!type.compare("BUTTON")) {
 		if (!flags[0].compare("CONTACT")) {
-			if (!Text_Printer::busy) 
+			if (!Text_Printer::busy)
 				Text_Printer::addToQueue(content);
 		}
 	}
@@ -66,11 +85,33 @@ void GObject::trigger()
 	if (!type.compare("TELEPORT")) {
 		Character::movingUnit.teleport(x, y);
 	}
+	if (!type.compare("DOOR")) {
+		//check level, front/back and id
+		string levelName = getNextWord(content);
+		string type = getNextWord(content);
+		string id = getNextWord(content);
+		if (!levelName.empty() && !type.empty() && !id.empty()) {
+			try {
+				int doorId = stoi(id);
+
+			}
+			catch (exception&) {
+
+			}
+				
+			
+		}
+	}
+	/*
+	if (!type.compare("CAMBLOCK")) {
+
+	}
+	*/
 
 	flagTrigger = 0;
 }
 
-bool GObject::checkFlag(std::string flag)
+bool GObject::checkFlag(string flag)
 {
 	for (auto i = flags.begin(); i != flags.end(); ++i) {
 		if (!i->compare(flag)) return true;

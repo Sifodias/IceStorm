@@ -154,9 +154,6 @@
     <ClInclude Include="Text_Printer.h" />
     <ClInclude Include="Engine_Manager.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="Dialogs\dialog.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -29,7 +29,7 @@ public :
 	static void checkMate();
 	static bool changed;
 	static std::ifstream* currentLevel;	//the stream containing the level
-	static std::vector<std::vector<std::vector<int>>> matrix;	//the matrix of the level
+	static std::vector<std::vector<std::vector<int>>> matrix;	//the matrix of the level	|  the pair indexes represent front plans, the odds back plans
 	static std::string levelname;
 
 	static int cx;		//the x of the matrix in the stream currentlevel
