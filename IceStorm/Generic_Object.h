@@ -20,7 +20,6 @@ Each object has a TRIGGER function
 */
 #include <string>
 #include <SDL.h>
-#include "C_Rect.h"
 #include <vector>
 #include "Moving_Unit.h"
 
@@ -55,7 +54,7 @@ public:
 	std::string textureName;
 	int x;
 	int y;
-	C_Rect rect;
+	SDL_Rect rect;
 	std::string content;
 	Moving_Unit movingUnit;
 

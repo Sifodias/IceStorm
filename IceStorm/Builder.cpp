@@ -14,23 +14,24 @@ vector<int> Builder::cmdDone(123, 0);
 int Builder::currentPlan = 0;
 
 bool Builder::checkKey(int key) {
-	if (key <0 || key > cmdDone.size() - 1) return false;
+	if (key < 0 || key > cmdDone.size() - 1) return false;
 	else return cmdDone[key];
 }
+
 void Builder::setKey(int key) {
-	if (key <0 || key > cmdDone.size() - 1) return;
+	if (key < 0 || key > cmdDone.size() - 1) return;
 	else {
 		if (cmdDone[key]) cmdDone[key] = 0;
 		else cmdDone[key] = 1;
 	}
 }
+
 GObject* fetchObject(string name) {
 	GObject* printObject;
 	int temp;
 	try {
 		temp = stoi(name);
-		if (temp > Objects_Manager::objects.size()) return NULL;
-		printObject = Objects_Manager::objects[temp];
+		printObject = Objects_Manager::findObjectOfID(temp);
 	}
 	catch (exception&) {
 		printObject = Objects_Manager::findObject(name);
@@ -56,6 +57,11 @@ void Builder::fetch()
 				catch (exception&) {
 				}
 			}
+			else if (Objects_Manager::identify(buffer, "ent ")) {
+				createObject(buffer);
+			}
+			else
+				goto unknownCMD;
 		}
 
 		else if (Objects_Manager::identify(buffer, "load ")) {		////
@@ -65,16 +71,20 @@ void Builder::fetch()
 			else if (Objects_Manager::identify(buffer, "level ")) {
 				loadLevel(buffer);
 			}
+			else
+				goto unknownCMD;
 
 		}
 
 		else if (Objects_Manager::identify(buffer, "current ")) {		////
-			if (Objects_Manager::identify(buffer, "obj")) {
+			if (Objects_Manager::identify(buffer, "ent")) {
 				printInfo(currentObject);
 			}
 			else if (Objects_Manager::identify(buffer, "plan")) {
 				cout << "Current plan : " << currentPlan << endl;
 			}
+			else
+				goto unknownCMD;
 
 		}
 
@@ -88,24 +98,32 @@ void Builder::fetch()
 				catch (exception&) {
 				}
 			}
-			if (Objects_Manager::identify(buffer, "obj ")) {
+			else if (Objects_Manager::identify(buffer, "ent ")) {
 				currentObject = fetchObject(buffer);
 			}
+			else goto unknownCMD;
 		}
 
 		else if (Objects_Manager::identify(buffer, "info ")) {
 			printInfo(fetchObject(buffer));
 		}
 
-		else std::cout << "Error: Unknown cmd" << std::endl;
+		else if (Objects_Manager::identify(buffer, "edit ")) {
+			editObject(buffer);
+		}
+
+		else {
+		unknownCMD:
+			std::cout << "Error: Unknown cmd" << std::endl;
+		}
 		getline(std::cin, buffer);
 	}
 }
 
-
 void Builder::loadEnts() {
 	Objects_Manager::Init();
 }
+
 void Builder::printInfo(GObject* printObject)
 {
 	if (printObject == NULL) return;
@@ -140,14 +158,14 @@ void Builder::printInfo(GObject* printObject)
 	cout << "-------------" << endl;
 }
 
-void Builder::createObject()
+void Builder::createObject(string buffer)
 {
-
+	printInfo(Objects_Manager::createObject(buffer));
 }
 
-void Builder::editObject()
+void Builder::editObject(string str)
 {
-
+	Objects_Manager::editObject(str);
 }
 
 void Builder::newPlan(int plan) {
@@ -172,27 +190,29 @@ void Builder::newLevel(std::string name)
 	level << "<0\n-\n\nEOF";
 	level.close();
 }
-void Builder::clean() {
+
+void Builder::clean(int plan) {
 	int toPop = 0;
 	int flaggy = 0;
-	for (int i = (int)Map::matrix[0].size() - 1; i >= 0; i--) {
-		for (int j = (int)Map::matrix[0][i].size() - 1; j >= 0; j--) {
-			if (Map::matrix[0][i][j] != 0) {
+	for (int i = (int)Map::matrix[plan].size() - 1; i >= 0; i--) {
+		for (int j = (int)Map::matrix[plan][i].size() - 1; j >= 0; j--) {
+			if (Map::matrix[plan][i][j] != 0) {
 				flaggy = 1;
 				break;
 			}
 			toPop++;
 		}
-		Map::matrix[0][i].erase(Map::matrix[0][i].end() - toPop, Map::matrix[0][i].end());
+		Map::matrix[plan][i].erase(Map::matrix[plan][i].end() - toPop, Map::matrix[plan][i].end());
 		toPop = 0;
 		if (flaggy == 0) {
-			if (Map::matrix[0][i].size() == 0)
-				Map::matrix[0].erase(Map::matrix[0].begin() + i, Map::matrix[0].begin() + i + 1);
+			if (Map::matrix[plan][i].size() == 0)
+				Map::matrix[plan].erase(Map::matrix[plan].begin() + i, Map::matrix[plan].begin() + i + 1);
 		}
 	}
+		
 }
-void Builder::loadLevel(std::string name)
-{
+
+void Builder::loadLevel(std::string name) {
 	Map::loadLevel(name);
 	Map::findOccurrence(69, &Character::movingUnit.hitBox.x, &Character::movingUnit.hitBox.y);
 }
@@ -270,24 +290,32 @@ void Builder::routine(SDL_Event & e)
 			break;
 		}
 		case SDLK_c: {
-			clean();
+			clean(currentPlan);
 			break;
 		}
 		case SDLK_n: {
-			Map::checkMate();
+			Map::checkMate(currentPlan);
 			break;
+		}
+		case SDLK_z: {
+			cout << Map::isItSolid(Character::movingUnit.hitBox);
 		}
 		}
 	}
 }
+
 void Builder::zoom(int focus) {
 	if (focus == -1) {
 		Renderer::SCREEN_H = Camera::outerRect.h *= 2;
+		//Camera::innerRect.h *= 2;
 		Renderer::SCREEN_W = Camera::outerRect.w *= 2;
+		//Camera::innerRect.w *= 2;
 	}
 	if (focus == 1) {
 		Renderer::SCREEN_H = Camera::outerRect.h /= 2;
+		//Camera::innerRect.w /= 2;
 		Renderer::SCREEN_W = Camera::outerRect.w /= 2;
+		//Camera::innerRect.w /= 2;
 	}
 	SDL_RenderSetLogicalSize(Renderer::g_Renderer, Camera::outerRect.w, Camera::outerRect.h);
 }

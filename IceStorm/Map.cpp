@@ -5,14 +5,15 @@
 #include "Objects_Manager.h"
 
 std::vector<std::vector<std::vector<int>>> Map::matrix;
-int Map::cx = 0;
-int Map::cy = 0;
+
 std::ifstream* Map::currentLevel;
 bool Map::changed = 1;
 std::string Map::levelname = "";
 
 void Map::loadLevel(std::string name)
 {
+	saveMatrix();
+
 	for (int i = 0; i < matrix.size(); i++) {
 		matrix[i].clear();
 	}
@@ -35,7 +36,7 @@ void Map::loadMatrix() {
 	while (line.compare("EOF")) {
 		if (line[0] == '<') {
 			line.erase(0, 1);
-			currentplan = line[0]-'0';
+			currentplan = line[0] - '0';
 			std::getline(*currentLevel, line);
 			std::vector<int> jammy;
 			std::vector<std::vector<int>> planny;
@@ -46,7 +47,7 @@ void Map::loadMatrix() {
 
 			int h = 0, temp = 0;
 			while (line[0] != '-') {
-			//	
+				//	
 				if (line.empty()) {
 					matrix[currentplan].push_back(jammy);
 					h++;
@@ -78,9 +79,8 @@ int Map::getIdObject(double ay, int iy, double ax, int ix, int plan) {
 	if ((int)(ay / GRID_H) + iy < matrix[plan].size() && (int)(ax / GRID_W) + ix < matrix[plan][(int)(ay / GRID_H) + iy].size()
 		&& (int)(ay / GRID_H) + iy >= 0 && (int)(ax / GRID_W) + ix >= 0) {
 		if (matrix[plan][(int)(ay / GRID_H) + iy]
-			[(int)(ax / GRID_W) + ix] >= 0
-			&& matrix[plan][(int)(ay / GRID_H) + iy]
-			[(int)(ax / GRID_W) + ix] < Objects_Manager::objects.size())
+			[(int)(ax / GRID_W) + ix] >= 0)
+
 			return matrix[plan][(int)(ay / GRID_H) + iy]
 			[(int)(ax / GRID_W) + ix];
 	}
@@ -93,31 +93,32 @@ int Map::getID(int ix, int iy, int plan) {
 		}
 	return 0;
 }
-bool Map::isItSolid(C_Rect reqt)
+bool Map::isItSolid(SDL_Rect reqt)
 {
+	
 	//faire une grille gridh x gridw
 	//tester pour chaque pt de la grille que pas solide
 	for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
 		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-			if (Objects_Manager::objects[getIdObject(reqt.y, iy,
-				reqt.x, ix)]->checkFlag("SOLID")) {
+			if (Objects_Manager::findObjectOfID(getIdObject(reqt.y, iy,
+				reqt.x, ix))->checkFlag("SOLID")) {
 				return true;
 			}
 			if (ix + 1 > (int)(reqt.w / GRID_W)) {
-				if (Objects_Manager::objects[getIdObject(reqt.y, iy,
-					reqt.x + reqt.w, 0)]->checkFlag("SOLID"))
+				if (Objects_Manager::findObjectOfID(getIdObject(reqt.y, iy,
+					reqt.x + reqt.w-1, 0))->checkFlag("SOLID"))
 					return true;
 			}
 		}
 		if (iy + 1 > (int)(reqt.h / GRID_H)) {
 			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-				if (Objects_Manager::objects[getIdObject(reqt.y + reqt.h, 0, reqt.x, ix)
-				]->checkFlag("SOLID")) {
+				if (Objects_Manager::findObjectOfID(getIdObject(reqt.y + reqt.h-1, 0, reqt.x, ix)
+				)->checkFlag("SOLID")) {
 					return true;
 				}
 				if (ix + 1 > (int)(reqt.w / GRID_W)) {
-					if (Objects_Manager::objects[getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w, 0)
-					]->checkFlag("SOLID")) {
+					if (Objects_Manager::findObjectOfID(getIdObject(reqt.y + reqt.h-1, 0, reqt.x + reqt.w-1, 0)
+					)->checkFlag("SOLID")) {
 						return true;
 					}
 				}
@@ -125,74 +126,41 @@ bool Map::isItSolid(C_Rect reqt)
 			break;
 		}
 	}
+	
 	return false;
 }
 
 
-void Map::trigger(C_Rect reqt, int direction, bool contact)	//contact = 1 -> trigger only CONTACT type 
+void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> trigger only CONTACT type 
 {
 	GObject* tempObj = NULL;
-	switch (direction) {
-	case 2:
-		for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
-			if (getIdObject(reqt.y, iy, reqt.x + reqt.w + 1, 0)) {
-				tempObj = Objects_Manager::objects[getIdObject(reqt.y, iy, reqt.x + reqt.w + 1, 0)];
-				break;
-			}
-		}
-		if (reqt.h%GRID_H) {
-			if (getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w + 1, 0)) {
-				tempObj = Objects_Manager::objects[getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w + 1, 0)];
-				break;
-			}
-		}
-		break;
 
-	case -2:
-		for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
-			if (getIdObject(reqt.y, iy, reqt.x - 1, 0)) {
-				tempObj = Objects_Manager::objects[getIdObject(reqt.y, iy, reqt.x - 1, 0)];
-				break;
-			}
-		}
-		if (reqt.h%GRID_H) {
-			if (getIdObject(reqt.y + reqt.h, 0, reqt.x - 1, 0)) {
-				tempObj = Objects_Manager::objects[getIdObject(reqt.y + reqt.h, 0, reqt.x - 1, 0)];
-				break;
-			}
-		}
-		break;
 
-	case 1:
+	for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
 		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-			if (getIdObject(reqt.y + reqt.h + 1, 0, reqt.x, ix)) {
-				tempObj = Objects_Manager::objects[getIdObject(reqt.y + reqt.h + 1, 0, reqt.x, ix)];
-				break;
+			if (getIdObject(reqt.y, iy, reqt.x, ix)) {
+				tempObj = Objects_Manager::findObjectOfID(getIdObject(reqt.y, iy, reqt.x, ix));
+			}
+			if (ix + 1 > (int)(reqt.w / GRID_W)) {
+				if (getIdObject(reqt.y, iy, reqt.x + reqt.w, 0))
+					tempObj = Objects_Manager::findObjectOfID(getIdObject(reqt.y, iy, reqt.x + reqt.w-1, 0));
 			}
 		}
-		if (reqt.w%GRID_W) {
-			if (getIdObject(reqt.y + reqt.h + 1, 0, reqt.x + reqt.w, 0)) {
-				tempObj = Objects_Manager::objects[getIdObject(reqt.y + reqt.h + 1, 0, reqt.x + reqt.w, 0)];
-				break;
+		if (iy + 1 > (int)(reqt.h / GRID_H)) {
+			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
+				if (getIdObject(reqt.y + reqt.h, 0, reqt.x, ix)) {
+					tempObj = Objects_Manager::findObjectOfID(getIdObject(reqt.y + reqt.h-1, 0, reqt.x, ix));
+				}
+				if (ix + 1 > (int)(reqt.w / GRID_W)) {
+					if (getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w, 0)) {
+						tempObj = Objects_Manager::findObjectOfID(getIdObject(reqt.y + reqt.h-1, 0, reqt.x + reqt.w-1, 0));
+					}
+				}
 			}
+			break;
 		}
-		break;
-
-	case -1:
-		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-			if (getIdObject(reqt.y - 1, 0, reqt.x, ix)) {
-				tempObj = Objects_Manager::objects[getIdObject(reqt.y - 1, 0, reqt.x, ix)];
-				break;
-			}
-		}
-		if (reqt.w%GRID_W) {
-			if (getIdObject(reqt.y - 1, 0, reqt.x + reqt.w, 0)) {
-				tempObj = Objects_Manager::objects[getIdObject(reqt.y - 1, 0, reqt.x + reqt.w, 0)];
-				break;
-			}
-		}
-		break;
 	}
+
 	if (tempObj != NULL) {
 		if (contact) {
 			for (int i = 0; i < tempObj->flags.size(); i++) {
@@ -205,22 +173,21 @@ void Map::trigger(C_Rect reqt, int direction, bool contact)	//contact = 1 -> tri
 	}
 }
 
-void Map::findOccurrence(int charry, double * ix, double * iy)
+void Map::findOccurrence(int charry, int * ix, int * iy)
 {
-	for (int h = 0; h < matrix[0].size(); h++) {
-		for (int w = 0; w < matrix[0][h].size(); w++) {
-			if (matrix[0][h][w] == charry) {
-				*ix = w * GRID_W;
-				*iy = h * GRID_W;
-				cx = w;
-				cy = h;
-				matrix[0][h][w] = 0;
-				return;
+	for (int i = 0; i < matrix.size(); i++) {
+		for (int j = 0; j < matrix[i].size(); j++) {
+			for (int k = 0; k < matrix[i][j].size(); k++) {
+				if (matrix[i][j][k] == charry) {
+					*ix = k * GRID_W;
+					*iy = j * GRID_H;
+					return;
+				}
 			}
 		}
 	}
-	*ix = -1;
-	*iy = -1;
+	std::cout << "Error: No character marker found";
+	*ix = *iy = 0;
 }
 
 void Map::saveMatrix()
@@ -235,10 +202,7 @@ void Map::saveMatrix()
 		ofs.write("\n", 1);
 		for (int b = 0; b < matrix[i].size(); b++) {
 			for (int a = 0; a < matrix[i][b].size(); a++) {
-				if (a == cx && b == cy)
-					ofs.write("69", 2);
-				else
-					ofs.write(to_string(matrix[i][b][a]).c_str(), to_string(matrix[i][b][a]).size());
+				ofs.write(to_string(matrix[i][b][a]).c_str(), to_string(matrix[i][b][a]).size());
 
 				ofs.write(",", 1);
 			}
@@ -254,11 +218,11 @@ void Map::saveMatrix()
 }
 
 
-void Map::checkMate()
+void Map::checkMate(int plan)
 {
-	for (int h = 0; h < matrix[0].size(); h++) {
-		for (int w = 0; w < matrix[0][h].size(); w++) {
-			printf("%d ", matrix[0][h][w]);
+	for (int h = 0; h < matrix[plan].size(); h++) {
+		for (int w = 0; w < matrix[plan][h].size(); w++) {
+			printf("%d ", matrix[plan][h][w]);
 		}
 		std::cout << std::endl;
 	}

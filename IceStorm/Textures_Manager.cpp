@@ -14,6 +14,8 @@
 std::vector<SDL_Texture*> Textures_Manager::textureList;
 std::vector<std::string> Textures_Manager::textureNames;
 SDL_Texture* Textures_Manager::levelScreenshot = NULL;
+bool Textures_Manager::showInvisibleEnts = true;
+
 
 std::vector<SDL_Texture*> Textures_Manager::texturesListInit()
 {
@@ -71,14 +73,17 @@ SDL_Texture * Textures_Manager::findTexture(std::string name)
 	return NULL;
 }
 
+
+
+//This functions works well, but need to be cleaned
 void Textures_Manager::blitStuff()
 {
 	SDL_Rect blitty;
 	blitty.h = GRID_H;
 	blitty.w = GRID_W;
+
 	for (int i = 0; i < Map::matrix.size(); i++) {
 		blitty.x = -Camera::getX();
-
 		blitty.y = -Camera::getY();
 
 		int maxy = ((Camera::getY() + Camera::outerRect.h) / GRID_H) + 1;
@@ -96,19 +101,39 @@ void Textures_Manager::blitStuff()
 			for (int x = minx; x < maxx; x++, blitty.x += blitty.w) {
 				if (blitty.x > -GRID_W && blitty.x < Renderer::SCREEN_W &&
 					blitty.y > -GRID_H && blitty.y < Renderer::SCREEN_H) {
-					if (Objects_Manager::objects.size() > Map::getID(x, y, i))
+					if (showInvisibleEnts) {
+						if (Map::getID(x, y, i)) {
+							if (Objects_Manager::findObjectOfID(Map::getID(x, y, i))->texture == NULL) {
+								SDL_RenderCopy(Renderer::g_Renderer,
+									findTexture("inv.png"), NULL, &blitty);
+							}
+							else SDL_RenderCopy(Renderer::g_Renderer,
+								Objects_Manager::findObjectOfID(Map::getID(x, y, i))->texture, NULL, &blitty);
+						}
+					}
+					else
 						SDL_RenderCopy(Renderer::g_Renderer,
-							Objects_Manager::objects[Map::getID(x, y, i)]->texture, NULL, &blitty);
+							Objects_Manager::findObjectOfID(Map::getID(x, y, i))->texture, NULL, &blitty);
 				}
 			}
 		}
 	}
-	blitty = (SDL_Rect)Character::movingUnit.hitBox;
 
+	blitty = (SDL_Rect)Character::movingUnit.hitBox;
 	blitty.x -= Camera::getX();
 	blitty.y -= Camera::getY();
 	blitty.y -= CHAR_H - CHAR_HITBOX_H;
 	blitty.h = CHAR_H;
 	blitty.w = CHAR_W;
 	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &blitty);
+
+	for (int i = 0; i < Objects_Manager::objects.size(); i++) {
+		if (!Objects_Manager::objects[i]->x && Objects_Manager::objects[i]->y)
+			continue;
+		blitty.x = Objects_Manager::objects[i]->movingUnit.hitBox.x;
+		blitty.y = Objects_Manager::objects[i]->movingUnit.hitBox.y;
+		blitty.w = Objects_Manager::objects[i]->movingUnit.hitBox.w;
+		blitty.h = Objects_Manager::objects[i]->movingUnit.hitBox.h;
+		SDL_RenderCopy(Renderer::g_Renderer, Objects_Manager::objects[i]->texture, NULL, &blitty);
+	}
 }

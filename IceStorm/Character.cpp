@@ -10,17 +10,20 @@ Moving_Unit Character::movingUnit;
 void Character::characterRoutine(SDL_Event & e)
 {
 	movingUnit.move(e);
-	if (movingUnit.mainDirection == -2) {
+	switch (movingUnit.mainDirection) {
+	case -2:
 		textures.setCurrentGroup("left");
-	}
-	if (movingUnit.mainDirection == 2) {
+		break;
+	case 2:
 		textures.setCurrentGroup("right");
-	}
-	if (movingUnit.mainDirection == -1) {
+		break;
+	case -1:
 		textures.setCurrentGroup("up");
-	}
-	if (movingUnit.mainDirection == 1) {
+		break;
+
+	case 1:
 		textures.setCurrentGroup("down");
+		break;
 	}
 
 	if (e.type == SDL_KEYDOWN) {
@@ -35,7 +38,7 @@ void Character::characterRoutine(SDL_Event & e)
 
 void Character::Init()
 {
-	C_Rect hitty(0, 0, CHAR_HITBOX_W, CHAR_HITBOX_H);
+	SDL_Rect hitty = { 0, 0, CHAR_HITBOX_W, CHAR_HITBOX_H };
 	movingUnit.init(hitty);
 	Map::findOccurrence(69, &movingUnit.hitBox.x, &movingUnit.hitBox.y);
 	textures.init("left.png | right.png | up.png | down.png", "left right up down");

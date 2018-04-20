@@ -12,10 +12,10 @@ using namespace std;
 #define JUMPLOCK 1
 #define GRAVITY_ENABLED 1
 
-#define CHAR_H 28
-#define CHAR_W 20
-#define CHAR_HITBOX_H 28
-#define CHAR_HITBOX_W 20
+#define CHAR_H 19
+#define CHAR_W 19
+#define CHAR_HITBOX_H 19
+#define CHAR_HITBOX_W 19
 
 
 //Text printer

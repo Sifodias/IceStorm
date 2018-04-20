@@ -32,18 +32,21 @@ int Camera::getX() {
 		if (outerRect.x < 0)
 			return 0;
 
-		int max = 0;
+		double max = 0;
 		for (int i = 0; i < Map::matrix[0].size(); i++) {
 			max = std::fmax(max, Map::matrix[0][i].size());
 		}
-		return std::fmin(max*GRID_W - outerRect.w, outerRect.x);
+		
+		return (int)std::fmin(std::abs(max*GRID_W - outerRect.w), outerRect.x);
 	}
 
 	else {
 		outerRect.x = (int)Character::movingUnit.hitBox.x - (int)(outerRect.w / 2);
-		return outerRect.x;
+		return (int)outerRect.x;
 	}
 }
+
+
 int Camera::getY() {
 	if (!FREEDOM) {
 		if ((int)(Character::movingUnit.hitBox.y + Character::movingUnit.hitBox.h)
@@ -57,10 +60,10 @@ int Camera::getY() {
 		if (outerRect.y < 0)
 			return 0;
 
-		return std::fmin(Map::matrix[0].size()*GRID_H - outerRect.h, outerRect.y);
+		return (int)std::fmin(std::abs((double)(Map::matrix[0].size()*GRID_H - outerRect.h)), outerRect.y);
 	}
 	else {
 		outerRect.y = (int)Character::movingUnit.hitBox.y - (int)(outerRect.h / 2);
-		return outerRect.y;
+		return (int)outerRect.y;
 	}
 }

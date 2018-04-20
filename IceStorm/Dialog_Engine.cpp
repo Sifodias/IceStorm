@@ -16,7 +16,8 @@ void DialogEngine::dialogSelector(string desu)
 
 	if (!desu.compare("|firstTalk"))
 		firstTalk();
-
+	if (!desu.compare("|firstTalkClean"))
+		firstTalkClean();
 
 	Character::movingUnit.unlockMovements();
 }
@@ -77,6 +78,24 @@ void DialogEngine::firstTalk()
 			print("See you next time <3");
 	}
 }
+
+void DialogEngine::firstTalkClean()
+{
+	print("Hello there !");
+	print("How do you feel today ?");
+	erabe("Fine", "Tired");
+	if (A) {
+		print("That's cool :)");
+		print("See you around buddy");
+	}
+	else if (B) {
+		print("Oh I'm sorry to hear that");
+		print("Well, relax and have fun here");
+	}
+
+
+}
+
 
 void intro() {
 	print("Well, here we are");

@@ -13,10 +13,16 @@ public:
 
 	static GObject* findObject(string target);
 
+	static  GObject* findObjectOfID(int id);
+
 	static bool identify(string& target, string wanted);
 
-	static void createObject(int mode, string data = "");	//mode 0 for creating an object from the string
-															//mode 1 for fetching the data from the datafile
+	static void loadObjects();	
+	static void saveObjects();
+	static GObject* createObject(string data);
+	static void fillObject(GObject* obj, string data);
+	static void editObject(string data);
+
 	static void objectsRoutine();
 
 	static vector<GObject*> objects;

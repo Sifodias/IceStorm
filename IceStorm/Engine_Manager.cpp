@@ -39,36 +39,61 @@ int filterEvents(SDL_Event* e) {
 
 void handleRoutines(SDL_Event e) {
 	SDL_RenderClear(Renderer::g_Renderer);
-	//printGrid();
+
 	Builder::routine(e);
 	Character::characterRoutine(e);
+
 	Textures_Manager::blitStuff();
 
 	Text_Printer::handleRoutine(e);
 
 	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderPresent(Renderer::g_Renderer);
-
 }
 
 void main_event_loop()
 {
 	SDL_Event e;
-	int out = 0;
-	while (out == 0) {
+
+	//SDL_Rect mabite; mabite.x = 300;
+	//double x = 300;
+	//Uint32 A;
+	//Uint32 B = A = SDL_GetTicks();
+	//Uint32 t = 0;
+	//Uint32 C;
+	//Uint32 D = C = SDL_GetTicks();
+	//double dx = 300;
+	//B = SDL_GetTicks();
+	//D = SDL_GetTicks();
+	//if (B - A > 1) {
+	//	mabite.x -= (B - A)*0.001 * 150;
+	//	if (D - C > 300) {
+	//		std::cout << "X: " << mabite.x << "  speedX: " <<
+	//			(double)((mabite.x - x) / ((B - A)*0.001)) << endl;
+	//		C = D;
+	//	}
+	//	x = mabite.x;
+	//	A = B;
+	//}
+
+	Uint32 timerA = SDL_GetTicks();
+	Uint32 timerB = SDL_GetTicks();
+	int x = Character::movingUnit.hitBox.x;
+	while (1) {
 		if (SDL_PollEvent(&e) != 0) {
-			//if (filterEvents(&e))
-				//continue;
 			SDL_FlushEvent(SDL_MOUSEMOTION);			//This useless event overloads the event queue
 			if (e.type == SDL_QUIT) {
-				out = 1;
 				Renderer::quitAll();
 				break;
 			}
 
 		}
+
 		handleRoutines(e);
 	}
+
+
+
 }
 
 std::ifstream* loadFile(std::string path)
@@ -83,7 +108,9 @@ std::ifstream* loadFile(std::string path)
 }
 
 void engineQuit() {
-	if (SAVE_ENABLED)
+	if (SAVE_ENABLED) {
 		Map::saveMatrix();
+		Objects_Manager::saveObjects();
+	}
 
 }

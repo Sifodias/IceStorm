@@ -111,6 +111,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Users\Sifodias\Documents\Visual Studio 2017\SDL\SDL2_ttf-2.0.14\include;C:\Users\Sifodias\Documents\Visual Studio 2017\SDL\SDL2_image-2.0.1\include;C:\Users\Sifodias\Documents\Visual Studio 2017\SDL\SDL2-2.0.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -119,6 +120,9 @@
       <AdditionalDependencies>SDL2main.lib;SDL2.lib;SDL2_ttf.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Builder.cpp" />
@@ -140,7 +144,6 @@
     <ClInclude Include="Builder.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Character.h" />
-    <ClInclude Include="C_Rect.h" />
     <ClInclude Include="Dialog_Engine.h" />
     <ClInclude Include="Generic_Object.h" />
     <ClInclude Include="Global_Flags.h" />

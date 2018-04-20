@@ -66,9 +66,11 @@ void GObject::trigger()
 			Objects_Manager::findObject(targetnames[i])->trigger();
 	}
 	if (!type.compare("BUTTON")) {
-		if (!flags[0].compare("CONTACT")) {
-			if (!Text_Printer::busy)
-				Text_Printer::addToQueue(content);
+		if (checkFlag("CONTACT")) {
+			if (checkFlag("PRINT"))
+				if (!Text_Printer::busy)
+					Text_Printer::addToQueue(content);
+
 		}
 	}
 
@@ -85,6 +87,7 @@ void GObject::trigger()
 	if (!type.compare("TELEPORT")) {
 		Character::movingUnit.teleport(x, y);
 	}
+	/*
 	if (!type.compare("DOOR")) {
 		//check level, front/back and id
 		string levelName = getNextWord(content);
@@ -98,10 +101,11 @@ void GObject::trigger()
 			catch (exception&) {
 
 			}
-				
-			
+
+
 		}
 	}
+	*/
 	/*
 	if (!type.compare("CAMBLOCK")) {
 

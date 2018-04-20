@@ -1,11 +1,10 @@
 #pragma once
-#include "C_Rect.h"
 #include <vector>
 #include "Global_Flags.h"
-
+#include <SDL.h>
 class Moving_Unit {
 public:
-	void init(C_Rect hitboxx, int cspeed = CSPEED, int jspeed = JSPEED,
+	void init(SDL_Rect hitboxx, int cspeed = CSPEED, int jspeed = JSPEED,
 		int gravity = GRAVITY, int gravityEnabled = GRAVITY_ENABLED, int nouclip = 0) {
 		hitBox = hitboxx; xCSPEED = cspeed;
 		xJSPEED = jspeed; xGRAVITY = gravity; xGRAVITY_ENABLED = gravityEnabled;
@@ -22,7 +21,7 @@ public:
 
 	double speedX;
 	double speedY;
-	C_Rect hitBox;
+	SDL_Rect hitBox;
 	std::vector<int> movesX;
 	std::vector<int> movesY;
 	int mainDirection;

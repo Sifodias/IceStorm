@@ -2,6 +2,32 @@
 #include "Map.h"
 #include <iostream>
 
+bool rectEquals(SDL_Rect a, SDL_Rect b) {
+	if (a.x == b.x
+		&& a.y == b.y
+		&& a.w == b.w
+		&& a.h == b.h
+		)
+		return true;
+	return false;
+}
+
+void speedRestrainer(double& speedX, double& speedY, SDL_Rect rect) {
+	rect.x += 1;
+	if (speedX > 0 && Map::isItSolid(rect))
+		speedX = 0;
+	rect.x -= 2;
+	if (speedX < 0 && Map::isItSolid(rect))
+		speedX = 0;
+	rect.x += 1;
+	rect.y += 1;
+	if (speedY > 0 && Map::isItSolid(rect))
+		speedY = 0;
+	rect.y -= 2;
+	if (speedY < 0 && Map::isItSolid(rect))
+		speedY = 0;
+}
+
 void Moving_Unit::handleMoves()
 {
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -88,6 +114,9 @@ void Moving_Unit::handleMoves()
 	if (!movesX.size()) {
 		speedX = 0;
 	}
+
+	speedRestrainer(speedX, speedY, hitBox);
+
 	if (!xGRAVITY_ENABLED) {
 		jumpLock = 0;
 		if (!movesY.size()) {
@@ -96,20 +125,22 @@ void Moving_Unit::handleMoves()
 		return;
 	}
 	//else if gravity is enabled
-	C_Rect temprect = hitBox;
+	SDL_Rect temprect = hitBox;
 	temprect.y += 1;
-	if (Map::isItSolid(temprect) && speedY > 0) {
-		speedY = 0;
-		if (!state[SDL_SCANCODE_W])
+	if (Map::isItSolid(temprect)) {
+		//speedY = 0;
+		//if (!state[SDL_SCANCODE_W])
 			jumpLock = 0;
-		return;
+			
+		//return;
 	}
-	temprect.y -= 2;
-	if (Map::isItSolid(temprect) && speedY < 0) {
-		speedY = 0;
-		if (!state[SDL_SCANCODE_W])
-			jumpLock = 0;
-	}
+	//temprect.y -= 2;
+	//if (Map::isItSolid(temprect) && speedY < 0) {
+	//	speedY = 0;
+	//	if (!state[SDL_SCANCODE_W])
+	//		jumpLock = 0;
+	//}
+	//std::cout << jumpLock;
 }
 
 void Moving_Unit::addMoves(SDL_Event & e)
@@ -164,8 +195,8 @@ void Moving_Unit::addMoves(SDL_Event & e)
 
 void Moving_Unit::doMoves()
 {
-	C_Rect tempReqt(hitBox);
-	C_Rect backup(hitBox);
+	SDL_Rect tempReqt(hitBox);
+	SDL_Rect backup(hitBox);
 	timerB = SDL_GetTicks();
 	double t = (double)(timerB - timerA)*0.001;
 	if (t > 0.100) {
@@ -174,81 +205,110 @@ void Moving_Unit::doMoves()
 		return;
 	}
 	if (noclip) {
-		hitBox.x += t*speedX;
-		hitBox.y += t*speedY;
-		timerA = timerB = SDL_GetTicks();
+		hitBox.x += (int)(t*speedX);
+		hitBox.y += (int)(t*speedY);
+		timerA = timerB;
 		return;
 	}
 	if (speedY <= 300 && xGRAVITY_ENABLED)
 		speedY += (int)(GRAVITY*t);
-	int out = 0;
+
+	/////////
+	int tempDistancex = (int)(t*speedX);
+	int tempDistancey = (int)(t*speedY);
+	while (tempDistancex*speedX > 0 || tempDistancey * speedY > 0) {
+		if ((tempDistancex < 0 && speedX > 0) || (tempDistancex > 0 && speedX < 0)) {
+			tempDistancex = 0;
+			speedX = 0;
+		}
+		if ((tempDistancey < 0 && speedY > 0) || (tempDistancey > 0 && speedY < 0)) {
+			tempDistancey = 0;
+			speedY = 0;
+		}
+		tempReqt.x = hitBox.x + tempDistancex;
+		tempReqt.y = hitBox.y + tempDistancey;
+		if (!Map::isItSolid(tempReqt)) {
+			hitBox.x += tempDistancex;
+			hitBox.y += tempDistancey;
+			break;
+		}
+		else {
+			if (speedX)
+				tempDistancex += (int)((-1)*(speedX / abs(speedX)));
+			if (speedY)
+				tempDistancey += (int)((-1)*(speedY / abs(speedY)));
+		}
+	}
+	/////////
+	/*
 	if (!speedY) {
-		double tempDistance = t*speedX;
-		while (!out && tempDistance*speedX >= 0) {
+		int tempDistance = (int)(t*speedX);
+		while (tempDistance*speedX >= 0) {
 			tempReqt.x = hitBox.x + tempDistance;
 			if (!Map::isItSolid(tempReqt)) {
 				hitBox.x += tempDistance;
-				out = 1;
+				break;
 			}
-			else tempDistance += (-1)*(speedX / abs(speedX));
+			else tempDistance += (int)((-1)*(speedX / abs(speedX)));
 		}
 	}
 	else if (!speedX) {
-		double tempDistance = t*speedY;
-		while (!out && tempDistance*speedY >= 0) {
+		int tempDistance = (int)(t*speedY);
+		while (tempDistance*speedY >= 0) {
 			tempReqt.y = hitBox.y + tempDistance;
 			if (!Map::isItSolid(tempReqt)) {
 				hitBox.y += tempDistance;
-				out = 1;
+				break;
 			}
-			else tempDistance += (-1)*(speedY / abs(speedY));
+			else tempDistance += (int)((-1)*(speedY / abs(speedY)));
 		}
 	}
 	else {
-		double tempDistanceY = t*speedY;
-		double tempDistanceX = t*speedX;
-		while (!out && tempDistanceX*speedX >= 0 && tempDistanceY*speedY >= 0) {
+		int tempDistanceY = (int)(t*speedY);
+		int tempDistanceX = (int)(t*speedX);
+		while (tempDistanceX*speedX >= 0 && tempDistanceY*speedY >= 0) {
 			tempReqt.x = hitBox.x + tempDistanceX;
 			tempReqt.y = hitBox.y + tempDistanceY;
 			if (!Map::isItSolid(tempReqt)) {
 				hitBox.y += tempDistanceY;
 				hitBox.x += tempDistanceX;
-				out = 1;
+				break;
 			}
 			else {
-				tempDistanceX += (-1)*(speedX / abs(speedX));
-				tempDistanceY += (-1)*(speedY / abs(speedY));
+				tempDistanceX += (int)((-1)*(speedX / abs(speedX)));
+				tempDistanceY += (int)((-1)*(speedY / abs(speedY)));
 			}
 
 		}
-		if (backup == hitBox) {
-			out = 0;
-			double tempDistance = t*speedX;
-			while (!out && tempDistance*speedX >= 0) {
+		if (rectEquals(backup, hitBox)) {
+			int tempDistance = (int)(t*speedX);
+			while (tempDistance*speedX >= 0) {
 				tempReqt.x = hitBox.x + tempDistance;
 				tempReqt.y = hitBox.y;
 				if (!Map::isItSolid(tempReqt)) {
 					hitBox.x += tempDistance;
-					out = 1;
+					break;
 				}
-				else tempDistance += (-1)*(speedX / abs(speedX));
+				else tempDistance += (int)((-1)*(speedX / abs(speedX)));
 			}
 
-			tempDistance = t*speedY;
-			out = 0;
-			while (!out && tempDistance*speedY >= 0) {
+			tempDistance = (int)(t*speedY);
+
+			while (tempDistance*speedY >= 0) {
 				tempReqt.y = hitBox.y + tempDistance;
 				tempReqt.x = hitBox.x;
 				if (!Map::isItSolid(tempReqt)) {
 					hitBox.y += tempDistance;
-					out = 1;
+					break;
 				}
-				else tempDistance += (-1)*(speedY / abs(speedY));
+				else tempDistance += (int)((-1)*(speedY / abs(speedY)));
 			}
 		}
 	}
+	*/
+	timerA = timerB;
 
-	timerA = timerB = SDL_GetTicks();
+
 }
 
 void Moving_Unit::move(SDL_Event & e)
@@ -278,9 +338,10 @@ void Moving_Unit::unlockMovements()
 	movementsLock = 0;
 }
 
-void Moving_Unit::teleport(int x, int y) 
+void Moving_Unit::teleport(int x, int y)
 {
 	hitBox.x = x;
 	hitBox.y = y;
 
 }
+

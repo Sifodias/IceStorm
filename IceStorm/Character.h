@@ -1,5 +1,4 @@
 #pragma once
-#include "C_Rect.h"
 #include <vector>
 #include <SDL.h>
 #include "Moving_Unit.h"

@@ -1,62 +1,106 @@
 ID: 0
+type: GENERIC
+
 
 ID: 1
 target: wall_test
-texture: wall2.png
 flags: SOLID
+type: GENERIC
+texture: wall2.png
+
 
 ID: 2
 target: sign
-texture: sign.png
-flags: 
 targetnames: dummymsg
+type: GENERIC
+texture: sign.png
+
 
 ID: 3
 target: dummymsg
 type: DIALOG
-content: |firstTalk
+content: |firstTalkClean
+
 
 ID: 4
 target: teletest
 type: TELEPORT
-x: 100
-y: 100
+
 
 ID: 5
 target: conTest
-type: BUTTON
-flags: CONTACT
 targetnames: teletest
+flags: CONTACT
+type: BUTTON
+
 
 ID: 6
 target: patterntest
-texture: inv.png
 type: PATTERN
+texture: inv.png
+
 
 ID: 7
-texture: wall2down.png
 flags: SOLID
+type: GENERIC
+texture: wall2down.png
+
 
 ID: 8
-texture: wall2left.png
 flags: SOLID
+type: GENERIC
+texture: wall2left.png
+
 
 ID: 9
-texture: wall2right.png
 flags: SOLID
+type: GENERIC
+texture: wall2right.png
+
 
 ID: 10
 target: enemytest
 targetnames: teletest
 flags: CONTACT
+type: GENERIC
 texture: wall2.png
+
 
 ID: 11
 target: backdoortest
-type: DOOR
 flags: CONTACT
+type: DOOR
 texture: inv.png
 content: default front 0
+
+
+ID: 69
+target: characterMarkerMap
+type: GENERIC
+texture: inv.png
+
+
+ID: 12
+target: grossebite
+targetnames: dummymsg
+flags: SOLID
+type: GENERIC
+texture: sign.png
+
+
+ID: 13
+target: bitee
+targetnames: butty
+flags: CONTACT
+type: BUTTON
+
+
+ID: 14
+target: butty
+type: TELEPORT
+x: 100
+y: 100
+
 
 
 

@@ -1,11 +1,4 @@
 #pragma once
-//trace
-//nearby
-//event place mouse
-//set element to place
-//create an element to the database
-//save the level
-//create a new level
 
 #include "Generic_Object.h"
 #include <vector>
@@ -17,8 +10,8 @@ public:
 	static void zoom(int focus);
 	static void trace(int set, int plan = 0);
 	static void nearby();
-	static void createObject();
-	static void editObject();
+	static void createObject(string buffer);
+	static void editObject(string target);
 	static void placeElement(int x, int y, int plan = 0);
 	static void saveLevel(std::string name);
 	static void newLevel(std::string name);
@@ -30,7 +23,7 @@ public:
 	static void loadEnts();
 	static void newPlan(int plan);
 	static void setPlan(int plan);
-	static void clean(); //remove the 0 useless in the matrix
+	static void clean(int plan); //remove the 0 useless in the matrix
 
 	static GObject* currentObject;
 	static int currentPlan;

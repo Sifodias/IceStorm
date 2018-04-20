@@ -10,4 +10,5 @@ public:
 
 	//dialogs
 	static void firstTalk();
+	static void firstTalkClean();
 };
