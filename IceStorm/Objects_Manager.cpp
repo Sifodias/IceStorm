@@ -222,6 +222,8 @@ void Objects_Manager::fillObject(GObject* obj, string data) {
 			obj->y = std::stoi(getAndClear(data));
 			continue;
 		}
+		cout << "Error: Unknown field in: " << data << endl;
+		break;
 	}
 }
 

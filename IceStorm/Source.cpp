@@ -9,14 +9,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 /*
-Object manager create object finish implementation
 
-
-Efficient way to load levels
-Efficient way to create levels
-		 - Map
-		 - Objects
-			-> create entities, edit, load entities etc ...
 
 
 */

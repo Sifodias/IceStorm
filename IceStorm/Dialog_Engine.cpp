@@ -26,6 +26,18 @@ int DialogEngine::choiceMode(string a, string b, string c = "", string d = "")
 {
 	Text_Printer::standStill = 1;
 	SDL_Rect bite = { 0, 0, 300, 50 };
+
+	SDL_Event e;
+	while (Text_Printer::queue.size() > 1) {
+		SDL_PollEvent(&e);
+
+		SDL_RenderClear(Renderer::g_Renderer);
+		SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+		Textures_Manager::blitStuff();
+		Text_Printer::handleRoutine(e);
+		SDL_RenderPresent(Renderer::g_Renderer);
+	}
+
 	Text_Printer::addToQueue(a, &bite, 1);
 	bite.y += 10;
 	Text_Printer::addToQueue(b, &bite, 1);
@@ -34,8 +46,6 @@ int DialogEngine::choiceMode(string a, string b, string c = "", string d = "")
 	bite.y += 10;
 	Text_Printer::addToQueue(d, &bite, 1);
 
-	SDL_Event e;
-	int out = 0;
 	while (1) {
 		if (SDL_PollEvent(&e) != 0) {
 			if (e.type == SDL_KEYDOWN && Text_Printer::queue.size() == 1) {

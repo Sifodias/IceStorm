@@ -75,7 +75,7 @@ SDL_Texture * Textures_Manager::findTexture(std::string name)
 
 
 
-//This functions works well, but need to be cleaned
+//This function works well, but needs to be cleaned
 void Textures_Manager::blitStuff()
 {
 	SDL_Rect blitty;

@@ -209,7 +209,7 @@ void Builder::clean(int plan) {
 				Map::matrix[plan].erase(Map::matrix[plan].begin() + i, Map::matrix[plan].begin() + i + 1);
 		}
 	}
-		
+
 }
 
 void Builder::loadLevel(std::string name) {
@@ -257,7 +257,7 @@ void Builder::routine(SDL_Event & e)
 			break;
 		}
 		case SDLK_i: {
-			Character::movingUnit.xGRAVITY_ENABLED = checkKey(SDLK_i);
+			//Character::movingUnit.xGRAVITY_ENABLED = checkKey(SDLK_i);
 			Character::movingUnit.noclip = !Character::movingUnit.noclip;
 			Camera::FREEDOM = !checkKey(SDLK_i);
 			setKey(SDLK_i);
@@ -272,6 +272,8 @@ void Builder::routine(SDL_Event & e)
 			break;
 		}
 		case SDLK_f: {
+			if (currentObject == NULL)
+				break;
 			int x = -1; int y = -1;
 			SDL_GetMouseState(&x, &y);
 			int width, height;
@@ -279,6 +281,10 @@ void Builder::routine(SDL_Event & e)
 			x = (int)((x / (double)width)*Renderer::SCREEN_W);
 			y = (int)((y / (double)height)*Renderer::SCREEN_H);
 			placeElement(x, y, currentPlan);
+			currentObject->movingUnit.hitBox.x = ((x + Camera::getX())/GRID_W)*GRID_W;
+			currentObject->movingUnit.hitBox.y = ((y + Camera::getY())/GRID_H)*GRID_H;
+			currentObject->x = ((x + Camera::getX()) / GRID_W)*GRID_W;
+			currentObject->y = ((y + Camera::getY()) / GRID_H)*GRID_H;
 			break;
 		}
 		case SDLK_r: {

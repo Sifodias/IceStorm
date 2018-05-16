@@ -128,19 +128,9 @@ void Moving_Unit::handleMoves()
 	SDL_Rect temprect = hitBox;
 	temprect.y += 1;
 	if (Map::isItSolid(temprect)) {
-		//speedY = 0;
-		//if (!state[SDL_SCANCODE_W])
-			jumpLock = 0;
-			
-		//return;
+		jumpLock = 0;
+
 	}
-	//temprect.y -= 2;
-	//if (Map::isItSolid(temprect) && speedY < 0) {
-	//	speedY = 0;
-	//	if (!state[SDL_SCANCODE_W])
-	//		jumpLock = 0;
-	//}
-	//std::cout << jumpLock;
 }
 
 void Moving_Unit::addMoves(SDL_Event & e)
@@ -216,14 +206,21 @@ void Moving_Unit::doMoves()
 	/////////
 	int tempDistancex = (int)(t*speedX);
 	int tempDistancey = (int)(t*speedY);
+
+	//factor technique to get rid of stutter when speedx and y different and hit a wall
+	//(it kinda works, doesn't fully remove the stuttering but most of it)
+	double factorX = abs((double)speedX / (double)(speedX + speedY));
+	double factorY = abs((double)speedY / (double)(speedY + speedX));
+	double storageX = 0;
+	double storageY = 0;
 	while (tempDistancex*speedX > 0 || tempDistancey * speedY > 0) {
 		if ((tempDistancex < 0 && speedX > 0) || (tempDistancex > 0 && speedX < 0)) {
 			tempDistancex = 0;
-			speedX = 0;
+			//speedX = 0;
 		}
 		if ((tempDistancey < 0 && speedY > 0) || (tempDistancey > 0 && speedY < 0)) {
 			tempDistancey = 0;
-			speedY = 0;
+			//speedY = 0;
 		}
 		tempReqt.x = hitBox.x + tempDistancex;
 		tempReqt.y = hitBox.y + tempDistancey;
@@ -233,10 +230,24 @@ void Moving_Unit::doMoves()
 			break;
 		}
 		else {
-			if (speedX)
-				tempDistancex += (int)((-1)*(speedX / abs(speedX)));
-			if (speedY)
-				tempDistancey += (int)((-1)*(speedY / abs(speedY)));
+			if (speedX) {
+					storageX += (int)((-1)*(speedX / abs(speedX)))*factorX;
+
+				if (abs(storageX) >= 1) {
+					tempDistancex += (int)((storageX / abs(storageX)));
+					storageX -= (int)((storageX / abs(storageX)));
+				}
+
+			}
+			if (speedY) {
+					storageY += (int)((-1)*(speedY / abs(speedY)))*factorY;
+
+				if (abs(storageY) >= 1) {
+					tempDistancey += (int)((storageY / abs(storageY)));
+					storageY -= (int)((storageY / abs(storageY)));
+				}
+
+			}
 		}
 	}
 	/////////
