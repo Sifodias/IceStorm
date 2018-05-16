@@ -1,7 +1,9 @@
 # IceStorm
-A 2D Adventure-Action Game Engine
+A 2D Adventure Game
 
 Language: C++
+
+IDE: Visual Studio 2017
 
 Libs: SDL2
 
