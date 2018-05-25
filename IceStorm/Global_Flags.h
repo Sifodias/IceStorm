@@ -10,9 +10,9 @@ using namespace std;
 #define JSPEED 350	//jump speed
 #define GRAVITY 1300
 #define JUMPLOCK 1
-#define GRAVITY_ENABLED 1
+#define GRAVITY_ENABLED 0
 
-#define CHAR_H 19
+#define CHAR_H 29
 #define CHAR_W 19
 #define CHAR_HITBOX_H 19
 #define CHAR_HITBOX_W 19

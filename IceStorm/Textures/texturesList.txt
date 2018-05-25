@@ -20,3 +20,4 @@ right.png
 left.png
 up.png
 down.png
+tile.png

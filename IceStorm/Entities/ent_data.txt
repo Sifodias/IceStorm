@@ -1,19 +1,26 @@
 ID: 0
 type: GENERIC
+x: 1060
+y: 700
 
 
 ID: 1
 target: wall_test
 flags: SOLID
 type: GENERIC
-texture: wall2.png
+texture: tile.png
+x: 820
+y: 540
 
 
 ID: 2
 target: sign
 targetnames: dummymsg
+flags: SOLID
 type: GENERIC
 texture: sign.png
+x: 240
+y: 60
 
 
 ID: 3
@@ -78,6 +85,8 @@ ID: 69
 target: characterMarkerMap
 type: GENERIC
 texture: inv.png
+x: 1020
+y: 620
 
 
 ID: 12
@@ -100,6 +109,14 @@ target: butty
 type: TELEPORT
 x: 100
 y: 100
+
+
+ID: 15
+target: camblock
+flags: SOLID
+type: CAMBLOCK
+x: 800
+y: 540
 
 
 

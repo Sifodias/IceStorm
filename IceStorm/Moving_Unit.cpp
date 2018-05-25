@@ -203,14 +203,16 @@ void Moving_Unit::doMoves()
 	if (speedY <= 300 && xGRAVITY_ENABLED)
 		speedY += (int)(GRAVITY*t);
 
-	/////////
+
 	int tempDistancex = (int)(t*speedX);
 	int tempDistancey = (int)(t*speedY);
 
 	//factor technique to get rid of stutter when speedx and y different and hit a wall
-	//(it kinda works, doesn't fully remove the stuttering but most of it)
+	//useless when both speeds are equal
+	//glitch: freeze at a distance of 1 pixel for few seconds
 	double factorX = abs((double)speedX / (double)(speedX + speedY));
 	double factorY = abs((double)speedY / (double)(speedY + speedX));
+	factorX = factorY = 1;
 	double storageX = 0;
 	double storageY = 0;
 	while (tempDistancex*speedX > 0 || tempDistancey * speedY > 0) {
@@ -231,92 +233,26 @@ void Moving_Unit::doMoves()
 		}
 		else {
 			if (speedX) {
-					storageX += (int)((-1)*(speedX / abs(speedX)))*factorX;
+					storageX += (-1)*(speedX / abs(speedX))*factorX;
 
 				if (abs(storageX) >= 1) {
 					tempDistancex += (int)((storageX / abs(storageX)));
-					storageX -= (int)((storageX / abs(storageX)));
+					storageX -= (storageX / abs(storageX));
 				}
 
 			}
 			if (speedY) {
-					storageY += (int)((-1)*(speedY / abs(speedY)))*factorY;
+					storageY += (-1)*(speedY / abs(speedY))*factorY;
 
 				if (abs(storageY) >= 1) {
 					tempDistancey += (int)((storageY / abs(storageY)));
-					storageY -= (int)((storageY / abs(storageY)));
+					storageY -= (storageY / abs(storageY));
 				}
 
 			}
 		}
 	}
-	/////////
-	/*
-	if (!speedY) {
-		int tempDistance = (int)(t*speedX);
-		while (tempDistance*speedX >= 0) {
-			tempReqt.x = hitBox.x + tempDistance;
-			if (!Map::isItSolid(tempReqt)) {
-				hitBox.x += tempDistance;
-				break;
-			}
-			else tempDistance += (int)((-1)*(speedX / abs(speedX)));
-		}
-	}
-	else if (!speedX) {
-		int tempDistance = (int)(t*speedY);
-		while (tempDistance*speedY >= 0) {
-			tempReqt.y = hitBox.y + tempDistance;
-			if (!Map::isItSolid(tempReqt)) {
-				hitBox.y += tempDistance;
-				break;
-			}
-			else tempDistance += (int)((-1)*(speedY / abs(speedY)));
-		}
-	}
-	else {
-		int tempDistanceY = (int)(t*speedY);
-		int tempDistanceX = (int)(t*speedX);
-		while (tempDistanceX*speedX >= 0 && tempDistanceY*speedY >= 0) {
-			tempReqt.x = hitBox.x + tempDistanceX;
-			tempReqt.y = hitBox.y + tempDistanceY;
-			if (!Map::isItSolid(tempReqt)) {
-				hitBox.y += tempDistanceY;
-				hitBox.x += tempDistanceX;
-				break;
-			}
-			else {
-				tempDistanceX += (int)((-1)*(speedX / abs(speedX)));
-				tempDistanceY += (int)((-1)*(speedY / abs(speedY)));
-			}
-
-		}
-		if (rectEquals(backup, hitBox)) {
-			int tempDistance = (int)(t*speedX);
-			while (tempDistance*speedX >= 0) {
-				tempReqt.x = hitBox.x + tempDistance;
-				tempReqt.y = hitBox.y;
-				if (!Map::isItSolid(tempReqt)) {
-					hitBox.x += tempDistance;
-					break;
-				}
-				else tempDistance += (int)((-1)*(speedX / abs(speedX)));
-			}
-
-			tempDistance = (int)(t*speedY);
-
-			while (tempDistance*speedY >= 0) {
-				tempReqt.y = hitBox.y + tempDistance;
-				tempReqt.x = hitBox.x;
-				if (!Map::isItSolid(tempReqt)) {
-					hitBox.y += tempDistance;
-					break;
-				}
-				else tempDistance += (int)((-1)*(speedY / abs(speedY)));
-			}
-		}
-	}
-	*/
+	
 	timerA = timerB;
 
 
@@ -325,9 +261,6 @@ void Moving_Unit::doMoves()
 void Moving_Unit::move(SDL_Event & e)
 {
 	if (movementsLock == 0) {
-		//if (noclip)
-	//		xGRAVITY_ENABLED = 0;
-		//else xGRAVITY_ENABLED = 1;
 		addMoves(e);
 		handleMoves();
 		doMoves();
@@ -336,7 +269,6 @@ void Moving_Unit::move(SDL_Event & e)
 		movementsLock = 0;
 		timerA = timerB = SDL_GetTicks();
 	}
-	//std::cout << Map::isItSolid(hitBox);
 }
 
 void Moving_Unit::lockMovements()
