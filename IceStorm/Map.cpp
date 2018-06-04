@@ -135,46 +135,47 @@ void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> t
 {
 	GObject* tempObj = NULL;
 
-
-	for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
-		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-			if (getIdObject(reqt.y-1, iy, reqt.x-1, ix)) {
-				tempObj = Objects_Manager::findObjectOfID(getIdObject(reqt.y-1, iy, reqt.x-1, ix));
-				goto found;
-			}
-			if (ix + 1 > (int)(reqt.w / GRID_W)) {
-				if (getIdObject(reqt.y-1, iy, reqt.x + reqt.w, 0)) {
-					tempObj = Objects_Manager::findObjectOfID(getIdObject(reqt.y-1, iy, reqt.x + reqt.w, 0));
-					goto found;
-				}
-			}
-		}
-		if (iy + 1 > (int)(reqt.h / GRID_H)) {
+	for (int i = 0; i < Map::matrix.size(); i++) {
+		for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
 			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-				if (getIdObject(reqt.y + reqt.h, 0, reqt.x, ix)) {
-					tempObj = Objects_Manager::findObjectOfID(getIdObject(reqt.y + reqt.h, 0, reqt.x, ix));
+				if (getIdObject(reqt.y - 1, iy, reqt.x - 1, ix, i)) {
+					tempObj = Objects_Manager::findObjectOfID(getIdObject(reqt.y - 1, iy, reqt.x - 1, ix, i));
 					goto found;
 				}
 				if (ix + 1 > (int)(reqt.w / GRID_W)) {
-					if (getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w, 0)) {
-						tempObj = Objects_Manager::findObjectOfID(getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w, 0));
+					if (getIdObject(reqt.y - 1, iy, reqt.x + reqt.w, 0, i)) {
+						tempObj = Objects_Manager::findObjectOfID(getIdObject(reqt.y - 1, iy, reqt.x + reqt.w, 0, i));
 						goto found;
 					}
 				}
 			}
-			break;
-		}
-	}
-found:
-	if (tempObj != NULL) {
-		if (contact) {
-			for (int i = 0; i < tempObj->flags.size(); i++) {
-				if (!tempObj->flags[i].compare("CONTACT"))
-					tempObj->trigger();
+			if (iy + 1 > (int)(reqt.h / GRID_H)) {
+				for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
+					if (getIdObject(reqt.y + reqt.h, 0, reqt.x, ix, i)) {
+						tempObj = Objects_Manager::findObjectOfID(getIdObject(reqt.y + reqt.h, 0, reqt.x, ix, i));
+						goto found;
+					}
+					if (ix + 1 > (int)(reqt.w / GRID_W)) {
+						if (getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w, 0, i)) {
+							tempObj = Objects_Manager::findObjectOfID(getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w, 0, i));
+							goto found;
+						}
+					}
+				}
+				break;
 			}
 		}
-		else
-			tempObj->trigger();
+	found:
+		if (tempObj != NULL) {
+			if (contact) {
+				for (int i = 0; i < tempObj->flags.size(); i++) {
+					if (!tempObj->flags[i].compare("CONTACT"))
+						tempObj->trigger();
+				}
+			}
+			else
+				tempObj->trigger();
+		}
 	}
 }
 

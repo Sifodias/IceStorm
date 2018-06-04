@@ -34,26 +34,28 @@ int Camera::getX() {
 			return 0;
 
 		double max = 0;
-		for (int i = 0; i < Map::matrix[0].size(); i++)
-			max = std::fmax(max, Map::matrix[0][i].size());
+		for (int y = 0; y < Map::matrix[0].size(); y++)
+			max = std::fmax(max, Map::matrix[0][y].size());
 
-		double max2 = std::abs(max * GRID_W - outerRect.w);
-		for (int i = ((outerRect.x / GRID_W))*GRID_W; i < outerRect.w + outerRect.x; i += GRID_W) {
+		double max2 = Map::matrix[0][(Character::movingUnit.hitBox.y / GRID_H)*GRID_H].size()*GRID_W;
+		int flagChanged = 0;
+
+		for (int i = 0; i < outerRect.w / 2 + Character::movingUnit.hitBox.x + GRID_W * 90; i += GRID_W) {
 			if (!Objects_Manager::findObjectOfID(Map::getIdObject(Character::movingUnit.hitBox.y, 0, i, 0))
 				->type.compare("CAMBLOCK")) {
-				max2 = i;
-				if (max2 < outerRect.x + outerRect.w / 2)
-					goto ret1;
-				else
-					goto ret2;
-				//std::cout << "BITRE";
-				break;
+				if (std::abs(Character::movingUnit.hitBox.x - max2) > std::abs(Character::movingUnit.hitBox.x - i)) {
+					max2 = i;
+					flagChanged = 6666;
+				}
 			}
 		}
-		return (int)std::fmin(std::abs(max*GRID_W - outerRect.w), outerRect.x);
-	ret1:
-		return (int)std::fmax(outerRect.x, max2 + GRID_W);
-	ret2:
+
+		if (!flagChanged) 
+			return (int)std::fmin(std::abs(max*GRID_W - outerRect.w), outerRect.x);
+		
+		if (max2 < Character::movingUnit.hitBox.x)
+			return (int)std::fmax(outerRect.x, max2 + GRID_W);
+
 		return (int)std::fmin(outerRect.x, max2 - outerRect.w);
 	}
 
@@ -67,7 +69,7 @@ int Camera::getX() {
 int Camera::getY() {
 	if (!FREEDOM) {
 		if ((int)(Character::movingUnit.hitBox.y + Character::movingUnit.hitBox.h)
-				> innerRect.y + innerRect.h)
+		> innerRect.y + innerRect.h)
 			innerRect.y = (int)(Character::movingUnit.hitBox.y + Character::movingUnit.hitBox.h)
 			- innerRect.h;
 		else if ((int)(Character::movingUnit.hitBox.y) < innerRect.y)

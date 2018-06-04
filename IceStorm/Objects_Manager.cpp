@@ -42,6 +42,10 @@ void Objects_Manager::loadObjects()
 
 	GObject* currentObject;
 	while (buffer.compare("EOF")) {
+		while (!buffer.size()) {
+			std::getline(*tempStream, buffer);
+			continue;
+		}
 		identify(buffer, "ID: ");
 		currentObject = new GObject;
 		currentObject->ID = std::stoi(buffer);

@@ -55,27 +55,6 @@ void main_event_loop()
 {
 	SDL_Event e;
 
-	//SDL_Rect mabite; mabite.x = 300;
-	//double x = 300;
-	//Uint32 A;
-	//Uint32 B = A = SDL_GetTicks();
-	//Uint32 t = 0;
-	//Uint32 C;
-	//Uint32 D = C = SDL_GetTicks();
-	//double dx = 300;
-	//B = SDL_GetTicks();
-	//D = SDL_GetTicks();
-	//if (B - A > 1) {
-	//	mabite.x -= (B - A)*0.001 * 150;
-	//	if (D - C > 300) {
-	//		std::cout << "X: " << mabite.x << "  speedX: " <<
-	//			(double)((mabite.x - x) / ((B - A)*0.001)) << endl;
-	//		C = D;
-	//	}
-	//	x = mabite.x;
-	//	A = B;
-	//}
-
 	Uint32 timerA = SDL_GetTicks();
 	Uint32 timerB = SDL_GetTicks();
 	int x = Character::movingUnit.hitBox.x;
