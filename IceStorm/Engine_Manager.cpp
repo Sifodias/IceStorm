@@ -15,9 +15,9 @@ void Init_game()
 	Map::loadLevel("default.txt");
 	Textures_Manager::Init();
 	Objects_Manager::Init();
-	Character::Init();
 	Text_Printer::Init();
 	Camera::Init();
+	Character::Init();
 }
 
 /*

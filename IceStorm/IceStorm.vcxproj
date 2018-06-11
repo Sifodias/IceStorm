@@ -129,6 +129,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Dialog_Engine.cpp" />
+    <ClCompile Include="Fight_Handler.cpp" />
     <ClCompile Include="Generic_Object.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Moving_Unit.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Dialog_Engine.h" />
+    <ClInclude Include="Fight_Handler.h" />
     <ClInclude Include="Generic_Object.h" />
     <ClInclude Include="Global_Flags.h" />
     <ClInclude Include="Sprites_Handler.h" />

@@ -8,7 +8,7 @@ Each object has :
 - texture (sdl_texture)
 - CRect
 - flag solid
-- Content (differs depending on type, which can be :
+- Content (differs depending on the type, it can be :
 . Message
 . Dialogue instance
 . Activating mechanisms
@@ -32,7 +32,8 @@ type :
 	GENERIC,
 	TELEPORT,
 	ENEMY,
-	CAMBLOCK,
+	CAMBLOCKX,
+	CAMBLOCKY,
 	PATTERN  //it's itself a pattern
 
 flags :

@@ -36,11 +36,11 @@ void Moving_Unit::handleMoves()
 		switch (movesY.back()) {
 		case -1:
 			if (state[SDL_SCANCODE_W] && !jumpLock) {
-				if (xGRAVITY_ENABLED) {
-					speedY = -JSPEED;
+				if (xGRAVITY_ENABLED && !noclip) {
+					speedY = -xJSPEED;
 					jumpLock = 1;
 				}
-				else speedY = -CSPEED;
+				else speedY = -xCSPEED;
 				out = 1;
 			}
 			else movesY.pop_back();
@@ -48,7 +48,7 @@ void Moving_Unit::handleMoves()
 
 		case 1:
 			if (state[SDL_SCANCODE_S]) {
-				speedY = CSPEED;
+				speedY = xCSPEED;
 				out = 1;
 			}
 			else movesY.pop_back();
@@ -61,14 +61,14 @@ void Moving_Unit::handleMoves()
 		switch (movesX.back()) {
 		case 2:
 			if (state[SDL_SCANCODE_D]) {
-				speedX = CSPEED;
+				speedX = xCSPEED;
 				out = 1;
 			}
 			else movesX.pop_back();
 			break;
 		case -2:
 			if (state[SDL_SCANCODE_A]) {
-				speedX = -CSPEED;
+				speedX = -xCSPEED;
 				out = 1;
 			}
 			else movesX.pop_back();
@@ -115,9 +115,10 @@ void Moving_Unit::handleMoves()
 		speedX = 0;
 	}
 
-	speedRestrainer(speedX, speedY, hitBox);
+	if (!noclip)
+		speedRestrainer(speedX, speedY, hitBox);
 
-	if (!xGRAVITY_ENABLED) {
+	if (!xGRAVITY_ENABLED || noclip) {
 		jumpLock = 0;
 		if (!movesY.size()) {
 			speedY = 0;
@@ -233,7 +234,7 @@ void Moving_Unit::doMoves()
 		}
 		else {
 			if (speedX) {
-					storageX += (-1)*(speedX / abs(speedX))*factorX;
+				storageX += (-1)*(speedX / abs(speedX))*factorX;
 
 				if (abs(storageX) >= 1) {
 					tempDistancex += (int)((storageX / abs(storageX)));
@@ -242,7 +243,7 @@ void Moving_Unit::doMoves()
 
 			}
 			if (speedY) {
-					storageY += (-1)*(speedY / abs(speedY))*factorY;
+				storageY += (-1)*(speedY / abs(speedY))*factorY;
 
 				if (abs(storageY) >= 1) {
 					tempDistancey += (int)((storageY / abs(storageY)));
@@ -252,7 +253,7 @@ void Moving_Unit::doMoves()
 			}
 		}
 	}
-	
+
 	timerA = timerB;
 
 

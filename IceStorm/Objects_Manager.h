@@ -1,14 +1,12 @@
 #pragma once
 #include "Generic_Object.h"
 #include <vector>
+#include <map>
+
 using namespace std;
 
 class Objects_Manager {
 public:
-	Objects_Manager() {
-		Init();
-	}
-
 	static void Init();
 
 	static GObject* findObject(string target);

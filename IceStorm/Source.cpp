@@ -9,7 +9,12 @@ int main(int argc, char* argv[])
 	return 0;
 }
 /*
-
- 
+TODO :
+	- Menu handler (Print entries, with select by arrows)
+	- Fight Handler
+	- Finish save management
+	- Need for non generic objects ?
+		. Cinematics
+		. Ennemies
 
 */

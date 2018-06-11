@@ -37,22 +37,32 @@ int Camera::getX() {
 		for (int y = 0; y < Map::matrix[0].size(); y++)
 			max = std::fmax(max, Map::matrix[0][y].size());
 
-		double max2 = Map::matrix[0][(Character::movingUnit.hitBox.y / GRID_H)*GRID_H].size()*GRID_W;
+		double max2 = outerRect.w / 2 + Character::movingUnit.hitBox.x + GRID_W * 5;
 		int flagChanged = 0;
-
-		for (int i = 0; i < outerRect.w / 2 + Character::movingUnit.hitBox.x + GRID_W * 90; i += GRID_W) {
+		int r =0, l = 0;
+		for (int i = (Character::movingUnit.hitBox.x/GRID_W)*GRID_W - outerRect.w/2 - GRID_W*5;
+			i < outerRect.w / 2 + Character::movingUnit.hitBox.x + GRID_W *5; i += GRID_W) {
 			if (!Objects_Manager::findObjectOfID(Map::getIdObject(Character::movingUnit.hitBox.y, 0, i, 0))
-				->type.compare("CAMBLOCK")) {
+				->type.compare("CAMBLOCKX")) {
 				if (std::abs(Character::movingUnit.hitBox.x - max2) > std::abs(Character::movingUnit.hitBox.x - i)) {
 					max2 = i;
 					flagChanged = 6666;
 				}
+				if (i < Character::movingUnit.hitBox.x) {
+					if (abs(r - Character::movingUnit.hitBox.x) > abs(i - Character::movingUnit.hitBox.x))
+						r = i;
+				}
+				else
+					if (abs(l - Character::movingUnit.hitBox.x) > abs(i - Character::movingUnit.hitBox.x))
+						l = i;
 			}
 		}
+		if (r && l)
+			return ((r + l) / 2) - (outerRect.w) / 2 + GRID_W / 2;
 
-		if (!flagChanged) 
+		if (!flagChanged)
 			return (int)std::fmin(std::abs(max*GRID_W - outerRect.w), outerRect.x);
-		
+
 		if (max2 < Character::movingUnit.hitBox.x)
 			return (int)std::fmax(outerRect.x, max2 + GRID_W);
 
@@ -80,24 +90,38 @@ int Camera::getY() {
 			return 0;
 
 
-		double max2 = std::abs((double)(Map::matrix[0].size()*GRID_H - outerRect.h));
-		for (int i = ((outerRect.y / GRID_H))*GRID_H; i < outerRect.h + outerRect.y; i += GRID_H) {
+		double max2 = std::abs((double)(Map::matrix[0].size()*GRID_H));
+		int flagChanged = 0;
+		int r = 0, l = 0;
+		for (int i = (Character::movingUnit.hitBox.y/GRID_H)*GRID_H - outerRect.h/2 - GRID_H*5;
+			i < outerRect.h / 2 + Character::movingUnit.hitBox.y+ GRID_H*5; i += GRID_H) {
 			if (!Objects_Manager::findObjectOfID(Map::getIdObject(i, 0, Character::movingUnit.hitBox.x, 0))
-				->type.compare("CAMBLOCK")) {
-				max2 = i;
-				if (max2 < outerRect.y + outerRect.h / 2)
-					goto ret1;
+				->type.compare("CAMBLOCKY")) {
+				if (std::abs(Character::movingUnit.hitBox.y - max2) > std::abs(Character::movingUnit.hitBox.y - i)) {
+					max2 = i;
+					flagChanged = 6666;
+				}
+				if (i < Character::movingUnit.hitBox.y) {
+					if (abs(r - Character::movingUnit.hitBox.y) > abs(i - Character::movingUnit.hitBox.y))
+						r = i;
+				}
 				else
-					goto ret2;
-				break;
+					if (abs(l - Character::movingUnit.hitBox.y) > abs(i - Character::movingUnit.hitBox.y))
+						l = i;
 			}
 		}
-		return (int)std::fmin(std::abs((double)(Map::matrix[0].size()*GRID_H - outerRect.h)), outerRect.y);
-	ret1:
-		return (int)std::fmax(outerRect.y, max2 + GRID_H);
-	ret2:
+		if (r && l)
+			return ((r + l) / 2) - (outerRect.h) / 2 + GRID_H / 2;
+
+		if (!flagChanged)
+			return (int)std::fmin(std::abs((double)(Map::matrix[0].size()*GRID_H - outerRect.h)), outerRect.y);
+
+		if (max2 < Character::movingUnit.hitBox.y)
+			return (int)std::fmax(outerRect.y, max2 + GRID_H);
+
 		return (int)std::fmin(outerRect.y, max2 - outerRect.h);
 	}
+
 	else {
 		outerRect.y = (int)Character::movingUnit.hitBox.y - (int)(outerRect.h / 2);
 		return (int)outerRect.y;
