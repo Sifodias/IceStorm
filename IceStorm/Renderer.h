@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include <string>
-
+#include <SDL_mutex.h>
 class Renderer {
 public:
 	//Renderer();
@@ -11,7 +11,7 @@ public:
 	static void quitAll();		//Closes SDL modules
 	static int SCREEN_W;
 	static int SCREEN_H;
-
+	static SDL_mutex* lockRenderer;
 	static SDL_Renderer* g_Renderer;	//Renderer of the engine
 	static SDL_Window* g_Window;		//Window of the game
 

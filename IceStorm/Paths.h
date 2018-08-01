@@ -10,4 +10,5 @@ public :
 	static string asciiPath;
 	static string entData;
 	static string dialogs;
+	static string saveData;
 };

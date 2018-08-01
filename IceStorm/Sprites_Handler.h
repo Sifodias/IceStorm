@@ -5,6 +5,8 @@
 #include <sstream>
 #include "Textures_Manager.h"
 
+
+//need to be able to handle spritesheets
 class SpritesHandler {
 public:
 	void init(std::string str, std::string names, int ispeed = 100) {

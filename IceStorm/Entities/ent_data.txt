@@ -1,7 +1,7 @@
 ID: 0
 type: GENERIC
-x: 2040
-y: 800
+x: 1460
+y: 1120
 
 
 ID: 1
@@ -9,8 +9,8 @@ target: wall_test
 flags: SOLID
 type: GENERIC
 texture: tile.png
-x: 2060
-y: 760
+x: 1420
+y: 1240
 
 
 ID: 2
@@ -85,8 +85,8 @@ ID: 69
 target: characterMarkerMap
 type: GENERIC
 texture: inv.png
-x: 1020
-y: 600
+x: 1260
+y: 1220
 
 
 ID: 12
@@ -113,16 +113,16 @@ y: 100
 
 ID: 15
 target: camblock
-type: CAMBLOCK
-x: 1640
-y: 780
+type: CAMBLOCKX
+x: 1500
+y: 1580
 
 
 ID: 16
 target: teltel
 type: TELEPORT
 texture: bite.png
-x: 1680
+x: 1660
 y: 740
 
 
@@ -132,15 +132,15 @@ targetnames: teltel
 flags: CONTACT
 type: 
 texture: bite.png
-x: 1240
-y: 700
+x: 1260
+y: 740
 
 
 ID: 18
 target: tel2
 type: TELEPORT
 texture: Untitled.png
-x: 1200
+x: 1220
 y: 740
 
 
@@ -150,8 +150,22 @@ targetnames: tel2
 flags: CONTACT
 type: 
 texture: Untitled.png
-x: 1640
+x: 1620
 y: 740
+
+
+ID: 20
+target: cammy
+flags: SOLID
+type: CAMBLOCKY
+x: 1100
+y: 1660
+
+
+ID: 21
+target: choiceTick
+type: GENERIC
+texture: choice.png
 
 
 

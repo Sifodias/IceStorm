@@ -60,7 +60,7 @@ void Text_Printer::printText(NodeQueue& node) {
 }
 
 void Text_Printer::addToQueue(std::string str,
-	SDL_Rect* container, int immediate, int policeID, SDL_Rect* rect)
+	SDL_Rect* container, int immediate, int policeID, SDL_Rect* rect, bool showDialogBox)
 {
 	if (!str.size()) return;
 	if (queue.size() > 10000) {
@@ -77,7 +77,7 @@ void Text_Printer::addToQueue(std::string str,
 		std::cout << "Invalid index for Police ! index : " << policeID << std::endl;
 		return;
 	}
-	NodeQueue tempNode{ str, *rect, policeID, 0 , *container, 0 };
+	NodeQueue tempNode{ str, *rect, policeID, 0 , *container, 0, showDialogBox };
 	if (!immediate)
 		queue.push_back(tempNode);
 	else imQueue.push_back(tempNode);
@@ -90,7 +90,7 @@ void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue>& iQueue) {
 			printText(iQueue[i]);
 			if (iQueue[i].lock) {
 				if (e.type == SDL_KEYDOWN && (&iQueue == &queue) &&
-					(!standStill  || iQueue.size() > 1)) {
+					(!standStill || iQueue.size() > 1)) {
 					if (e.key.keysym.sym == SDLK_j) {
 						while (iQueue[i].str[iQueue[i].iterator] == ' ')
 							iQueue[i].iterator++;
@@ -116,9 +116,11 @@ void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue>& iQueue) {
 void Text_Printer::handleRoutine(SDL_Event e)
 {
 	timerB = SDL_GetTicks();
-	if (queue.size() > 0)
-		SDL_RenderCopy(Renderer::g_Renderer, dialogBox,
-			NULL, &dialogRect);
+	if (queue.size() > 0) {
+		if (queue.front().showDialogBox)
+			SDL_RenderCopy(Renderer::g_Renderer, dialogBox,
+				NULL, &dialogRect);
+	}
 	keepGoin(e, queue);
 	keepGoin(e, imQueue);
 }

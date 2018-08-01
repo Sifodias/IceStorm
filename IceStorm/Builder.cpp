@@ -316,12 +316,16 @@ void Builder::zoom(int focus) {
 		//Camera::innerRect.h *= 2;
 		Renderer::SCREEN_W = Camera::outerRect.w *= 2;
 		//Camera::innerRect.w *= 2;
+		Character::movingUnit.xCSPEED *= 2;
+		//Character::movingUnit.speedY *= 10;
 	}
 	if (focus == 1) {
 		Renderer::SCREEN_H = Camera::outerRect.h /= 2;
 		//Camera::innerRect.w /= 2;
 		Renderer::SCREEN_W = Camera::outerRect.w /= 2;
 		//Camera::innerRect.w /= 2;
+		Character::movingUnit.xCSPEED /= 2;
+		//Character::movingUnit.speedY /= 10;
 	}
 	SDL_RenderSetLogicalSize(Renderer::g_Renderer, Camera::outerRect.w, Camera::outerRect.h);
 }

@@ -14,13 +14,14 @@ typedef struct t_nodequeue {
 	int iterator;
 	SDL_Rect container;
 	bool lock;
+	bool showDialogBox;
 } NodeQueue;
 
 class Text_Printer {
 public:
 	static void Init();
 	static void addToQueue(std::string str, 
-		SDL_Rect* container = NULL, int immediate = 0, int policeID = 0, SDL_Rect* rect = NULL);
+		SDL_Rect* container = NULL, int immediate = 0, int policeID = 0, SDL_Rect* rect = NULL, bool showDialogBox = 1);
 	static void handleRoutine(SDL_Event e);
 	void static keepGoin(SDL_Event e, std::vector<NodeQueue>& iQueue);
 

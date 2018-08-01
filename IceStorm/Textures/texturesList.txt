@@ -21,3 +21,9 @@ left.png
 up.png
 down.png
 tile.png
+choice.png
+Unknown.png
+Main.png
+Unknown2.png
+thing.png
+Unknown3.png
