@@ -7,4 +7,4 @@ IDE: Visual Studio 2017
 
 Libs: SDL2
 
-Contributors: Sifodias
+Contributors: Sifodias, Raphaelaz
