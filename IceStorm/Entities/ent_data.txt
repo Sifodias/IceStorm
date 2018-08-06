@@ -1,7 +1,7 @@
 ID: 0
 type: GENERIC
-x: 1460
-y: 1120
+x: 340
+y: 200
 
 
 ID: 1
@@ -9,8 +9,8 @@ target: wall_test
 flags: SOLID
 type: GENERIC
 texture: tile.png
-x: 1420
-y: 1240
+x: 400
+y: 240
 
 
 ID: 2
@@ -85,8 +85,8 @@ ID: 69
 target: characterMarkerMap
 type: GENERIC
 texture: inv.png
-x: 1260
-y: 1220
+x: 160
+y: 80
 
 
 ID: 12

@@ -23,9 +23,5 @@ TODO :
 		. Ennemies
 
 
-Do we need an event queue ?
-Let's start:
-we display the title
-then a menu
 
 */

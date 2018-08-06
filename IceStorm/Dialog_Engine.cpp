@@ -32,7 +32,7 @@ int DialogEngine::choiceMode(string a, string b, string c = "", string d = "")
 		SDL_PollEvent(&e);
 
 		SDL_RenderClear(Renderer::g_Renderer);
-		SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+		SDL_SetRenderDrawColor(Renderer::g_Renderer, 100, 50, 100, SDL_ALPHA_OPAQUE);
 		Textures_Manager::blitStuff();
 		Text_Printer::handleRoutine(e);
 		SDL_RenderPresent(Renderer::g_Renderer);
@@ -57,7 +57,7 @@ int DialogEngine::choiceMode(string a, string b, string c = "", string d = "")
 			}
 		}
 		SDL_RenderClear(Renderer::g_Renderer);
-		SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+		SDL_SetRenderDrawColor(Renderer::g_Renderer, 100, 50, 100, SDL_ALPHA_OPAQUE);
 		Textures_Manager::blitStuff();
 		Text_Printer::handleRoutine(e);
 		SDL_RenderPresent(Renderer::g_Renderer);

@@ -27,3 +27,15 @@ Main.png
 Unknown2.png
 thing.png
 Unknown3.png
+maindown.png
+mainup.png
+mainup1.png
+mainup2.png
+mainleft.png
+mainleft1.png
+mainleft2.png
+mainright.png
+mainright1.png
+mainright2.png
+maindown1.png
+maindown2.png

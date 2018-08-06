@@ -192,7 +192,7 @@ void Map::findOccurrence(int charry, int * ix, int * iy)
 			}
 		}
 	}
-	std::cout << "Error: No character marker found";
+	std::cout << "Error: No character marker found\n";
 	*ix = *iy = 0;
 }
 

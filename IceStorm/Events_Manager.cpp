@@ -26,6 +26,10 @@ void Events_Manager::addToQueue(std::function<void()> event)
 	eventsQueue.push_back(event);
 }
 
+int choiceMenu(int numchoices, int xFirstChoice, int offset) {
+
+}
+
 void testTitle()
 {
 	SDL_Rect container{ Renderer::SCREEN_W / 2 - 32, Renderer::SCREEN_H / 2 - 32, 500, 500 };

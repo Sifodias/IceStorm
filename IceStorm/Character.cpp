@@ -16,17 +16,25 @@ void Character::characterRoutine(SDL_Event & e)
 	movingUnit.move(e);
 	switch (movingUnit.mainDirection) {
 	case -2:
-		textures.setCurrentGroup("left");
+		if (movingUnit.speedX)
+			textures.setCurrentGroup("left");
+		else textures.setCurrentGroup("sleft");
 		break;
 	case 2:
-		textures.setCurrentGroup("right");
+		if (movingUnit.speedX)
+			textures.setCurrentGroup("right");
+		else textures.setCurrentGroup("sright");
 		break;
 	case -1:
-		textures.setCurrentGroup("up");
+		if (movingUnit.speedY)
+			textures.setCurrentGroup("up");
+		else textures.setCurrentGroup("sup");
 		break;
 
 	case 1:
-		textures.setCurrentGroup("down");
+		if (movingUnit.speedY)
+			textures.setCurrentGroup("down");
+		else textures.setCurrentGroup("sdown");
 		break;
 	}
 
@@ -44,7 +52,7 @@ void Character::Init()
 {
 	SDL_Rect hitty = { 0, 0, CHAR_HITBOX_W, CHAR_HITBOX_H };
 	movingUnit.init(hitty);
-	textures.init("left.png | right.png | up.png | down.png", "left right up down");
+	textures.init("mainleft.png mainleft1.png mainleft.png mainleft2.png | mainright.png mainright1.png mainright.png mainright2.png | mainup.png mainup1.png mainup.png mainup2.png | maindown.png maindown1.png maindown.png maindown2.png | mainleft.png | mainright.png | mainup.png | maindown.png", "left right up down sleft sright sup sdown", 250);
 
 	saveFile = loadFile(Paths::saveData + "save.txt");
 	loadSave();

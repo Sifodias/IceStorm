@@ -28,7 +28,7 @@ int tarlatata(void*)
 void Init_game()
 {
 	Renderer::initAll();
-	Map::loadLevel("default.txt");
+	Map::loadLevel("maintest.txt");
 	Textures_Manager::Init();
 	Objects_Manager::Init();
 	Text_Printer::Init();
@@ -41,13 +41,6 @@ void Init_game()
 
 }
 
-/*
-1) black screen
-2) print text
-3) after a timer, display menu
-
-
-*/
 int filterEvents(SDL_Event* e) {
 	if (e->type != SDL_KEYDOWN && SDL_KEYUP && SDL_QUIT && SDL_SYSWMEVENT && SDL_WINDOWEVENT)
 		return 1;	//not cool event
@@ -64,7 +57,7 @@ void handleRoutines(SDL_Event e) {
 
 	Textures_Manager::blitStuff();
 	Text_Printer::handleRoutine(e);
-	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(Renderer::g_Renderer, 100, 50, 100, SDL_ALPHA_OPAQUE);
 	SDL_RenderPresent(Renderer::g_Renderer);
 
 
