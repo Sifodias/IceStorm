@@ -1,5 +1,5 @@
 # IceStorm
-A 2D Adventure Game
+A 2D Adventure Game made from scratch
 
 Language: C++
 
@@ -7,4 +7,4 @@ IDE: Visual Studio 2017
 
 Libs: SDL2
 
-Contributors: Sifodias, Raphaelaz
+by Sifodias (Ilan Coronel)
