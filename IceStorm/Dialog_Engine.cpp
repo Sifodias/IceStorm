@@ -14,8 +14,6 @@ void DialogEngine::dialogSelector(string desu)
 {
 	Character::movingUnit.lockMovements();
 
-	if (!desu.compare("|firstTalk"))
-		firstTalk();
 	if (!desu.compare("|firstTalkClean"))
 		firstTalkClean();
 
@@ -66,28 +64,6 @@ int DialogEngine::choiceMode(string a, string b, string c = "", string d = "")
 }
 
 
-void DialogEngine::firstTalk()
-{
-	print("Hey stranger ! Want a blowjob ?");
-	print("We have many discounts !");
-	erabe("Yee", "Nou");
-	if (A) {
-		print("Well ... that was unexpected ... Alright let's go !");
-		erabe("Yee", "Eh I was joking !");
-		if (A)
-			print("Damn I was just fooling around ... You're creeping me out");
-		else if (B)
-			print("Oh that's too bad ... we could have some fun ...");
-	}
-	else if (B) {
-		print("Oh, maybe next time then");
-		erabe("I don't think so", "Yeah, sure");
-		if (A)
-			print("Farewell ...");
-		else if (B)
-			print("See you next time <3");
-	}
-}
 
 void DialogEngine::firstTalkClean()
 {
@@ -102,23 +78,4 @@ void DialogEngine::firstTalkClean()
 		print("Oh I'm sorry to hear that");
 		print("Well, relax and have fun here");
 	}
-
-
-}
-
-
-void intro() {
-	print("Well, here we are");
-	print("Mistakes can't be fixed, can they ?");
-	print("It's now time to take responsabilities");
-	print("I wish you the best of luck ...");
-}
-
-void genny1() {
-	print("You're new here, aren't you ?");
-	print("I wonder how you get there ...");
-	print("But it doesn't matter now");
-	print("You shall try to make some friends, if you don't wanna disappear ...");
-	print("But keep in mind that it's all lies, in order to stay sane");
-	print("I'm out for now");
 }

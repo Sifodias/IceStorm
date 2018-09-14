@@ -9,8 +9,8 @@ target: wall_test
 flags: SOLID
 type: GENERIC
 texture: tile.png
-x: 400
-y: 240
+x: 940
+y: 580
 
 
 ID: 2
