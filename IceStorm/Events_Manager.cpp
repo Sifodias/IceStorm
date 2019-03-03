@@ -27,7 +27,7 @@ void Events_Manager::addToQueue(std::function<void()> event)
 }
 
 int choiceMenu(int numchoices, int xFirstChoice, int offset) {
-
+	return 0;
 }
 
 void testTitle()
