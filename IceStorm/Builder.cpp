@@ -377,14 +377,3 @@ void Builder::trace(int set, int plan)
 }
 
 
-/*
-Key mapping :
-t = console mode
-o = zoom out
-p = zoom in
-i = freedom cam + noclip
-r = trace
-q = trace and set as current
-n = checkmate
-c = clean matrice from 0
-*/

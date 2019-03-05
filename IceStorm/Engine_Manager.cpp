@@ -11,20 +11,7 @@
 #include "Events_Manager.h"
 #include <Windows.h>
 
-int tarlatata(void*)
-{
-	SDL_Event e;
-	while (1) {
-		if (SDL_PollEvent(&e) != 0) {
-			SDL_FlushEvent(SDL_MOUSEMOTION);			//This useless event overloads the event queue
-			if (e.type == SDL_QUIT) {
-				Renderer::quitAll();
-				break;
-			}
-		}
-	}
-	return 0;
-}
+
 void Init_game()
 {
 	Renderer::initAll();

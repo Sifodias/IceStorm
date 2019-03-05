@@ -95,7 +95,6 @@ int Map::getID(int ix, int iy, int plan) {
 }
 bool Map::isItSolid(SDL_Rect reqt)
 {
-
 	//faire une grille gridh x gridw
 	//tester pour chaque pt de la grille que pas solide
 	for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {

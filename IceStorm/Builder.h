@@ -23,10 +23,42 @@ public:
 	static void loadEnts();
 	static void newPlan(int plan);
 	static void setPlan(int plan);
-	static void clean(int plan); //remove the 0 useless in the matrix
+	static void clean(int plan); //remove useless information in plan
 
 	static GObject* currentObject;
 	static int currentPlan;
 	static vector<int> cmdDone;
 
 };
+
+/*
+Key mapping :
+t = console mode
+o = zoom out
+p = zoom in
+i = freedom cam + noclip
+r = trace
+q = trace and set as current
+n = checkmate
+c = clean matrix from 0
+
+
+Console commands:
+new		level
+		plan
+		ent
+
+load	ents
+		level
+
+current	ent
+		plan
+
+set		plan
+		ent
+
+info name/ID
+
+edit name/ID field1: value1, field2: value2...
+
+*/

@@ -35,6 +35,7 @@ void testTitle()
 	SDL_Rect container{ Renderer::SCREEN_W / 2 - 32, Renderer::SCREEN_H / 2 - 32, 500, 500 };
 	Text_Printer::addToQueue("IceStorm", &container, 1, 0, NULL, 0);
 	SDL_Event e{};
+	
 	Uint32 timerA = SDL_GetTicks();
 	Uint32 timerB = SDL_GetTicks();
 	while (timerB - timerA < 2000) {
@@ -44,6 +45,7 @@ void testTitle()
 		SDL_RenderPresent(Renderer::g_Renderer);
 		timerB = SDL_GetTicks();
 	}
+
 	Text_Printer::flush(2);
 
 	Text_Printer::addToQueue("NEW GAME", &container, 1, 0, NULL, 0);
