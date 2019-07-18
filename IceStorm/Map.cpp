@@ -178,7 +178,7 @@ void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> t
 	}
 }
 
-void Map::findOccurrence(int charry, int * ix, int * iy)
+void Map::findOccurrence(int charry, int* ix, int* iy)
 {
 	for (int i = 0; i < matrix.size(); i++) {
 		for (int j = 0; j < matrix[i].size(); j++) {

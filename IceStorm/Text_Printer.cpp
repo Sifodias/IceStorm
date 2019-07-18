@@ -31,7 +31,7 @@ void Text_Printer::printText(NodeQueue& node) {
 			while (node.str[y] != ' ' && node.str[y] != '\0')
 				y++;
 			//if out of limit
-			if (blitRect.x + ((y - i)*blitRect.w) > node.container.w + node.container.x) {
+			if (blitRect.x + ((y - i) * blitRect.w) > node.container.w + node.container.x) {
 				if (blitRect.y + 2 * blitRect.h > node.container.h + node.container.y) {
 					node.lock = 1;
 					return;
@@ -60,7 +60,7 @@ void Text_Printer::printText(NodeQueue& node) {
 }
 
 void Text_Printer::addToQueue(std::string str,
-	SDL_Rect* container, int immediate, int policeID, SDL_Rect* rect, bool showDialogBox)
+	SDL_Rect * container, int immediate, int policeID, SDL_Rect * rect, bool showDialogBox)
 {
 	if (!str.size()) return;
 	if (queue.size() > 10000) {
@@ -82,7 +82,7 @@ void Text_Printer::addToQueue(std::string str,
 		queue.push_back(tempNode);
 	else imQueue.push_back(tempNode);
 }
-void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue>& iQueue) {
+void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue> & iQueue) {
 	if (iQueue.size() > 0) {
 		if (&iQueue == &queue)
 			busy = 1;
@@ -117,9 +117,12 @@ void Text_Printer::handleRoutine(SDL_Event e)
 {
 	timerB = SDL_GetTicks();
 	if (queue.size() > 0) {
-		if (queue.front().showDialogBox)
+		if (queue.front().showDialogBox) {
 			SDL_RenderCopy(Renderer::g_Renderer, dialogBox,
 				NULL, &dialogRect);
+			SDL_Rect bite = { 2, 202, 55, 36 };
+			SDL_RenderCopy(Renderer::g_Renderer, Textures_Manager::findTexture("testc.png"), NULL, &bite);
+		}
 	}
 	keepGoin(e, queue);
 	keepGoin(e, imQueue);

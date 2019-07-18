@@ -152,13 +152,13 @@ GObject* Objects_Manager::findObjectOfID(int id) {
 }
 
 
-void cleanSpaces(string& str) {
+void cleanSpaces(string & str) {
 	while (str[0] == ' ') {
 		str.erase(0, 1);
 	}
 }
 
-string getAndClear(string& str) {
+string getAndClear(string & str) {
 	cleanSpaces(str);
 	string ret = "";
 	for (int i = 0; i < str.size(); i++) {
@@ -173,7 +173,7 @@ string getAndClear(string& str) {
 	return ret;
 }
 
-void Objects_Manager::fillObject(GObject* obj, string data) {
+void Objects_Manager::fillObject(GObject * obj, string data) {
 	while (!data.empty()) {
 		cleanSpaces(data);
 
@@ -240,14 +240,14 @@ void Objects_Manager::editObject(string data) {
 		else break;
 	}
 	data.erase(0, target.size() + 1);
-	
+
 	if (findObject(target) != objects[0])
 		fillObject(findObject(target), data);
 }
 
 
 //syntax in console : new ent <field1>: <value1>, <field2>: <value2> ...
-GObject* Objects_Manager::createObject(string data) {
+GObject * Objects_Manager::createObject(string data) {
 
 	GObject* obj = new GObject;
 

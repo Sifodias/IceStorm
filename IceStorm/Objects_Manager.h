@@ -15,7 +15,7 @@ public:
 
 	static bool identify(string& target, string wanted);
 
-	static void loadObjects();	
+	static void loadObjects();
 	static void saveObjects();
 	static GObject* createObject(string data);
 	static void fillObject(GObject* obj, string data);

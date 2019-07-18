@@ -12,6 +12,7 @@
 #include <Windows.h>
 
 
+
 void Init_game()
 {
 	Renderer::initAll();
