@@ -22,7 +22,7 @@ void Init_game()
 	Text_Printer::Init();
 	Camera::Init();
 	Character::Init();
-	Events_Manager::addToQueue(testTitle);
+	//Events_Manager::addToQueue(testTitle);
 
 	//SDL_Thread* routineThread = SDL_CreateThread(blitting, "titi", (void*)NULL);
 	//SDL_DetachThread(routineThread);

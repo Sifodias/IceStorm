@@ -45,7 +45,7 @@ flags :
 
 class GObject {
 public:
-	GObject() : ID(0), type("GENERIC"), texture(NULL), x(0), y(0) {};
+	GObject() : ID(0), type("GENERIC"), texture(NULL), x(0), y(0), flagTrigger(false) {};
 	int ID;
 	std::string target;
 	std::vector<std::string> targetnames;
