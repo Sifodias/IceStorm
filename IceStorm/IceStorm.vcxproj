@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4BE12405-5789-4B53-A55E-20DAC65BB14B}</ProjectGuid>
     <RootNamespace>IceStorm</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -69,8 +69,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Sifodias\Documents\GitHub\IceStorm\SDL\SDL2_ttf-2.0.15\include;C:\Users\Sifodias\Documents\GitHub\IceStorm\SDL\SDL2_image-2.0.4\include;C:\Users\Sifodias\Documents\GitHub\IceStorm\SDL\SDL2-2.0.9\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Sifodias\Documents\GitHub\IceStorm\SDL\SDL2_ttf-2.0.15\lib\x64;C:\Users\Sifodias\Documents\GitHub\IceStorm\SDL\SDL2_image-2.0.4\lib\x64;C:\Users\Sifodias\Documents\GitHub\IceStorm\SDL\SDL2-2.0.9\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Sifodias\source\repos\IceStorm\SDL\SDL2_ttf-2.0.15\include;C:\Users\Sifodias\source\repos\IceStorm\SDL\SDL2_image-2.0.4\include;C:\Users\Sifodias\source\repos\IceStorm\SDL\SDL2-2.0.9\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Sifodias\source\repos\IceStorm\SDL\SDL2_ttf-2.0.15\lib\x64;C:\Users\Sifodias\source\repos\IceStorm\SDL\SDL2_image-2.0.4\lib\x64;C:\Users\Sifodias\source\repos\IceStorm\SDL\SDL2-2.0.9\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -83,7 +83,8 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
