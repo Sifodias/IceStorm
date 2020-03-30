@@ -16,7 +16,7 @@ void GObject::routine()
 					if (!Objects_Manager::findObject(std::to_string
 					(Map::getIdObject(movingUnit.hitBox.y + movingUnit.hitBox.h + 1, 0, movingUnit.hitBox.x, 0)))
 						->type.compare("PATTERN")) {
-						movingUnit.speedY = movingUnit.xCSPEED;
+						movingUnit.speedY = movingUnit.move_speed;
 					}
 					break;
 				case -1:

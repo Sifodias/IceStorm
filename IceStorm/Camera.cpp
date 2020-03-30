@@ -7,9 +7,9 @@
 
 SDL_Rect Camera::innerRect;
 SDL_Rect Camera::outerRect;
-int Camera::FREEDOM = 0;
+bool Camera::FREEDOM = 0;
 
-void Camera::Init() {
+void Camera::init() {
 	outerRect.x = outerRect.y = 0;
 	outerRect.h = Renderer::SCREEN_H;
 	outerRect.w = Renderer::SCREEN_W;

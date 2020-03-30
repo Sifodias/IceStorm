@@ -1,18 +1,16 @@
 #pragma once
 #include <SDL.h>
 #include <string>
-#include <SDL_mutex.h>
-class Renderer {
-public:
-	//Renderer();
 
-	static void initAll();		//Inits SDL modules
-	static bool saveScreenshotBMP(std::string filepath);
-	static void quitAll();		//Closes SDL modules
-	static int SCREEN_W;
-	static int SCREEN_H;
-	static SDL_mutex* lockRenderer;
-	static SDL_Renderer* g_Renderer;	//Renderer of the engine
-	static SDL_Window* g_Window;		//Window of the game
+namespace Renderer {
+	void initAll();		//Inits SDL modules
+	bool saveScreenshotBMP(std::string filepath);
+	void quitAll();		//Closes SDL modules
+
+	extern int SCREEN_W;
+	extern int SCREEN_H;
+	
+	extern SDL_Renderer* g_Renderer;	//Renderer of the engine
+	extern SDL_Window* g_Window;		//Window of the game
 
 };

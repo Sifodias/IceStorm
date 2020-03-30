@@ -1,16 +1,12 @@
 #pragma once
 #include <SDL.h>
 
-class Camera {
-public:
-	static void Init();
-	static SDL_Rect outerRect;
-	static SDL_Rect innerRect;
+namespace Camera {
+	void init();	
+	int getX();
+	int getY();
 
-	static int getX();
-
-	static int getY();
-
-	static int FREEDOM;
-
+	extern SDL_Rect outerRect;
+	extern SDL_Rect innerRect;
+	extern bool FREEDOM;
 };

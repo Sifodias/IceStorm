@@ -13,7 +13,6 @@ SDL_Renderer* Renderer::g_Renderer = NULL;
 SDL_Window* Renderer::g_Window = NULL;
 int Renderer::SCREEN_W = 320;
 int Renderer::SCREEN_H = 240;
-SDL_mutex* Renderer::lockRenderer = SDL_CreateMutex();
 
 
 void Renderer::initAll()

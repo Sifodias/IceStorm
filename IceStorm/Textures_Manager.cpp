@@ -11,10 +11,10 @@
 #include "Objects_Manager.h"
 #include "Camera.h"
 
-std::vector<SDL_Texture*> Textures_Manager::textureList;
-std::vector<std::string> Textures_Manager::textureNames;
-SDL_Texture* Textures_Manager::levelScreenshot = NULL;
-bool Textures_Manager::showInvisibleEnts = true;
+std::vector<SDL_Texture*> textureList;
+std::vector<std::string> textureNames;
+SDL_Texture* levelScreenshot = NULL;
+bool showInvisibleEnts = true;
 
 
 std::vector<SDL_Texture*> Textures_Manager::texturesListInit()
@@ -58,7 +58,7 @@ SDL_Texture* Textures_Manager::loadTexture(std::string path)
 	return newTexture;
 }
 
-void Textures_Manager::Init()
+void Textures_Manager::init()
 {
 	textureList = texturesListInit();
 }
@@ -72,8 +72,6 @@ SDL_Texture * Textures_Manager::findTexture(std::string name)
 	}
 	return NULL;
 }
-
-
 
 //This function works well, but needs to be cleaned
 void Textures_Manager::blitStuff()

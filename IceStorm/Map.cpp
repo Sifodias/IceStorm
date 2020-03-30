@@ -6,9 +6,9 @@
 
 std::vector<std::vector<std::vector<int>>> Map::matrix;
 
-std::ifstream* Map::currentLevel;
-bool Map::changed = 1;
-std::string Map::levelname = "";
+std::ifstream* currentLevel;
+bool changed = 1;
+std::string levelname = "";
 
 void Map::loadLevel(std::string name)
 {

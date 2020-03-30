@@ -2,14 +2,11 @@
 #include <vector>
 #include "Global_Flags.h"
 #include <SDL.h>
+
 class Moving_Unit {
 public:
-	void init(SDL_Rect hitboxx, int cspeed = CSPEED, int jspeed = JSPEED,
-		int gravity = GRAVITY, int gravityEnabled = GRAVITY_ENABLED, int nouclip = 0) {
-		hitBox = hitboxx; xCSPEED = cspeed;
-		xJSPEED = jspeed; xGRAVITY = gravity; xGRAVITY_ENABLED = gravityEnabled;
-		noclip = nouclip; mainDirection = 2; jumpLock = 0; movementsLock = 1;
-	}
+	Moving_Unit(SDL_Rect hitbox_i = SDL_Rect{ 0, 0, 0, 0 }, int cspeed = CSPEED, int jspeed = JSPEED,
+		int gravityEnabled = GRAVITY_ENABLED, int noclip_i = 0);
 
 	void handleMoves();
 	void addMoves(SDL_Event& e);
@@ -27,14 +24,13 @@ public:
 	int mainDirection;
 	std::vector<int> direction;		//1 = down	| -1 = up
 									//2 = right | -2 = left
-	int xJSPEED;
-	int xCSPEED;
-	int xGRAVITY;
+	int jump_speed;
+	int move_speed;
 
 	Uint32 timerA;
 	Uint32 timerB;
 	bool jumpLock;
 	bool noclip;
-	bool xGRAVITY_ENABLED;
+	bool gravity_affected;
 	bool movementsLock;
 };

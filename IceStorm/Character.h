@@ -4,23 +4,13 @@
 #include "Sprites_Handler.h"
 #include <fstream>
 
-class Character
+namespace Character
 {
-	//save fields
-	static string charaMark;
-	static string map;
-	//
+	void init();
+	void characterRoutine(SDL_Event& e);
+	void loadSave();// string save = "save.txt");
+	void save();// string save = "save.txt");
 
-public:
-	static void characterRoutine(SDL_Event& e);
-	static void Init();
-
-	static SpritesHandler textures;
-	static Moving_Unit movingUnit;
-
-	static void loadSave();// string save = "save.txt");
-	static void save();// string save = "save.txt");
-
-	static ifstream* saveFile;
-
+	extern SpritesHandler textures;
+	extern Moving_Unit movingUnit;
 };

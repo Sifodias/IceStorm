@@ -7,9 +7,10 @@
 
 SpritesHandler Character::textures;
 Moving_Unit Character::movingUnit;
-ifstream* Character::saveFile = NULL;
-string Character::charaMark;
-string Character::map;
+
+ifstream* saveFile = NULL;
+string charaMark;
+string map_name;
 
 void Character::characterRoutine(SDL_Event & e)
 {
@@ -48,11 +49,11 @@ void Character::characterRoutine(SDL_Event & e)
 
 }
 
-void Character::Init()
+void Character::init()
 {
 	SDL_Rect hitty = { 0, 0, CHAR_HITBOX_W, CHAR_HITBOX_H };
-	movingUnit.init(hitty);
-	textures.init("mainleft.png mainleft1.png mainleft.png mainleft2.png | mainright.png mainright1.png mainright.png mainright2.png | mainup.png mainup1.png mainup.png mainup2.png | maindown.png maindown1.png maindown.png maindown2.png | mainleft.png | mainright.png | mainup.png | maindown.png", "left right up down sleft sright sup sdown", 250);
+	movingUnit = Moving_Unit(hitty);
+	textures = SpritesHandler("mainleft.png mainleft1.png mainleft.png mainleft2.png | mainright.png mainright1.png mainright.png mainright2.png | mainup.png mainup1.png mainup.png mainup2.png | maindown.png maindown1.png maindown.png maindown2.png | mainleft.png | mainright.png | mainup.png | maindown.png", "left right up down sleft sright sup sdown", 250);
 
 	saveFile = loadFile(Paths::saveData + "save.txt");
 	loadSave();
@@ -67,7 +68,7 @@ void Character::loadSave()
 	while (buffer.compare("EOF")) {
 		if (Objects_Manager::identify(buffer, "map: ")) {
 			Map::loadLevel(buffer);
-			map = buffer;
+			map_name = buffer;
 			goto next;
 		}
 

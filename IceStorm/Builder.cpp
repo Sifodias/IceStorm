@@ -9,9 +9,9 @@
 #include "Renderer.h"
 #include "Paths.h"
 
-GObject* Builder::currentObject = NULL;
-vector<int> Builder::cmdDone(123, 0);
-int Builder::currentPlan = 0;
+GObject* currentObject = NULL;
+int currentPlan = 0;
+vector<int> cmdDone(123, 0);
 
 bool Builder::checkKey(int key) {
 	if (key < 0 || key > cmdDone.size() - 1) return false;
@@ -121,7 +121,7 @@ void Builder::fetch()
 }
 
 void Builder::loadEnts() {
-	Objects_Manager::Init();
+	Objects_Manager::init();
 }
 
 void Builder::printInfo(GObject* printObject)
@@ -257,7 +257,7 @@ void Builder::routine(SDL_Event & e)
 			break;
 		}
 		case SDLK_i: {
-			//Character::movingUnit.xGRAVITY_ENABLED = checkKey(SDLK_i);
+			//Character::movingUnit.gravity_affected = checkKey(SDLK_i);
 			Character::movingUnit.noclip = !Character::movingUnit.noclip;
 			Camera::FREEDOM = !checkKey(SDLK_i);
 			setKey(SDLK_i);
@@ -316,7 +316,7 @@ void Builder::zoom(int focus) {
 		//Camera::innerRect.h *= 2;
 		Renderer::SCREEN_W = Camera::outerRect.w *= 2;
 		//Camera::innerRect.w *= 2;
-		Character::movingUnit.xCSPEED *= 2;
+		Character::movingUnit.move_speed *= 2;
 		//Character::movingUnit.speedY *= 10;
 	}
 	if (focus == 1) {
@@ -324,7 +324,7 @@ void Builder::zoom(int focus) {
 		//Camera::innerRect.w /= 2;
 		Renderer::SCREEN_W = Camera::outerRect.w /= 2;
 		//Camera::innerRect.w /= 2;
-		Character::movingUnit.xCSPEED /= 2;
+		Character::movingUnit.move_speed /= 2;
 		//Character::movingUnit.speedY /= 10;
 	}
 	SDL_RenderSetLogicalSize(Renderer::g_Renderer, Camera::outerRect.w, Camera::outerRect.h);

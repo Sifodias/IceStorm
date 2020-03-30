@@ -28,19 +28,28 @@ void speedRestrainer(double& speedX, double& speedY, SDL_Rect rect) {
 		speedY = 0;
 }
 
+Moving_Unit::Moving_Unit(SDL_Rect hitbox_i, int cspeed, int jspeed, int gravityEnabled, int noclip_i) {
+	hitBox = hitbox_i; move_speed = cspeed;
+	jump_speed = jspeed; gravity_affected = gravityEnabled;
+	noclip = noclip_i; mainDirection = 2; jumpLock = 0; movementsLock = 1;
+	speedX = speedY = 0;
+	timerA = timerB = SDL_GetTicks();
+}
+
+
 void Moving_Unit::handleMoves()
 {
-	const Uint8 *state = SDL_GetKeyboardState(NULL);
+	const Uint8* state = SDL_GetKeyboardState(NULL);
 	int out = 0;
 	while (!out && movesY.size()) {
 		switch (movesY.back()) {
 		case -1:
 			if (state[SDL_SCANCODE_W] && !jumpLock) {
-				if (xGRAVITY_ENABLED && !noclip) {
-					speedY = -xJSPEED;
+				if (gravity_affected && !noclip) {
+					speedY = -jump_speed;
 					jumpLock = 1;
 				}
-				else speedY = -xCSPEED;
+				else speedY = -move_speed;
 				out = 1;
 			}
 			else movesY.pop_back();
@@ -48,7 +57,7 @@ void Moving_Unit::handleMoves()
 
 		case 1:
 			if (state[SDL_SCANCODE_S]) {
-				speedY = xCSPEED;
+				speedY = move_speed;
 				out = 1;
 			}
 			else movesY.pop_back();
@@ -61,14 +70,14 @@ void Moving_Unit::handleMoves()
 		switch (movesX.back()) {
 		case 2:
 			if (state[SDL_SCANCODE_D]) {
-				speedX = xCSPEED;
+				speedX = move_speed;
 				out = 1;
 			}
 			else movesX.pop_back();
 			break;
 		case -2:
 			if (state[SDL_SCANCODE_A]) {
-				speedX = -xCSPEED;
+				speedX = -move_speed;
 				out = 1;
 			}
 			else movesX.pop_back();
@@ -118,7 +127,7 @@ void Moving_Unit::handleMoves()
 	if (!noclip)
 		speedRestrainer(speedX, speedY, hitBox);
 
-	if (!xGRAVITY_ENABLED || noclip) {
+	if (!gravity_affected || noclip) {
 		jumpLock = 0;
 		if (!movesY.size()) {
 			speedY = 0;
@@ -134,7 +143,7 @@ void Moving_Unit::handleMoves()
 	}
 }
 
-void Moving_Unit::addMoves(SDL_Event & e)
+void Moving_Unit::addMoves(SDL_Event& e)
 {
 	if (e.type == SDL_KEYDOWN)
 	{
@@ -189,24 +198,24 @@ void Moving_Unit::doMoves()
 	SDL_Rect tempReqt(hitBox);
 	SDL_Rect backup(hitBox);
 	timerB = SDL_GetTicks();
-	double t = (double)(timerB - timerA)*0.001;
+	double t = (double)(timerB - timerA) * 0.001;
 	if (t > 0.100) {
 		t = 0;
 		timerA = timerB = SDL_GetTicks();
 		return;
 	}
 	if (noclip) {
-		hitBox.x += (int)(t*speedX);
-		hitBox.y += (int)(t*speedY);
+		hitBox.x += (int)(t * speedX);
+		hitBox.y += (int)(t * speedY);
 		timerA = timerB;
 		return;
 	}
-	if (speedY <= 300 && xGRAVITY_ENABLED)
-		speedY += (int)(GRAVITY*t);
+	if (speedY <= 300 && gravity_affected)
+		speedY += (int)(GRAVITY * t);
 
 
-	int tempDistancex = (int)(t*speedX);
-	int tempDistancey = (int)(t*speedY);
+	int tempDistancex = (int)(t * speedX);
+	int tempDistancey = (int)(t * speedY);
 
 	//factor technique to get rid of stutter when speedx and y different and hit a wall
 	//useless when both speeds are equal
@@ -216,7 +225,7 @@ void Moving_Unit::doMoves()
 	factorX = factorY = 1;
 	double storageX = 0;
 	double storageY = 0;
-	while (tempDistancex*speedX > 0 || tempDistancey * speedY > 0) {
+	while (tempDistancex * speedX > 0 || tempDistancey * speedY > 0) {
 		if ((tempDistancex < 0 && speedX > 0) || (tempDistancex > 0 && speedX < 0)) {
 			tempDistancex = 0;
 			//speedX = 0;
@@ -234,7 +243,7 @@ void Moving_Unit::doMoves()
 		}
 		else {
 			if (speedX) {
-				storageX += (-1)*(speedX / abs(speedX))*factorX;
+				storageX += (-1) * (speedX / abs(speedX)) * factorX;
 
 				if (abs(storageX) >= 1) {
 					tempDistancex += (int)((storageX / abs(storageX)));
@@ -243,7 +252,7 @@ void Moving_Unit::doMoves()
 
 			}
 			if (speedY) {
-				storageY += (-1)*(speedY / abs(speedY))*factorY;
+				storageY += (-1) * (speedY / abs(speedY)) * factorY;
 
 				if (abs(storageY) >= 1) {
 					tempDistancey += (int)((storageY / abs(storageY)));
@@ -259,7 +268,7 @@ void Moving_Unit::doMoves()
 
 }
 
-void Moving_Unit::move(SDL_Event & e)
+void Moving_Unit::move(SDL_Event& e)
 {
 	if (movementsLock == 0) {
 		addMoves(e);

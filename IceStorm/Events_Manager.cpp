@@ -4,11 +4,8 @@
 #include "Objects_Manager.h"
 
 
-std::vector<std::function<void()>> Events_Manager::eventsQueue;
-bool Events_Manager::busy = 0;
-
-Events_Manager::Events_Manager() {
-}
+std::vector<std::function<void()>> eventsQueue;
+bool busy = 0;
 
 void Events_Manager::routine()
 {
@@ -30,7 +27,7 @@ int choiceMenu(int numchoices, int xFirstChoice, int offset) {
 	return 0;
 }
 
-void testTitle()
+void Events_Manager::testTitle()
 {
 	SDL_Rect container{ Renderer::SCREEN_W / 2 - 32, Renderer::SCREEN_H / 2 - 32, 500, 500 };
 	Text_Printer::addToQueue("IceStorm", &container, 1, 0, NULL, 0);

@@ -3,12 +3,11 @@
 #include <string>
 using namespace std;
 
-class Paths {
-public :
-	static string levelPath;
-	static string texturesListPath;
-	static string asciiPath;
-	static string entData;
-	static string dialogs;
-	static string saveData;
+namespace Paths {
+	extern string levelPath;
+	extern string texturesListPath;
+	extern string asciiPath;
+	extern string entData;
+	extern string dialogs;
+	extern string saveData;
 };

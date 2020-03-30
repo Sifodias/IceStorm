@@ -7,18 +7,62 @@
 #include "Renderer.h"
 #include "Paths.h"
 
-std::vector<std::array<SDL_Texture*, 127>> Text_Printer::lettersVec;
+std::vector<std::array<SDL_Texture*, 127>> lettersVec;
 std::vector<NodeQueue> Text_Printer::queue;
-std::vector<NodeQueue> Text_Printer::imQueue;
-Uint32 Text_Printer::timerA;
-Uint32 Text_Printer::timerB;
-SDL_Rect Text_Printer::defaultRect;
-SDL_Rect Text_Printer::defaultContainer;
-int Text_Printer::flagOverflow;
-SDL_Texture* Text_Printer::dialogBox = NULL;
-SDL_Rect Text_Printer::dialogRect;
+std::vector<NodeQueue> imQueue;
+Uint32 timerA;
+Uint32 timerB;
+SDL_Rect defaultRect;
+SDL_Rect defaultContainer;
+int flagOverflow;
+SDL_Texture* dialogBox = NULL;
+SDL_Rect dialogRect;
 bool Text_Printer::busy = 0;
 bool Text_Printer::standStill = 0;
+
+void Text_Printer::init() {
+	std::ifstream* tempStream = loadFile(Paths::asciiPath);
+	if (!tempStream) {
+		printf("ERROR : policeList not loaded\n");
+		return;
+	}
+
+	std::string catcher;
+	std::vector<TTF_Font*> tempVec;
+	tempStream->clear();
+	tempStream->seekg(0);
+	while (!tempStream->eof()) {
+		getline(*tempStream, catcher);
+		catcher.insert(0, "./Polices/");
+		std::cout << catcher << std::endl;
+		tempVec.push_back(TTF_OpenFont(catcher.c_str(), 200));
+	}
+
+	char tempStr[2] = "A";
+	tempStr[1] = '\0';
+	SDL_Color textColor = { 255, 255, 255 };
+	SDL_Surface* textSurface = NULL;
+	std::array<SDL_Texture*, 127> tempLetters = { NULL };
+
+	for (auto i = tempVec.begin(); i != tempVec.end(); ++i) {
+		for (int y = 0; y < 127; y++) {
+			tempStr[0] = y;
+			textSurface = TTF_RenderText_Solid(*i, tempStr, textColor);
+			tempLetters[y] = SDL_CreateTextureFromSurface(Renderer::g_Renderer, textSurface);
+		}
+		lettersVec.push_back(tempLetters);
+	}
+
+	timerA = timerB = SDL_GetTicks();
+	defaultRect.h = 8; defaultRect.x = 30;
+	defaultRect.w = 8; defaultRect.y = 30;
+	defaultContainer.h = 28; defaultContainer.x = 79;
+	defaultContainer.w = 220; defaultContainer.y = 208;
+	flagOverflow = 0;
+	dialogBox = Textures_Manager::findTexture("dialog_box_clean.png");
+	dialogRect.x = 0; dialogRect.y = 200;
+	dialogRect.h = 40; dialogRect.w = 320;
+}
 
 void Text_Printer::printText(NodeQueue& node) {
 	SDL_Rect blitRect = node.container;
@@ -82,6 +126,7 @@ void Text_Printer::addToQueue(std::string str,
 		queue.push_back(tempNode);
 	else imQueue.push_back(tempNode);
 }
+
 void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue> & iQueue) {
 	if (iQueue.size() > 0) {
 		if (&iQueue == &queue)
@@ -113,6 +158,7 @@ void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue> & iQueue) {
 	}
 	else if (&iQueue == &queue) busy = 0;
 }
+
 void Text_Printer::handleRoutine(SDL_Event e)
 {
 	timerB = SDL_GetTicks();
@@ -139,46 +185,3 @@ void Text_Printer::flush(int i)
 	}
 }
 
-void Text_Printer::Init() {
-	std::ifstream* tempStream = loadFile(Paths::asciiPath);
-	if (!tempStream) {
-		printf("ERROR : policeList not loaded\n");
-		return;
-	}
-
-	std::string catcher;
-	std::vector<TTF_Font*> tempVec;
-	tempStream->clear();
-	tempStream->seekg(0);
-	while (!tempStream->eof()) {
-		getline(*tempStream, catcher);
-		catcher.insert(0, "./Polices/");
-		std::cout << catcher << std::endl;
-		tempVec.push_back(TTF_OpenFont(catcher.c_str(), 200));
-	}
-
-	char tempStr[2] = "A";
-	tempStr[1] = '\0';
-	SDL_Color textColor = { 255, 255, 255 };
-	SDL_Surface* textSurface = NULL;
-	std::array<SDL_Texture*, 127> tempLetters = { NULL };
-
-	for (auto i = tempVec.begin(); i != tempVec.end(); ++i) {
-		for (int y = 0; y < 127; y++) {
-			tempStr[0] = y;
-			textSurface = TTF_RenderText_Solid(*i, tempStr, textColor);
-			tempLetters[y] = SDL_CreateTextureFromSurface(Renderer::g_Renderer, textSurface);
-		}
-		lettersVec.push_back(tempLetters);
-	}
-
-	timerA = timerB = SDL_GetTicks();
-	defaultRect.h = 8; defaultRect.x = 30;
-	defaultRect.w = 8; defaultRect.y = 30;
-	defaultContainer.h = 28; defaultContainer.x = 79;
-	defaultContainer.w = 220; defaultContainer.y = 208;
-	flagOverflow = 0;
-	dialogBox = Textures_Manager::findTexture("dialog_box_clean.png");
-	dialogRect.x = 0; dialogRect.y = 200;
-	dialogRect.h = 40; dialogRect.w = 320;
-}

@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[])
 {
-	Init_game();
+	init_game();
 
 	main_event_loop(NULL);
 	

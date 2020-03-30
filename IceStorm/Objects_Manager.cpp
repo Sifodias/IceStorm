@@ -9,9 +9,9 @@
 #include <algorithm>
 
 vector<GObject*> Objects_Manager::objects;
-ifstream* Objects_Manager::tempStream = NULL;
+ifstream* tempStream = NULL;
 
-void Objects_Manager::Init() {
+void Objects_Manager::init() {
 	tempStream = loadFile(Paths::entData);
 	objects.clear();
 	if (tempStream == NULL) {

@@ -9,19 +9,18 @@
 #include "Camera.h"
 #include "Builder.h"
 #include "Events_Manager.h"
-#include <Windows.h>
 
 
 
-void Init_game()
+void init_game()
 {
 	Renderer::initAll();
 	Map::loadLevel("maintest.txt");
-	Textures_Manager::Init();
-	Objects_Manager::Init();
-	Text_Printer::Init();
-	Camera::Init();
-	Character::Init();
+	Textures_Manager::init();
+	Objects_Manager::init();
+	Text_Printer::init();
+	Camera::init();
+	Character::init();
 	//Events_Manager::addToQueue(testTitle);
 
 	//SDL_Thread* routineThread = SDL_CreateThread(blitting, "titi", (void*)NULL);
@@ -42,7 +41,6 @@ void handleRoutines(SDL_Event e) {
 	Builder::routine(e);
 	Character::characterRoutine(e);
 	Events_Manager::routine();
-
 	Textures_Manager::blitStuff();
 	Text_Printer::handleRoutine(e);
 	SDL_SetRenderDrawColor(Renderer::g_Renderer, 100, 50, 100, SDL_ALPHA_OPAQUE);

@@ -52,11 +52,11 @@ public:
 	std::vector<std::string> flags;
 	std::string type;
 	SDL_Texture* texture;
-//	SpritesHandler textures;
+	//SpritesHandler textures;
 	std::string textureName;
 	int x;
 	int y;
-	SDL_Rect rect;
+	//SDL_Rect rect;
 	std::string content;
 	Moving_Unit movingUnit;
 

@@ -5,26 +5,23 @@
 
 using namespace std;
 
-class Objects_Manager {
-public:
-	static void Init();
+namespace Objects_Manager {
+	void init();
 
-	static GObject* findObject(string target);
+	GObject* findObject(string target);
 
-	static  GObject* findObjectOfID(int id);
+	GObject* findObjectOfID(int id);
 
-	static bool identify(string& target, string wanted);
+	bool identify(string& target, string wanted);
+	void loadObjects();
+	void saveObjects();
+	GObject* createObject(string data);
+	void fillObject(GObject* obj, string data);
+	void editObject(string data);
 
-	static void loadObjects();
-	static void saveObjects();
-	static GObject* createObject(string data);
-	static void fillObject(GObject* obj, string data);
-	static void editObject(string data);
+	void objectsRoutine();
 
-	static void objectsRoutine();
-
-	static vector<GObject*> objects;
-	static ifstream* tempStream;
+	extern vector<GObject*> objects;
 };
 
 
