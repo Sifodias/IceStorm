@@ -18,8 +18,8 @@ void Map::loadLevel(std::string name)
 		matrix[i].clear();
 	}
 	if (name.empty()) {
-		name = "default.txt";
-		levelname = "default.txt";
+		//name = "default.txt";
+		//levelname = "default.txt";
 	}
 	currentLevel = loadFile(Paths::levelPath + name);
 

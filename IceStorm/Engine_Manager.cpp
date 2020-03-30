@@ -15,16 +15,13 @@
 void init_game()
 {
 	Renderer::initAll();
-	Map::loadLevel("maintest.txt");
+	Map::loadLevel("ripof");
 	Textures_Manager::init();
 	Objects_Manager::init();
 	Text_Printer::init();
 	Camera::init();
 	Character::init();
 	//Events_Manager::addToQueue(testTitle);
-
-	//SDL_Thread* routineThread = SDL_CreateThread(blitting, "titi", (void*)NULL);
-	//SDL_DetachThread(routineThread);
 
 }
 
@@ -43,7 +40,7 @@ void handleRoutines(SDL_Event e) {
 	Events_Manager::routine();
 	Textures_Manager::blitStuff();
 	Text_Printer::handleRoutine(e);
-	SDL_SetRenderDrawColor(Renderer::g_Renderer, 100, 50, 100, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderPresent(Renderer::g_Renderer);
 
 

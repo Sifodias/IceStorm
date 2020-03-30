@@ -151,6 +151,10 @@ void Builder::printInfo(GObject* printObject)
 		cout << "type: " << printObject->type << endl;
 	if (printObject->textureName.size())
 		cout << "texture: " << printObject->textureName << endl;
+	if (printObject->rect.w > 0) {
+		cout << "width: " << printObject->rect.w << endl;
+		cout << "height: " << printObject->rect.h << endl;
+	}
 	if (printObject->content.size())
 		cout << "content: " << printObject->content << endl;
 	if (printObject->x != 0 && printObject->y != 0)

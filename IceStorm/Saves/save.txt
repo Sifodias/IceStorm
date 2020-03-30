@@ -1,4 +1,4 @@
-map: maintest.txt
+map: ripof
 charaMark: characterMarkerMap
 
 

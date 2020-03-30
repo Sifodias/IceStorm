@@ -57,8 +57,8 @@ void Objects_Manager::loadObjects()
 				if (findObject(buffer) != objects[0])
 					std::cout << "Objects with the same target : " << buffer <<
 					". Can result in unexpected behavior" << std::endl;
-				std::getline(*tempStream, buffer);
-				continue;
+
+				goto next;
 			}
 			if (identify(buffer, "targetnames: ")) {
 				istringstream iss(buffer);
@@ -66,19 +66,24 @@ void Objects_Manager::loadObjects()
 				while (iss >> word) {
 					currentObject->targetnames.push_back(word);
 				}
-				std::getline(*tempStream, buffer);
-				continue;
+				goto next;
 			}
 			if (identify(buffer, "texture: ")) {
 				currentObject->textureName = buffer;
 				currentObject->texture = Textures_Manager::findTexture(buffer);
-				std::getline(*tempStream, buffer);
-				continue;
+				goto next;
+			}
+			if (identify(buffer, "width: ")) {
+				currentObject->rect.w = stoi(buffer);
+				goto next;
+			}
+			if (identify(buffer, "height: ")) {
+				currentObject->rect.h = stoi(buffer);
+				goto next;
 			}
 			if (identify(buffer, "type: ")) {
 				currentObject->type = buffer;
-				std::getline(*tempStream, buffer);
-				continue;
+				goto next;
 			}
 			if (identify(buffer, "flags: ")) {
 				istringstream iss(buffer);
@@ -86,31 +91,27 @@ void Objects_Manager::loadObjects()
 				while (iss >> word) {
 					currentObject->flags.push_back(word);
 				}
-				std::getline(*tempStream, buffer);
-				continue;
+				goto next;
 			}
 			if (identify(buffer, "crect: ")) {
-				std::getline(*tempStream, buffer);
-				continue;
+				goto next;
 			}
 			if (identify(buffer, "content: ")) {
 				currentObject->content = buffer;
-				std::getline(*tempStream, buffer);
-				continue;
+				goto next;
 			}
 			if (identify(buffer, "x: ")) {
 				currentObject->x = std::stoi(buffer);
 				currentObject->movingUnit.hitBox.x = std::stoi(buffer);
-				std::getline(*tempStream, buffer);
-				continue;
+				goto next;
 			}
 			if (identify(buffer, "y: ")) {
 				currentObject->y = std::stoi(buffer);
 				currentObject->movingUnit.hitBox.y = std::stoi(buffer);
-				std::getline(*tempStream, buffer);
-				continue;
+				goto next;
 			}
-			else std::getline(*tempStream, buffer);
+		next:
+			std::getline(*tempStream, buffer);
 		}
 		objects.push_back(currentObject);
 	}
@@ -151,14 +152,13 @@ GObject* Objects_Manager::findObjectOfID(int id) {
 	return objects[0];
 }
 
-
-void cleanSpaces(string & str) {
+void cleanSpaces(string& str) {
 	while (str[0] == ' ') {
 		str.erase(0, 1);
 	}
 }
 
-string getAndClear(string & str) {
+string getAndClear(string& str) {
 	cleanSpaces(str);
 	string ret = "";
 	for (int i = 0; i < str.size(); i++) {
@@ -173,7 +173,7 @@ string getAndClear(string & str) {
 	return ret;
 }
 
-void Objects_Manager::fillObject(GObject * obj, string data) {
+void Objects_Manager::fillObject(GObject* obj, string data) {
 	while (!data.empty()) {
 		cleanSpaces(data);
 
@@ -196,6 +196,14 @@ void Objects_Manager::fillObject(GObject * obj, string data) {
 		if (identify(data, "texture: ")) {
 			obj->textureName = getAndClear(data);
 			obj->texture = Textures_Manager::findTexture(obj->textureName);
+			continue;
+		}
+		if (identify(data, "width: ")) {
+			obj->rect.w = stoi(data);
+			continue;
+		}
+		if (identify(data, "height: ")) {
+			obj->rect.h = stoi(data);
 			continue;
 		}
 		if (identify(data, "type: ")) {
@@ -247,7 +255,7 @@ void Objects_Manager::editObject(string data) {
 
 
 //syntax in console : new ent <field1>: <value1>, <field2>: <value2> ...
-GObject * Objects_Manager::createObject(string data) {
+GObject* Objects_Manager::createObject(string data) {
 
 	GObject* obj = new GObject;
 
@@ -283,31 +291,44 @@ void Objects_Manager::saveObjects() {
 	std::ofstream ofs;
 	ofs.open(Paths::entData, std::ofstream::out | std::ofstream::trunc);
 
-	for (int i = 0; i < objects.size(); i++) {
-		ofs << "ID: " << objects[i]->ID << endl;
-		if (!objects[i]->target.empty())
-			ofs << "target: " << objects[i]->target << endl;
-		if (!objects[i]->targetnames.empty()) {
+	for (GObject* obj : objects) {
+		ofs << "ID: " << obj->ID << endl;
+
+		if (!obj->target.empty())
+			ofs << "target: " << obj->target << endl;
+
+		if (!obj->targetnames.empty()) {
 			ofs << "targetnames:";
-			for (int j = 0; j < objects[i]->targetnames.size(); j++)
-				ofs << " " << objects[i]->targetnames[j];
+			for (int j = 0; j < obj->targetnames.size(); j++)
+				ofs << " " << obj->targetnames[j];
 			ofs << endl;
 		}
-		if (!objects[i]->flags.empty()) {
+
+		if (!obj->flags.empty()) {
 			ofs << "flags:";
-			for (int j = 0; j < objects[i]->flags.size(); j++)
-				ofs << " " << objects[i]->flags[j];
+			for (int j = 0; j < obj->flags.size(); j++)
+				ofs << " " << obj->flags[j];
 			ofs << endl;
 		}
-		ofs << "type: " << objects[i]->type << endl;
-		if (!objects[i]->textureName.empty())
-			ofs << "texture: " << objects[i]->textureName << endl;
-		if (objects[i]->x)
-			ofs << "x: " << objects[i]->x << endl;
-		if (objects[i]->y)
-			ofs << "y: " << objects[i]->y << endl;
-		if (!objects[i]->content.empty())
-			ofs << "content: " << objects[i]->content << endl;
+
+		ofs << "type: " << obj->type << endl;
+		
+		if (!obj->textureName.empty())
+			ofs << "texture: " << obj->textureName << endl;
+
+		if (obj->rect.w > 0 && obj->rect.h > 0) {
+			ofs << "width: " << obj->rect.w << endl;
+			ofs << "height: " << obj->rect.h << endl;
+		}
+
+		if (obj->x)
+			ofs << "x: " << obj->x << endl;
+
+		if (obj->y)
+			ofs << "y: " << obj->y << endl;
+
+		if (!obj->content.empty())
+			ofs << "content: " << obj->content << endl;
 		ofs << endl << endl;
 	}
 

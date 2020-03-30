@@ -11,67 +11,80 @@
 #include "Objects_Manager.h"
 #include "Camera.h"
 
-std::vector<SDL_Texture*> textureList;
-std::vector<std::string> textureNames;
-SDL_Texture* levelScreenshot = NULL;
+
+
+class img_struct {
+public:
+	img_struct(SDL_Texture* t, SDL_Surface* s, std::string n) : texture(t), surface(s), name(n) {}
+	//~img_struct() {
+	//	SDL_DestroyTexture(texture);
+	//	SDL_FreeSurface(surface);
+	//}
+
+	SDL_Texture* texture;
+	SDL_Surface* surface;
+	std::string name;
+};
+
+std::vector<img_struct> imgList;
 bool showInvisibleEnts = true;
 
 
-std::vector<SDL_Texture*> Textures_Manager::texturesListInit()
+void Textures_Manager::init()
 {
 	std::ifstream* tempStream = loadFile(Paths::texturesListPath);
 	std::vector<SDL_Texture*> tempVec;
 
 	if (!tempStream) {
 		printf("ERROR texturelist not loaded\n");
-		return tempVec;
+		return;
 	}
+
 	std::string catcher;
-	SDL_Texture* textTemp;
 
 	tempStream->clear();
 	tempStream->seekg(0);
 	while (!tempStream->eof()) {
 		getline(*tempStream, catcher);
-		textureNames.push_back(catcher);
-		catcher.insert(0, "./Textures/");
-		std::cout << catcher << endl;
-		textTemp = loadTexture(catcher);
-		tempVec.push_back(textTemp);
+
+		SDL_Surface* new_surface = IMG_Load(("./Textures/" + catcher).c_str());
+		if (new_surface == NULL) {
+			std::cout << "Image not loaded ! Error: " << SDL_GetError() << std::endl;
+			continue;
+		}
+		SDL_Texture* newTexture = SDL_CreateTextureFromSurface(Renderer::g_Renderer, new_surface);
+		if (newTexture == NULL) {
+			std::cout << "Texture not loaded ! Error: " << SDL_GetError() << std::endl;
+			continue;
+		}
+		imgList.push_back(img_struct(newTexture, new_surface, catcher));
 	}
-	if (tempVec.size() != textureNames.size())
-		std::cout << "Size of texture vectors not matching wtf" << std::endl;
-	return tempVec;
 }
 
-SDL_Texture* Textures_Manager::loadTexture(std::string path)
-{
-	SDL_Surface* surface_temp = IMG_Load(path.c_str());
-	if (surface_temp == NULL) {
-		std::cout << "Image not loaded ! Error: " << SDL_GetError() << std::endl;
-	}
-	SDL_Texture* newTexture = SDL_CreateTextureFromSurface(Renderer::g_Renderer, surface_temp);
-	if (newTexture == NULL) {
-		std::cout << "Texture not loaded ! Error: " << SDL_GetError() << std::endl;
-	}
-	SDL_FreeSurface(surface_temp);
-	return newTexture;
-}
 
-void Textures_Manager::init()
-{
-	textureList = texturesListInit();
-}
 
-SDL_Texture * Textures_Manager::findTexture(std::string name)
+SDL_Texture* Textures_Manager::findTexture(std::string name)
 {
 	if (!name.size()) return NULL;
-	int y = 0;
-	for (auto i = textureNames.begin(); i != textureNames.end(); ++i, y++) {
-		if (!i->compare(name)) return textureList[y];
+	for (img_struct& img : imgList) {
+		if (img.name == name) {
+			return img.texture;
+		}
 	}
 	return NULL;
 }
+
+SDL_Surface* Textures_Manager::findSurface(std::string name)
+{
+	if (!name.size()) return NULL;
+	for (img_struct& img : imgList) {
+		if (img.name == name) {
+			return img.surface;
+		}
+	}
+	return NULL;
+}
+
 
 //This function works well, but needs to be cleaned
 void Textures_Manager::blitStuff()
@@ -99,19 +112,31 @@ void Textures_Manager::blitStuff()
 			for (int x = minx; x < maxx; x++, blitty.x += blitty.w) {
 				if (blitty.x > -GRID_W && blitty.x < Renderer::SCREEN_W &&
 					blitty.y > -GRID_H && blitty.y < Renderer::SCREEN_H) {
+
+					SDL_Rect out = Objects_Manager::findObjectOfID(Map::getID(x, y, i))->rect;
+					if (out.w > 0 && out.h > 0) {
+						//here use the dimensions specified in the object data
+						out.x = blitty.x; out.y = blitty.y;
+					}
+					else {
+						out = blitty;
+					}
 					if (showInvisibleEnts) {
 						if (Map::getID(x, y, i)) {
 							if (Objects_Manager::findObjectOfID(Map::getID(x, y, i))->texture == NULL) {
 								SDL_RenderCopy(Renderer::g_Renderer,
 									findTexture("inv.png"), NULL, &blitty);
 							}
-							else SDL_RenderCopy(Renderer::g_Renderer,
-								Objects_Manager::findObjectOfID(Map::getID(x, y, i))->texture, NULL, &blitty);
+							else {
+									SDL_RenderCopy(Renderer::g_Renderer,
+										Objects_Manager::findObjectOfID(Map::getID(x, y, i))->texture, NULL, &out);
+							}
 						}
 					}
-					else
+					else {
 						SDL_RenderCopy(Renderer::g_Renderer,
-							Objects_Manager::findObjectOfID(Map::getID(x, y, i))->texture, NULL, &blitty);
+							Objects_Manager::findObjectOfID(Map::getID(x, y, i))->texture, NULL, &out);
+					}
 				}
 			}
 		}

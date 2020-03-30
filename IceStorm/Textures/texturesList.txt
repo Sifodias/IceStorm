@@ -39,3 +39,6 @@ mainright1.png
 mainright2.png
 maindown1.png
 maindown2.png
+frisk.png
+ruins.png
+entry.png

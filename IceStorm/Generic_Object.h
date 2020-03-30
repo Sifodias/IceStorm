@@ -45,7 +45,10 @@ flags :
 
 class GObject {
 public:
-	GObject() : ID(0), type("GENERIC"), texture(NULL), x(0), y(0), flagTrigger(false) {};
+	GObject() : ID(0), type("GENERIC"), texture(NULL), x(0), y(0), flagTrigger(false) {
+		rect.w = -1;
+		rect.h = -1;
+	};
 	int ID;
 	std::string target;
 	std::vector<std::string> targetnames;
@@ -56,7 +59,7 @@ public:
 	std::string textureName;
 	int x;
 	int y;
-	//SDL_Rect rect;
+	SDL_Rect rect;
 	std::string content;
 	Moving_Unit movingUnit;
 
