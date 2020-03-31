@@ -78,5 +78,5 @@ void engineQuit() {
 		Map::saveMatrix();
 		Objects_Manager::saveObjects();
 	}
-
+	Text_Printer::quit();
 }

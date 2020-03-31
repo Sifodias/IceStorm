@@ -31,7 +31,7 @@ void speedRestrainer(double& speedX, double& speedY, SDL_Rect rect) {
 Moving_Unit::Moving_Unit(SDL_Rect hitbox_i, int cspeed, int jspeed, int gravityEnabled, int noclip_i) {
 	hitBox = hitbox_i; move_speed = cspeed;
 	jump_speed = jspeed; gravity_affected = gravityEnabled;
-	noclip = noclip_i; mainDirection = 2; jumpLock = 0; movementsLock = 1;
+	noclip = noclip_i; mainDirection = 1; jumpLock = 0; movementsLock = 1;
 	speedX = speedY = 0;
 	timerA = timerB = SDL_GetTicks();
 }

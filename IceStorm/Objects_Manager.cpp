@@ -200,11 +200,11 @@ void Objects_Manager::fillObject(GObject& obj, string data) {
 			continue;
 		}
 		if (identify(data, "width: ")) {
-			obj.rect.w = stoi(data);
+			obj.rect.w = stoi(getAndClear(data));
 			continue;
 		}
 		if (identify(data, "height: ")) {
-			obj.rect.h = stoi(data);
+			obj.rect.h = stoi(getAndClear(data));
 			continue;
 		}
 		if (identify(data, "type: ")) {

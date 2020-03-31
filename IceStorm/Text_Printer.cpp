@@ -185,3 +185,10 @@ void Text_Printer::flush(int i)
 	}
 }
 
+void Text_Printer::quit() {
+	for (std::array<SDL_Texture*, 127>& police : lettersVec) {
+		for (SDL_Texture* texture : police) {
+			SDL_DestroyTexture(texture);
+		}
+	}
+}

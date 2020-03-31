@@ -26,6 +26,7 @@ namespace Text_Printer {
 
 	void flush(int i); //1 for regular queue, 2 for immediate
 	void printText(NodeQueue& node);
+	void quit();
 
 	extern bool standStill;
 	extern std::vector<NodeQueue> queue;

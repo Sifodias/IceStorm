@@ -1,7 +1,7 @@
 ID: 0
 type: GENERIC
-x: 620
-y: 100
+x: 340
+y: 440
 
 
 ID: 1
@@ -9,8 +9,8 @@ target: wall_test
 flags: SOLID
 type: GENERIC
 texture: tile.png
-x: 220
-y: 240
+x: 340
+y: 440
 
 
 ID: 2
@@ -85,7 +85,7 @@ ID: 69
 target: characterMarkerMap
 type: GENERIC
 x: 160
-y: 80
+y: 380
 
 
 ID: 12
@@ -180,8 +180,16 @@ ID: 70
 target: nullWall
 flags: SOLID
 type: GENERIC
-x: 620
+x: 180
 y: 100
+
+
+ID: 71
+target: encounterbck
+type: GLOBAL
+texture: firstEncounter.png
+width: 319
+height: 471
 
 
 

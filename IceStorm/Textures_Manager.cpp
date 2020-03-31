@@ -52,6 +52,7 @@ void Textures_Manager::init()
 			std::cout << "Image not loaded ! Error: " << SDL_GetError() << std::endl;
 			continue;
 		}
+		SDL_SetColorKey(new_surface, SDL_TRUE, SDL_MapRGB(new_surface->format, ALPHAR, ALPHAG, ALPHAB));
 		SDL_Texture* newTexture = SDL_CreateTextureFromSurface(Renderer::g_Renderer, new_surface);
 		if (newTexture == NULL) {
 			std::cout << "Texture not loaded ! Error: " << SDL_GetError() << std::endl;

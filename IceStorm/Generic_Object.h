@@ -22,6 +22,7 @@ Each object has a TRIGGER function
 #include <SDL.h>
 #include <vector>
 #include "Moving_Unit.h"
+#include "Sprites_Handler.h"
 
 /*
 type :
@@ -55,7 +56,7 @@ public:
 	std::vector<std::string> flags;
 	std::string type;
 	SDL_Texture* texture;
-	//SpritesHandler textures;
+	SpritesHandler textures;
 	std::string textureName;
 	int x;
 	int y;

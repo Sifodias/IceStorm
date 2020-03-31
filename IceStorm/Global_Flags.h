@@ -22,3 +22,7 @@ using namespace std;
 #define PRINT_SPEED 0
 
 #define SAVE_ENABLED 1
+
+#define ALPHAR 195
+#define ALPHAG 134
+#define ALPHAB 255

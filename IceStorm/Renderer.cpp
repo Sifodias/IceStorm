@@ -57,7 +57,7 @@ void Renderer::initAll()
 	if (g_Renderer == NULL) {
 		printf("Can't create the renderer : %s\n", SDL_GetError());
 	}
-
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
 	SDL_RenderSetLogicalSize(g_Renderer, SCREEN_W, SCREEN_H);
 }
 
