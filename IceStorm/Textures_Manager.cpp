@@ -10,7 +10,7 @@
 #include "Engine_Manager.h"
 #include "Objects_Manager.h"
 #include "Camera.h"
-
+#include <algorithm>
 
 
 class img_struct {
@@ -86,77 +86,116 @@ SDL_Surface* Textures_Manager::findSurface(std::string name)
 }
 
 
-//This function works well, but needs to be cleaned
-void Textures_Manager::blitStuff()
+void Textures_Manager::printFrame()
 {
-	SDL_Rect blitty;
-	blitty.h = GRID_H;
-	blitty.w = GRID_W;
+	//SDL_Rect blitty;
+	//blitty.h = GRID_H;
+	//blitty.w = GRID_W;
+	//for (int i = 0; i < Map::matrix.size(); i++) {
+	//	blitty.x = -Camera::getX();
+	//	blitty.y = -Camera::getY();
+	//	int maxy = ((Camera::getY() + Camera::outerRect.h) / GRID_H) + 1;
+	//	int maxx = ((Camera::getX() + Camera::outerRect.w) / GRID_W) + 1;
+	//	if (((Camera::getY() + Camera::outerRect.h) / GRID_H) + 1 > Map::matrix[0].size())
+	//		maxy = (int)Map::matrix[0].size();
+	//	int miny = (int)(Camera::getY() / GRID_H);
+	//	int minx = (int)(Camera::getX() / GRID_W);
+	//	if (--miny < 0) miny = 0;
+	//	if (--minx < 0) minx = 0;
+	//	blitty.y += miny * GRID_H;
+	//	blitty.x = -Camera::getX() + minx * GRID_W;
+	//	for (int y = miny; y < maxy; y++, blitty.x = -Camera::getX() + minx * GRID_W, blitty.y += blitty.h) {
+	//		for (int x = minx; x < maxx; x++, blitty.x += blitty.w) {
+	//			if (blitty.x > -GRID_W && blitty.x < Renderer::SCREEN_W &&
+	//				blitty.y > -GRID_H && blitty.y < Renderer::SCREEN_H) {
+	//				SDL_Rect out = Objects_Manager::findObject(Map::getID(x, y, i)).rect;
+	//				if (out.w > 0 && out.h > 0) {
+	//					//here use the dimensions specified in the object data
+	//					out.x = blitty.x; out.y = blitty.y;
+	//				}
+	//				else {
+	//					out = blitty;
+	//				}
+	//				if (showInvisibleEnts) {
+	//					if (Map::getID(x, y, i)) {
+	//						if (Objects_Manager::findObject(Map::getID(x, y, i)).texture == NULL) {
+	//							SDL_RenderCopy(Renderer::g_Renderer,
+	//								findTexture("inv.png"), NULL, &blitty);
+	//						}
+	//						else {
+	//								SDL_RenderCopy(Renderer::g_Renderer,
+	//									Objects_Manager::findObject(Map::getID(x, y, i)).texture, NULL, &out);
+	//						}
+	//					}
+	//				}
+	//				else {
+	//					SDL_RenderCopy(Renderer::g_Renderer,
+	//						Objects_Manager::findObject(Map::getID(x, y, i)).texture, NULL, &out);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 
-	for (int i = 0; i < Map::matrix.size(); i++) {
-		blitty.x = -Camera::getX();
-		blitty.y = -Camera::getY();
+	SDL_Rect rect_cursor = { 0, 0, GRID_W, GRID_H };
 
-		int maxy = ((Camera::getY() + Camera::outerRect.h) / GRID_H) + 1;
-		int maxx = ((Camera::getX() + Camera::outerRect.w) / GRID_W) + 1;
-		if (((Camera::getY() + Camera::outerRect.h) / GRID_H) + 1 > Map::matrix[0].size())
-			maxy = (int)Map::matrix[0].size();
+	/* For each map plan */
+	int i = 0;
+	for (std::vector<std::vector<int>>& plan : Map::matrix) {
+		rect_cursor.x = -Camera::getX();
+		rect_cursor.y = -Camera::getY();
 
-		int miny = (int)(Camera::getY() / GRID_H);
-		int minx = (int)(Camera::getX() / GRID_W);
-		if (--miny < 0) miny = 0;
-		if (--minx < 0) minx = 0;
-		blitty.y += miny * GRID_H;
-		blitty.x = -Camera::getX() + minx * GRID_W;
-		for (int y = miny; y < maxy; y++, blitty.x = -Camera::getX() + minx * GRID_W, blitty.y += blitty.h) {
-			for (int x = minx; x < maxx; x++, blitty.x += blitty.w) {
-				if (blitty.x > -GRID_W && blitty.x < Renderer::SCREEN_W &&
-					blitty.y > -GRID_H && blitty.y < Renderer::SCREEN_H) {
+		/* We won't print further than those matrix indexes */
+		/* Note that we trim out only the maximal indexes */
+		int y_limit_index = std::min(Camera::getY() + Camera::outerRect.h + GRID_H, (int)(plan.size()) * GRID_H) / GRID_H;
+		int x_limit_index;
 
-					SDL_Rect out = Objects_Manager::findObjectOfID(Map::getID(x, y, i))->rect;
-					if (out.w > 0 && out.h > 0) {
-						//here use the dimensions specified in the object data
-						out.x = blitty.x; out.y = blitty.y;
-					}
-					else {
-						out = blitty;
-					}
-					if (showInvisibleEnts) {
-						if (Map::getID(x, y, i)) {
-							if (Objects_Manager::findObjectOfID(Map::getID(x, y, i))->texture == NULL) {
-								SDL_RenderCopy(Renderer::g_Renderer,
-									findTexture("inv.png"), NULL, &blitty);
-							}
-							else {
-									SDL_RenderCopy(Renderer::g_Renderer,
-										Objects_Manager::findObjectOfID(Map::getID(x, y, i))->texture, NULL, &out);
-							}
-						}
-					}
-					else {
-						SDL_RenderCopy(Renderer::g_Renderer,
-							Objects_Manager::findObjectOfID(Map::getID(x, y, i))->texture, NULL, &out);
-					}
+		for (int y = 0; y < y_limit_index; y++,
+			rect_cursor.x = -Camera::getX(), rect_cursor.y += rect_cursor.h) {
+
+			/* Update the maximal index x for the current index y */
+			x_limit_index = std::min((Camera::getX() + Camera::outerRect.w + GRID_W) / GRID_W, (int)plan[y].size());
+
+			for (int x = 0; x < x_limit_index; x++, rect_cursor.x += rect_cursor.w) {
+				if (!Map::getID(x, y, i))
+					continue;
+
+				GObject& currentObj = Objects_Manager::findObject(Map::getID(x, y, i));
+				SDL_Rect out = currentObj.rect;
+				if (out.w > 0 && out.h > 0) {
+					/* Here use the dimensions specified in the object data */
+					out.x = rect_cursor.x; out.y = rect_cursor.y;
 				}
+				else
+					out = rect_cursor;
+
+				SDL_Texture* to_print = currentObj.texture;
+
+				/* If the object has no texture and we must display every ent, give generic texture */
+				to_print = to_print != NULL ? to_print : (showInvisibleEnts ? findTexture("inv.png") : NULL);
+
+				SDL_RenderCopy(Renderer::g_Renderer, to_print, NULL, &out);
 			}
 		}
+
+		/* Update the index of the current plan */
+		i++;
 	}
 
-	blitty = (SDL_Rect)Character::movingUnit.hitBox;
-	blitty.x -= Camera::getX();
-	blitty.y -= Camera::getY();
-	blitty.y -= CHAR_H - CHAR_HITBOX_H;
-	blitty.h = CHAR_H;
-	blitty.w = CHAR_W;
-	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &blitty);
+	/* Print the character */
+	rect_cursor = (SDL_Rect)Character::movingUnit.hitBox;
+	rect_cursor.x -= Camera::getX();
+	rect_cursor.y -= Camera::getY();
+	rect_cursor.y -= CHAR_H - CHAR_HITBOX_H;
+	rect_cursor.h = CHAR_H;
+	rect_cursor.w = CHAR_W;
+	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &rect_cursor);
 
-	for (int i = 0; i < Objects_Manager::objects.size(); i++) {
-		if (!Objects_Manager::objects[i]->x && Objects_Manager::objects[i]->y)
+	/* Print the dynamic objects */
+	for (GObject& obj : Objects_Manager::objects) {
+		if (!obj.x && obj.y)
 			continue;
-		blitty.x = Objects_Manager::objects[i]->movingUnit.hitBox.x;
-		blitty.y = Objects_Manager::objects[i]->movingUnit.hitBox.y;
-		blitty.w = Objects_Manager::objects[i]->movingUnit.hitBox.w;
-		blitty.h = Objects_Manager::objects[i]->movingUnit.hitBox.h;
-		SDL_RenderCopy(Renderer::g_Renderer, Objects_Manager::objects[i]->texture, NULL, &blitty);
+		rect_cursor = obj.movingUnit.hitBox;
+		SDL_RenderCopy(Renderer::g_Renderer, obj.texture, NULL, &rect_cursor);
 	}
 }

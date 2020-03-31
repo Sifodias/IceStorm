@@ -8,20 +8,20 @@ using namespace std;
 namespace Objects_Manager {
 	void init();
 
-	GObject* findObject(string target);
+	GObject& findObject(string target);
 
-	GObject* findObjectOfID(int id);
+	GObject& findObject(int id);
 
 	bool identify(string& target, string wanted);
 	void loadObjects();
 	void saveObjects();
-	GObject* createObject(string data);
-	void fillObject(GObject* obj, string data);
+	GObject createObject(string data);
+	void fillObject(GObject& obj, string data);
 	void editObject(string data);
 
 	void objectsRoutine();
 
-	extern vector<GObject*> objects;
+	extern vector<GObject> objects;
 };
 
 

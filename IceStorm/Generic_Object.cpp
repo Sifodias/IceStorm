@@ -15,7 +15,7 @@ void GObject::routine()
 				case 1:
 					if (!Objects_Manager::findObject(std::to_string
 					(Map::getIdObject(movingUnit.hitBox.y + movingUnit.hitBox.h + 1, 0, movingUnit.hitBox.x, 0)))
-						->type.compare("PATTERN")) {
+						.type.compare("PATTERN")) {
 						movingUnit.speedY = movingUnit.move_speed;
 					}
 					break;
@@ -62,8 +62,8 @@ void GObject::trigger()
 {
 	flagTrigger = 1;
 	for (int i = 0; i < targetnames.size(); i++) {
-		if (!Objects_Manager::findObject(targetnames[i])->flagTrigger)
-			Objects_Manager::findObject(targetnames[i])->trigger();
+		if (!Objects_Manager::findObject(targetnames[i]).flagTrigger)
+			Objects_Manager::findObject(targetnames[i]).trigger();
 	}
 	if (!type.compare("BUTTON")) {
 		if (checkFlag("CONTACT")) {

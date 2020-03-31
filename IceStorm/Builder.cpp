@@ -26,17 +26,13 @@ void Builder::setKey(int key) {
 	}
 }
 
-GObject* fetchObject(string name) {
-	GObject* printObject;
-	int temp;
+GObject& fetchObject(string name) {
 	try {
-		temp = stoi(name);
-		printObject = Objects_Manager::findObjectOfID(temp);
+		return Objects_Manager::findObject(stoi(name));
 	}
 	catch (exception&) {
-		printObject = Objects_Manager::findObject(name);
+		return Objects_Manager::findObject(name);
 	}
-	return printObject;
 }
 
 void Builder::fetch()
@@ -78,7 +74,7 @@ void Builder::fetch()
 
 		else if (Objects_Manager::identify(buffer, "current ")) {		////
 			if (Objects_Manager::identify(buffer, "ent")) {
-				printInfo(currentObject);
+				printInfo(*currentObject);
 			}
 			else if (Objects_Manager::identify(buffer, "plan")) {
 				cout << "Current plan : " << currentPlan << endl;
@@ -99,7 +95,7 @@ void Builder::fetch()
 				}
 			}
 			else if (Objects_Manager::identify(buffer, "ent ")) {
-				currentObject = fetchObject(buffer);
+				currentObject = &fetchObject(buffer);
 			}
 			else goto unknownCMD;
 		}
@@ -124,41 +120,40 @@ void Builder::loadEnts() {
 	Objects_Manager::init();
 }
 
-void Builder::printInfo(GObject* printObject)
+void Builder::printInfo(GObject& printObject)
 {
-	if (printObject == NULL) return;
 	cout << "-------------" << endl;
-	cout << "ID: " << printObject->ID << endl;
-	if (printObject->target.size())
-		cout << "target: " << printObject->target << endl;
-	if (printObject->targetnames.size()) {
+	cout << "ID: " << printObject.ID << endl;
+	if (printObject.target.size())
+		cout << "target: " << printObject.target << endl;
+	if (printObject.targetnames.size()) {
 		cout << "targetnames: ";
-		for (auto i = printObject->targetnames.begin();
-			i != printObject->targetnames.end(); ++i) {
+		for (auto i = printObject.targetnames.begin();
+			i != printObject.targetnames.end(); ++i) {
 			cout << *i << " ";
 		}
 		cout << endl;
 	}
-	if (printObject->flags.size()) {
+	if (printObject.flags.size()) {
 		cout << "flags: ";
-		for (auto i = printObject->flags.begin();
-			i != printObject->flags.end(); ++i) {
+		for (auto i = printObject.flags.begin();
+			i != printObject.flags.end(); ++i) {
 			cout << *i << " ";
 		}
 		cout << endl;
 	}
-	if (printObject->type.size())
-		cout << "type: " << printObject->type << endl;
-	if (printObject->textureName.size())
-		cout << "texture: " << printObject->textureName << endl;
-	if (printObject->rect.w > 0) {
-		cout << "width: " << printObject->rect.w << endl;
-		cout << "height: " << printObject->rect.h << endl;
+	if (printObject.type.size())
+		cout << "type: " << printObject.type << endl;
+	if (printObject.textureName.size())
+		cout << "texture: " << printObject.textureName << endl;
+	if (printObject.rect.w > 0) {
+		cout << "width: " << printObject.rect.w << endl;
+		cout << "height: " << printObject.rect.h << endl;
 	}
-	if (printObject->content.size())
-		cout << "content: " << printObject->content << endl;
-	if (printObject->x != 0 && printObject->y != 0)
-		cout << "x: " << printObject->x << ", y: " << printObject->y << endl;
+	if (printObject.content.size())
+		cout << "content: " << printObject.content << endl;
+	if (printObject.x != 0 && printObject.y != 0)
+		cout << "x: " << printObject.x << ", y: " << printObject.y << endl;
 	cout << "-------------" << endl;
 }
 
@@ -268,11 +263,11 @@ void Builder::routine(SDL_Event & e)
 			break;
 		}
 		case SDLK_0: {
-			currentObject = fetchObject("0");
+			currentObject = &fetchObject("0");
 			break;
 		}
 		case SDLK_1: {
-			currentObject = fetchObject("1");
+			currentObject = &fetchObject("1");
 			break;
 		}
 		case SDLK_f: {
@@ -376,7 +371,7 @@ void Builder::trace(int set, int plan)
 	}
 	printInfo(fetchObject(std::to_string(retObj)));
 	if (set) {
-		currentObject = fetchObject(std::to_string(retObj));
+		currentObject = &fetchObject(std::to_string(retObj));
 	}
 }
 

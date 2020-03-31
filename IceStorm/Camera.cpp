@@ -46,8 +46,8 @@ int Camera::getX() {
 		goto bypass;
 		for (int i = (Character::movingUnit.hitBox.x / GRID_W)*GRID_W - outerRect.w / 2 - GRID_W * 5;
 			i < outerRect.w / 2 + Character::movingUnit.hitBox.x + GRID_W * 5; i += GRID_W) {
-			if (!Objects_Manager::findObjectOfID(Map::getIdObject(Character::movingUnit.hitBox.y, 0, i, 0))
-				->type.compare("CAMBLOCKX")) {
+			if (!Objects_Manager::findObject(Map::getIdObject(Character::movingUnit.hitBox.y, 0, i, 0))
+				.type.compare("CAMBLOCKX")) {
 				if (std::abs(Character::movingUnit.hitBox.x - max2) > std::abs(Character::movingUnit.hitBox.x - i)) {
 					max2 = i;
 					flagChanged = 6666;
@@ -100,8 +100,8 @@ int Camera::getY() {
 		goto bypass;
 		for (int i = (Character::movingUnit.hitBox.y / GRID_H)*GRID_H - outerRect.h / 2 - GRID_H * 5;
 			i < outerRect.h / 2 + Character::movingUnit.hitBox.y + GRID_H * 5; i += GRID_H) {
-			if (!Objects_Manager::findObjectOfID(Map::getIdObject(i, 0, Character::movingUnit.hitBox.x, 0))
-				->type.compare("CAMBLOCKY")) {
+			if (!Objects_Manager::findObject(Map::getIdObject(i, 0, Character::movingUnit.hitBox.x, 0))
+				.type.compare("CAMBLOCKY")) {
 				if (std::abs(Character::movingUnit.hitBox.y - max2) > std::abs(Character::movingUnit.hitBox.y - i)) {
 					max2 = i;
 					flagChanged = 6666;

@@ -76,8 +76,8 @@ void Character::loadSave()
 		}
 
 		if (Objects_Manager::identify(buffer, "charaMark: ")) {
-			GObject* tempObj = Objects_Manager::findObject(buffer);
-			movingUnit.teleport(tempObj->x, tempObj->y);
+			GObject tempObj = Objects_Manager::findObject(buffer);
+			movingUnit.teleport(tempObj.x, tempObj.y);
 			charaMark = buffer;
 			goto next;
 		}

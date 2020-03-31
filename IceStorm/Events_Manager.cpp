@@ -50,7 +50,7 @@ void Events_Manager::testTitle()
 	Text_Printer::addToQueue("QUIT", &container, 1, 0, NULL, 0);
 
 	int choice = 0;
-	GObject* choiceTick = Objects_Manager::findObject("choiceTick");
+	GObject choiceTick = Objects_Manager::findObject("choiceTick");
 	SDL_Rect choiceRect{ container.x - 20,container.y - 32, 5, 10 };
 	int lock = 0;
 	while (1) {
@@ -84,7 +84,7 @@ void Events_Manager::testTitle()
 
 		choiceRect.y = container.y - 32 + choice * 32;
 		SDL_RenderClear(Renderer::g_Renderer);
-		SDL_RenderCopy(Renderer::g_Renderer, choiceTick->texture, NULL, &choiceRect);
+		SDL_RenderCopy(Renderer::g_Renderer, choiceTick.texture, NULL, &choiceRect);
 		Text_Printer::handleRoutine(e);
 		SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderPresent(Renderer::g_Renderer);

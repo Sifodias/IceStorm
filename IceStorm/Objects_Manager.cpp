@@ -8,7 +8,7 @@
 #include "Textures_Manager.h"
 #include <algorithm>
 
-vector<GObject*> Objects_Manager::objects;
+vector<GObject> Objects_Manager::objects;
 ifstream* tempStream = NULL;
 
 void Objects_Manager::init() {
@@ -40,21 +40,21 @@ void Objects_Manager::loadObjects()
 	std::getline(*tempStream, buffer);
 
 
-	GObject* currentObject;
 	while (buffer.compare("EOF")) {
 		while (!buffer.size()) {
 			std::getline(*tempStream, buffer);
 			continue;
 		}
 		identify(buffer, "ID: ");
-		currentObject = new GObject;
-		currentObject->ID = std::stoi(buffer);
+		GObject currentObject;
+		currentObject.ID = std::stoi(buffer);
+
 		std::getline(*tempStream, buffer);
 		while (!identify(buffer, "ID: ") && buffer.compare("EOF")) {
 			//fill the element
 			if (identify(buffer, "target: ")) {
-				currentObject->target = buffer;
-				if (findObject(buffer) != objects[0])
+				currentObject.target = buffer;
+				if (findObject(buffer).ID)
 					std::cout << "Objects with the same target : " << buffer <<
 					". Can result in unexpected behavior" << std::endl;
 
@@ -64,32 +64,32 @@ void Objects_Manager::loadObjects()
 				istringstream iss(buffer);
 				string word;
 				while (iss >> word) {
-					currentObject->targetnames.push_back(word);
+					currentObject.targetnames.push_back(word);
 				}
 				goto next;
 			}
 			if (identify(buffer, "texture: ")) {
-				currentObject->textureName = buffer;
-				currentObject->texture = Textures_Manager::findTexture(buffer);
+				currentObject.textureName = buffer;
+				currentObject.texture = Textures_Manager::findTexture(buffer);
 				goto next;
 			}
 			if (identify(buffer, "width: ")) {
-				currentObject->rect.w = stoi(buffer);
+				currentObject.rect.w = stoi(buffer);
 				goto next;
 			}
 			if (identify(buffer, "height: ")) {
-				currentObject->rect.h = stoi(buffer);
+				currentObject.rect.h = stoi(buffer);
 				goto next;
 			}
 			if (identify(buffer, "type: ")) {
-				currentObject->type = buffer;
+				currentObject.type = buffer;
 				goto next;
 			}
 			if (identify(buffer, "flags: ")) {
 				istringstream iss(buffer);
 				string word;
 				while (iss >> word) {
-					currentObject->flags.push_back(word);
+					currentObject.flags.push_back(word);
 				}
 				goto next;
 			}
@@ -97,17 +97,17 @@ void Objects_Manager::loadObjects()
 				goto next;
 			}
 			if (identify(buffer, "content: ")) {
-				currentObject->content = buffer;
+				currentObject.content = buffer;
 				goto next;
 			}
 			if (identify(buffer, "x: ")) {
-				currentObject->x = std::stoi(buffer);
-				currentObject->movingUnit.hitBox.x = std::stoi(buffer);
+				currentObject.x = std::stoi(buffer);
+				currentObject.movingUnit.hitBox.x = std::stoi(buffer);
 				goto next;
 			}
 			if (identify(buffer, "y: ")) {
-				currentObject->y = std::stoi(buffer);
-				currentObject->movingUnit.hitBox.y = std::stoi(buffer);
+				currentObject.y = std::stoi(buffer);
+				currentObject.movingUnit.hitBox.y = std::stoi(buffer);
 				goto next;
 			}
 		next:
@@ -120,34 +120,34 @@ void Objects_Manager::loadObjects()
 void Objects_Manager::objectsRoutine()
 {
 	for (int i = 0; i < objects.size(); i++) {
-		objects[i]->routine();
+		objects[i].routine();
 	}
 
 }
 
-GObject* Objects_Manager::findObject(string target) {
+GObject& Objects_Manager::findObject(string target) {
 	int temp;
 	try {
 		temp = stoi(target);
-		for (int i = 0; i < objects.size(); i++) {
-			if (objects[i]->ID == temp)
-				return objects[i];
+		for (GObject& obj : objects) {
+			if (obj.ID == temp)
+				return obj;
 		}
 		return objects[0];
 	}
 	catch (exception&) {
-		for (auto i = objects.begin(); i != objects.end(); ++i) {
-			if (!(*i)->target.compare(target))
-				return *i;
+		for (GObject& obj : objects) {
+			if (obj.target == target)
+				return obj;
 		}
 	}
 	return objects[0];
 }
 
-GObject* Objects_Manager::findObjectOfID(int id) {
-	for (int i = 0; i < objects.size(); i++) {
-		if (objects[i]->ID == id)
-			return objects[i];
+GObject& Objects_Manager::findObject(int id) {
+	for (GObject& obj : objects) {
+		if (obj.ID == id)
+			return obj;
 	}
 	return objects[0];
 }
@@ -173,49 +173,50 @@ string getAndClear(string& str) {
 	return ret;
 }
 
-void Objects_Manager::fillObject(GObject* obj, string data) {
+/* TODO: Remove code duplication */
+void Objects_Manager::fillObject(GObject& obj, string data) {
 	while (!data.empty()) {
 		cleanSpaces(data);
 
 		if (identify(data, "target: ")) {
-			obj->target = getAndClear(data);
-			if (findObject(obj->target) != objects[0])
-				std::cout << "Objects with the same target : " << obj->target <<
+			obj.target = getAndClear(data);
+			if (findObject(obj.target).ID)
+				std::cout << "Objects with the same target : " << obj.target <<
 				". Can result in unexpected behavior" << std::endl;
 			continue;
 		}
 		if (identify(data, "targetnames: ")) {
 			istringstream iss(getAndClear(data));
 			string word;
-			obj->targetnames.clear();
+			obj.targetnames.clear();
 			while (iss >> word) {
-				obj->targetnames.push_back(word);
+				obj.targetnames.push_back(word);
 			}
 			continue;
 		}
 		if (identify(data, "texture: ")) {
-			obj->textureName = getAndClear(data);
-			obj->texture = Textures_Manager::findTexture(obj->textureName);
+			obj.textureName = getAndClear(data);
+			obj.texture = Textures_Manager::findTexture(obj.textureName);
 			continue;
 		}
 		if (identify(data, "width: ")) {
-			obj->rect.w = stoi(data);
+			obj.rect.w = stoi(data);
 			continue;
 		}
 		if (identify(data, "height: ")) {
-			obj->rect.h = stoi(data);
+			obj.rect.h = stoi(data);
 			continue;
 		}
 		if (identify(data, "type: ")) {
-			obj->type = getAndClear(data);
+			obj.type = getAndClear(data);
 			continue;
 		}
 		if (identify(data, "flags: ")) {
 			istringstream iss(getAndClear(data));
 			string word;
-			obj->flags.clear();
+			obj.flags.clear();
 			while (iss >> word) {
-				obj->flags.push_back(word);
+				obj.flags.push_back(word);
 			}
 			continue;
 		}
@@ -223,15 +224,15 @@ void Objects_Manager::fillObject(GObject* obj, string data) {
 			continue;
 		}
 		if (identify(data, "content: ")) {
-			obj->content = getAndClear(data);
+			obj.content = getAndClear(data);
 			continue;
 		}
 		if (identify(data, "x: ")) {
-			obj->x = std::stoi(getAndClear(data));
+			obj.x = std::stoi(getAndClear(data));
 			continue;
 		}
 		if (identify(data, "y: ")) {
-			obj->y = std::stoi(getAndClear(data));
+			obj.y = std::stoi(getAndClear(data));
 			continue;
 		}
 		cout << "Error: Unknown field in: " << data << endl;
@@ -249,38 +250,25 @@ void Objects_Manager::editObject(string data) {
 	}
 	data.erase(0, target.size() + 1);
 
-	if (findObject(target) != objects[0])
+	if (findObject(target).ID)
 		fillObject(findObject(target), data);
 }
 
-
 //syntax in console : new ent <field1>: <value1>, <field2>: <value2> ...
-GObject* Objects_Manager::createObject(string data) {
+GObject Objects_Manager::createObject(string data) {
+	GObject new_obj;
 
-	GObject* obj = new GObject;
-
-	std::vector<int> sortedID;
-	for (int i = 0; i < objects.size(); i++) {
-		sortedID.push_back(objects[i]->ID);
+	std::vector<int> idsVec;
+	for( GObject& obj : objects) {
+		idsVec.push_back(obj.ID);
 	}
-	std::sort(sortedID.begin(), sortedID.end());
+	new_obj.ID = *std::max_element(idsVec.begin(), idsVec.end());
 
-	for (int i = 0; i < sortedID.size(); i++) {
-		if (i == sortedID.size() - 1) {
-			obj->ID = sortedID[i] + 1;
-			break;
-		}
-		if (sortedID[i] != sortedID[i + 1] - 1) {
-			obj->ID = sortedID[i] + 1;
-			break;
-		}
-	}
+	fillObject(new_obj, data);
 
-	fillObject(obj, data);
+	objects.push_back(new_obj);
 
-	objects.push_back(obj);
-
-	return obj;
+	return new_obj;
 }
 
 
@@ -291,44 +279,44 @@ void Objects_Manager::saveObjects() {
 	std::ofstream ofs;
 	ofs.open(Paths::entData, std::ofstream::out | std::ofstream::trunc);
 
-	for (GObject* obj : objects) {
-		ofs << "ID: " << obj->ID << endl;
+	for (GObject& obj : objects) {
+		ofs << "ID: " << obj.ID << endl;
 
-		if (!obj->target.empty())
-			ofs << "target: " << obj->target << endl;
+		if (!obj.target.empty())
+			ofs << "target: " << obj.target << endl;
 
-		if (!obj->targetnames.empty()) {
+		if (!obj.targetnames.empty()) {
 			ofs << "targetnames:";
-			for (int j = 0; j < obj->targetnames.size(); j++)
-				ofs << " " << obj->targetnames[j];
+			for (int j = 0; j < obj.targetnames.size(); j++)
+				ofs << " " << obj.targetnames[j];
 			ofs << endl;
 		}
 
-		if (!obj->flags.empty()) {
+		if (!obj.flags.empty()) {
 			ofs << "flags:";
-			for (int j = 0; j < obj->flags.size(); j++)
-				ofs << " " << obj->flags[j];
+			for (int j = 0; j < obj.flags.size(); j++)
+				ofs << " " << obj.flags[j];
 			ofs << endl;
 		}
 
-		ofs << "type: " << obj->type << endl;
+		ofs << "type: " << obj.type << endl;
 		
-		if (!obj->textureName.empty())
-			ofs << "texture: " << obj->textureName << endl;
+		if (!obj.textureName.empty())
+			ofs << "texture: " << obj.textureName << endl;
 
-		if (obj->rect.w > 0 && obj->rect.h > 0) {
-			ofs << "width: " << obj->rect.w << endl;
-			ofs << "height: " << obj->rect.h << endl;
+		if (obj.rect.w > 0 && obj.rect.h > 0) {
+			ofs << "width: " << obj.rect.w << endl;
+			ofs << "height: " << obj.rect.h << endl;
 		}
 
-		if (obj->x)
-			ofs << "x: " << obj->x << endl;
+		if (obj.x)
+			ofs << "x: " << obj.x << endl;
 
-		if (obj->y)
-			ofs << "y: " << obj->y << endl;
+		if (obj.y)
+			ofs << "y: " << obj.y << endl;
 
-		if (!obj->content.empty())
-			ofs << "content: " << obj->content << endl;
+		if (!obj.content.empty())
+			ofs << "content: " << obj.content << endl;
 		ofs << endl << endl;
 	}
 

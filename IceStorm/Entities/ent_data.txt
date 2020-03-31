@@ -1,7 +1,6 @@
 ID: 0
 type: GENERIC
-x: 160
-y: 80
+y: 100
 
 
 ID: 1
@@ -9,8 +8,8 @@ target: wall_test
 flags: SOLID
 type: GENERIC
 texture: tile.png
-x: 1900
-y: 2100
+x: 260
+y: 380
 
 
 ID: 2

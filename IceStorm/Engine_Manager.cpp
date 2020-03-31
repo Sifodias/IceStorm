@@ -38,7 +38,7 @@ void handleRoutines(SDL_Event e) {
 	Builder::routine(e);
 	Character::characterRoutine(e);
 	Events_Manager::routine();
-	Textures_Manager::blitStuff();
+	Textures_Manager::printFrame();
 	Text_Printer::handleRoutine(e);
 	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderPresent(Renderer::g_Renderer);

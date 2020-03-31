@@ -15,7 +15,7 @@ namespace Builder {
 	void saveLevel(std::string name);
 	void newLevel(std::string name);
 	void loadLevel(std::string name);
-	void printInfo(GObject* printObject);
+	void printInfo(GObject& printObject);
 	void routine(SDL_Event& e);
 	bool checkKey(int key);
 	void setKey(int key);
