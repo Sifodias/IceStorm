@@ -22,7 +22,7 @@ namespace Builder {
 	void loadEnts();
 	void newPlan(int plan);
 	void setPlan(int plan);
-	void clean(int plan); //remove useless information in plan
+	void clean();
 
 };
 

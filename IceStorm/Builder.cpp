@@ -190,25 +190,26 @@ void Builder::newLevel(std::string name)
 	level.close();
 }
 
-void Builder::clean(int plan) {
-	int toPop = 0;
-	int flaggy = 0;
-	for (int i = (int)Map::matrix[plan].size() - 1; i >= 0; i--) {
-		for (int j = (int)Map::matrix[plan][i].size() - 1; j >= 0; j--) {
-			if (Map::matrix[plan][i][j] != 0) {
-				flaggy = 1;
-				break;
+void Builder::clean() {
+	for (std::vector<std::vector<int>>& plan : Map::matrix) {
+		int toPop = 0;
+		int flaggy = 0;
+		for (int i = (int)plan.size() - 1; i >= 0; i--) {
+			for (int j = (int)plan[i].size() - 1; j >= 0; j--) {
+				if (plan[i][j] != 0) {
+					flaggy = 1;
+					break;
+				}
+				toPop++;
 			}
-			toPop++;
-		}
-		Map::matrix[plan][i].erase(Map::matrix[plan][i].end() - toPop, Map::matrix[plan][i].end());
-		toPop = 0;
-		if (flaggy == 0) {
-			if (Map::matrix[plan][i].size() == 0)
-				Map::matrix[plan].erase(Map::matrix[plan].begin() + i, Map::matrix[plan].begin() + i + 1);
+			plan[i].erase(plan[i].end() - toPop, plan[i].end());
+			toPop = 0;
+			if (flaggy == 0) {
+				if (plan[i].size() == 0)
+					plan.erase(plan.begin() + i, plan.begin() + i + 1);
+			}
 		}
 	}
-
 }
 
 void Builder::loadLevel(std::string name) {
@@ -236,7 +237,7 @@ void Builder::placeElement(int x, int y, int plan) {
 
 }
 
-void Builder::routine(SDL_Event & e)
+void Builder::routine(SDL_Event& e)
 {
 	if (e.type == SDL_KEYDOWN)
 	{
@@ -277,13 +278,13 @@ void Builder::routine(SDL_Event & e)
 			SDL_GetMouseState(&x, &y);
 			int width, height;
 			SDL_GetWindowSize(Renderer::g_Window, &width, &height);
-			x = (int)((x / (double)width)*Renderer::SCREEN_W);
-			y = (int)((y / (double)height)*Renderer::SCREEN_H);
+			x = (int)((x / (double)width) * Renderer::SCREEN_W);
+			y = (int)((y / (double)height) * Renderer::SCREEN_H);
 			placeElement(x, y, currentPlan);
-			currentObject->movingUnit.hitBox.x = ((x + Camera::getX())/GRID_W)*GRID_W;
-			currentObject->movingUnit.hitBox.y = ((y + Camera::getY())/GRID_H)*GRID_H;
-			currentObject->x = ((x + Camera::getX()) / GRID_W)*GRID_W;
-			currentObject->y = ((y + Camera::getY()) / GRID_H)*GRID_H;
+			currentObject->movingUnit.hitBox.x = ((x + Camera::getX()) / GRID_W) * GRID_W;
+			currentObject->movingUnit.hitBox.y = ((y + Camera::getY()) / GRID_H) * GRID_H;
+			currentObject->x = ((x + Camera::getX()) / GRID_W) * GRID_W;
+			currentObject->y = ((y + Camera::getY()) / GRID_H) * GRID_H;
 			break;
 		}
 		case SDLK_r: {
@@ -295,7 +296,7 @@ void Builder::routine(SDL_Event & e)
 			break;
 		}
 		case SDLK_c: {
-			clean(currentPlan);
+			clean();
 			break;
 		}
 		case SDLK_n: {
@@ -305,27 +306,19 @@ void Builder::routine(SDL_Event & e)
 		case SDLK_z: {
 			cout << Map::isItSolid(Character::movingUnit.hitBox);
 		}
+		case SDLK_x: {
+			Textures_Manager::showInvisibleEnts = !Textures_Manager::showInvisibleEnts;
+		}
 		}
 	}
 }
 
 void Builder::zoom(int focus) {
-	if (focus == -1) {
-		Renderer::SCREEN_H = Camera::outerRect.h *= 2;
-		//Camera::innerRect.h *= 2;
-		Renderer::SCREEN_W = Camera::outerRect.w *= 2;
-		//Camera::innerRect.w *= 2;
-		Character::movingUnit.move_speed *= 2;
-		//Character::movingUnit.speedY *= 10;
-	}
-	if (focus == 1) {
-		Renderer::SCREEN_H = Camera::outerRect.h /= 2;
-		//Camera::innerRect.w /= 2;
-		Renderer::SCREEN_W = Camera::outerRect.w /= 2;
-		//Camera::innerRect.w /= 2;
-		Character::movingUnit.move_speed /= 2;
-		//Character::movingUnit.speedY /= 10;
-	}
+	Renderer::SCREEN_H = Camera::outerRect.h *= focus == -1 ? 2 : 0.5;
+	Renderer::SCREEN_W = Camera::outerRect.w *= focus == -1 ? 2 : 0.5;
+
+	Character::movingUnit.move_speed *= focus == -1 ? 2 : 0.5;
+
 	SDL_RenderSetLogicalSize(Renderer::g_Renderer, Camera::outerRect.w, Camera::outerRect.h);
 }
 

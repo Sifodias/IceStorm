@@ -11,4 +11,6 @@ namespace Textures_Manager {
 	
 	SDL_Texture* findTexture(std::string name);
 	SDL_Surface* findSurface(std::string name);
+
+	extern bool showInvisibleEnts;
 };

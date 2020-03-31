@@ -1,5 +1,6 @@
 ID: 0
 type: GENERIC
+x: 620
 y: 100
 
 
@@ -8,8 +9,8 @@ target: wall_test
 flags: SOLID
 type: GENERIC
 texture: tile.png
-x: 260
-y: 380
+x: 220
+y: 240
 
 
 ID: 2
@@ -83,7 +84,6 @@ content: default front 0
 ID: 69
 target: characterMarkerMap
 type: GENERIC
-texture: inv.png
 x: 160
 y: 80
 
@@ -173,6 +173,15 @@ type: GENERIC
 texture: entry.png
 width: 680
 height: 260
+x: 160
+
+
+ID: 70
+target: nullWall
+flags: SOLID
+type: GENERIC
+x: 620
+y: 100
 
 
 

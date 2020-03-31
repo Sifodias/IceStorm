@@ -33,7 +33,17 @@ void SpritesHandler::addGroup(std::string sheet_name, int width_per_sprite, int 
 	groups.push_back(sprite_group(texturesVec, speed, group_name));
 }
 
+void SpritesHandler::setIdle(bool idle)
+{
+	groups[currentGroup].idle = idle;
+}
+
+
+
 SDL_Texture* SpritesHandler::currentFrame() {
+	if (groups[currentGroup].idle) {
+		return groups[currentGroup].textures[0];
+	}
 	int index = (int)((SDL_GetTicks()) / groups[currentGroup].speed) % (groups[currentGroup].textures.size());
 	return groups[currentGroup].textures[index];
 }

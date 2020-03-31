@@ -12,30 +12,26 @@ ifstream* saveFile = NULL;
 string charaMark;
 string map_name;
 
-void Character::characterRoutine(SDL_Event & e)
+void Character::characterRoutine(SDL_Event& e)
 {
 	movingUnit.move(e);
 	switch (movingUnit.mainDirection) {
 	case -2:
-		if (movingUnit.speedX)
-			textures.setCurrentGroup("left");
-		//else textures.setCurrentGroup("sleft");
+		textures.setCurrentGroup("left");
+		textures.setIdle(movingUnit.speedX == 0);
 		break;
 	case 2:
-		if (movingUnit.speedX)
-			textures.setCurrentGroup("right");
-		//else textures.setCurrentGroup("sright");
+		textures.setCurrentGroup("right");
+		textures.setIdle(movingUnit.speedX == 0);
 		break;
 	case -1:
-		if (movingUnit.speedY)
-			textures.setCurrentGroup("up");
-		//else textures.setCurrentGroup("sup");
+		textures.setCurrentGroup("up");
+		textures.setIdle(movingUnit.speedY == 0);
 		break;
 
 	case 1:
-		if (movingUnit.speedY)
-			textures.setCurrentGroup("down");
-		//else textures.setCurrentGroup("sdown");
+		textures.setCurrentGroup("down");
+		textures.setIdle(movingUnit.speedY == 0);
 		break;
 	}
 
@@ -53,7 +49,7 @@ void Character::init()
 {
 	SDL_Rect hitty = { 0, 0, CHAR_HITBOX_W, CHAR_HITBOX_H };
 	movingUnit = Moving_Unit(hitty);
-	textures.addGroup("frisk.png", 19, 29, 5,21, 0, 4, "down", 250);
+	textures.addGroup("frisk.png", 19, 29, 5, 21, 0, 4, "down", 250);
 	textures.addGroup("frisk.png", 17, 29, 5, 21, 2, 2, "left", 250);
 	textures.addGroup("frisk.png", 17, 29, 5, 21, 4, 2, "right", 250);
 	textures.addGroup("frisk.png", 19, 29, 5, 21, 6, 4, "up", 250);

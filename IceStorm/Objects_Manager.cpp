@@ -262,7 +262,7 @@ GObject Objects_Manager::createObject(string data) {
 	for( GObject& obj : objects) {
 		idsVec.push_back(obj.ID);
 	}
-	new_obj.ID = *std::max_element(idsVec.begin(), idsVec.end());
+	new_obj.ID = *std::max_element(idsVec.begin(), idsVec.end())+1;
 
 	fillObject(new_obj, data);
 

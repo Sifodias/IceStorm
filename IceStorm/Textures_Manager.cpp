@@ -27,7 +27,7 @@ public:
 };
 
 std::vector<img_struct> imgList;
-bool showInvisibleEnts = true;
+bool Textures_Manager::showInvisibleEnts = true;
 
 
 void Textures_Manager::init()
