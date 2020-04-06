@@ -4,7 +4,9 @@
 #include "Dialog_Engine.h"
 #include "Character.h"
 #include "Map.h"
-using namespace std;
+#include "Camera.h"
+
+//using namespace std;
 
 void GObject::routine()
 {
@@ -40,23 +42,6 @@ void GObject::routine()
 	//movingUnit.move();
 }
 
-string getNextWord(string str) {
-	while (str[0] == ' ')
-		str.erase(0, 1);
-
-	string word = "";
-	int i = 0;
-	while (str[i] != ' ' && i < str.size()) {
-		word += str[i];
-		i++;
-	}
-	str.erase(0, i);
-
-	while (str[0] == ' ')
-		str.erase(0, 1);
-
-	return word;
-}
 
 void GObject::trigger()
 {
@@ -87,25 +72,34 @@ void GObject::trigger()
 	if (!type.compare("TELEPORT")) {
 		Character::movingUnit.teleport(x, y);
 	}
-	/*
+	
 	if (!type.compare("DOOR")) {
-		//check level, front/back and id
-		string levelName = getNextWord(content);
-		string type = getNextWord(content);
-		string id = getNextWord(content);
-		if (!levelName.empty() && !type.empty() && !id.empty()) {
-			try {
-				int doorId = stoi(id);
+		istringstream iss(content);
+		string word;
+		iss >> word;
 
+		/* Check if it's an entry or exit */
+		if (word == "0") {
+			/* Get the door target */
+			iss >> word;
+			string target = word;
+
+			/* Get the destination level */
+			iss >> word;
+
+			/* Teleportation */
+			Map::loadLevel(word);
+			Map::findOccurrence(stoi(target), &Character::movingUnit.hitBox.x, &Character::movingUnit.hitBox.y);
+			if (word == "flowey") {
+				Camera::lockCamX(160, true);
 			}
-			catch (exception&) {
-
+			else {
+				Camera::lockCamX(0, false);
 			}
-
-
 		}
+
 	}
-	*/
+	
 	/*
 	if (!type.compare("CAMBLOCK")) {
 

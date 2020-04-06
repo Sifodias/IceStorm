@@ -2,7 +2,7 @@
 #include "Generic_Object.h"
 #include <vector>
 #include <map>
-
+#include <tuple>
 using namespace std;
 
 namespace Objects_Manager {
@@ -18,7 +18,7 @@ namespace Objects_Manager {
 	GObject createObject(string data);
 	void fillObject(GObject& obj, string data);
 	void editObject(string data);
-
+	tuple<GObject, GObject> newDoors(string levelName);
 	void objectsRoutine();
 
 	extern vector<GObject> objects;

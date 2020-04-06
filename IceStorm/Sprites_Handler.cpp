@@ -24,7 +24,6 @@ void SpritesHandler::addGroup(std::string sheet_name, int width_per_sprite, int 
 	SDL_Surface* surface = Textures_Manager::findSurface(sheet_name);
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, alpha.r, alpha.g, alpha.b));
 
-
 	for (int i = 0; i < nb_of_frames; i++) {
 		SDL_Texture* texture = crop_surface(surface, (offsetX + width_per_sprite) * i + offsetX, (offsetY + height_per_sprite) * row_index + offsetY,
 																												width_per_sprite, height_per_sprite);

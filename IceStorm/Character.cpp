@@ -70,13 +70,14 @@ void Character::loadSave()
 			map_name = buffer;
 			goto next;
 		}
+		Map::findOccurrence(69, &Character::movingUnit.hitBox.x, &Character::movingUnit.hitBox.y);
 
-		if (Objects_Manager::identify(buffer, "charaMark: ")) {
+		/*if (Objects_Manager::identify(buffer, "charaMark: ")) {
 			GObject tempObj = Objects_Manager::findObject(buffer);
 			movingUnit.teleport(tempObj.x, tempObj.y);
 			charaMark = buffer;
 			goto next;
-		}
+		}*/
 
 	next:
 		std::getline(*saveFile, buffer);

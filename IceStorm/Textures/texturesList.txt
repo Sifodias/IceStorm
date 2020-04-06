@@ -40,3 +40,8 @@ entry.png
 door.png
 firstEncounter.png
 flowey.png
+A.png
+A2.png
+B.png
+B2.png
+flowey_dead.png

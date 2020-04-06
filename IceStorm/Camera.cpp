@@ -8,6 +8,8 @@
 SDL_Rect Camera::innerRect;
 SDL_Rect Camera::outerRect;
 bool Camera::FREEDOM = 0;
+int locked = false;
+int lockX = 0;
 
 void Camera::init() {
 	outerRect.x = outerRect.y = 0;
@@ -22,6 +24,11 @@ void Camera::init() {
 //this feature is currently disabled
 int Camera::getX() {
 	if (!FREEDOM) {
+		if (locked) {
+			return (outerRect.w / 2) - lockX;
+		}
+
+
 		if ((int)(Character::movingUnit.hitBox.x + Character::movingUnit.hitBox.w)
 		> innerRect.x + innerRect.w)
 			innerRect.x = (int)(Character::movingUnit.hitBox.x +
@@ -79,7 +86,6 @@ int Camera::getX() {
 	}
 }
 
-
 int Camera::getY() {
 	if (!FREEDOM) {
 		if ((int)(Character::movingUnit.hitBox.y + Character::movingUnit.hitBox.h)
@@ -131,4 +137,9 @@ int Camera::getY() {
 		outerRect.y = (int)Character::movingUnit.hitBox.y - (int)(outerRect.h / 2);
 		return (int)outerRect.y;
 	}
+}
+
+void Camera::lockCamX(int x, bool lock) {
+	locked = lock;
+	lockX = x;
 }

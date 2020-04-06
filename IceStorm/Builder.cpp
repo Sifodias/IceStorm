@@ -8,6 +8,7 @@
 #include <iostream>
 #include "Renderer.h"
 #include "Paths.h"
+#include <tuple>
 
 GObject* currentObject = NULL;
 int currentPlan = 0;
@@ -108,6 +109,10 @@ void Builder::fetch()
 			editObject(buffer);
 		}
 
+		else if (Objects_Manager::identify(buffer, "newdoor ")) {
+			newDoor(buffer);
+		}
+
 		else {
 		unknownCMD:
 			std::cout << "Error: Unknown cmd" << std::endl;
@@ -128,17 +133,15 @@ void Builder::printInfo(GObject& printObject)
 		cout << "target: " << printObject.target << endl;
 	if (printObject.targetnames.size()) {
 		cout << "targetnames: ";
-		for (auto i = printObject.targetnames.begin();
-			i != printObject.targetnames.end(); ++i) {
-			cout << *i << " ";
+		for (string& name : printObject.targetnames) {
+			cout << name << " ";
 		}
 		cout << endl;
 	}
 	if (printObject.flags.size()) {
 		cout << "flags: ";
-		for (auto i = printObject.flags.begin();
-			i != printObject.flags.end(); ++i) {
-			cout << *i << " ";
+		for (string& flag : printObject.flags) {
+			cout << flag << " ";
 		}
 		cout << endl;
 	}
@@ -368,4 +371,7 @@ void Builder::trace(int set, int plan)
 	}
 }
 
-
+void Builder::newDoor(string levelname) {
+	auto[a,b] = Objects_Manager::newDoors(levelname);
+	printInfo(a); printInfo(b);
+}

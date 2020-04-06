@@ -23,6 +23,7 @@ namespace Builder {
 	void newPlan(int plan);
 	void setPlan(int plan);
 	void clean();
+	void newDoor(string levelname);
 
 };
 

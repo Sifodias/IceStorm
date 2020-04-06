@@ -27,7 +27,7 @@ public:
 };
 
 std::vector<img_struct> imgList;
-bool Textures_Manager::showInvisibleEnts = true;
+bool Textures_Manager::showInvisibleEnts = SHOWINV;
 
 
 void Textures_Manager::init()
@@ -162,18 +162,20 @@ void Textures_Manager::printFrame()
 					continue;
 
 				GObject& currentObj = Objects_Manager::findObject(Map::getID(x, y, i));
-				SDL_Rect out = currentObj.rect;
-				if (out.w > 0 && out.h > 0) {
-					/* Here use the dimensions specified in the object data */
-					out.x = rect_cursor.x; out.y = rect_cursor.y;
+				SDL_Rect out = rect_cursor;
+				SDL_Surface* tempSrf = findSurface(currentObj.textureName);
+				if (tempSrf != NULL) {
+					out.w = tempSrf->w; 
+					out.h = tempSrf->h;
 				}
-				else
-					out = rect_cursor;
 
 				SDL_Texture* to_print = currentObj.texture;
 
 				/* If the object has no texture and we must display every ent, give generic texture */
 				to_print = to_print != NULL ? to_print : (showInvisibleEnts ? findTexture("inv.png") : NULL);
+				if (!showInvisibleEnts && currentObj.checkFlag("INV")) {
+					to_print = NULL;
+				}
 
 				SDL_RenderCopy(Renderer::g_Renderer, to_print, NULL, &out);
 			}
@@ -192,11 +194,11 @@ void Textures_Manager::printFrame()
 	rect_cursor.w = CHAR_W;
 	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &rect_cursor);
 
-	/* Print the dynamic objects */
-	for (GObject& obj : Objects_Manager::objects) {
-		if (!obj.x && obj.y)
-			continue;
-		rect_cursor = obj.movingUnit.hitBox;
-		SDL_RenderCopy(Renderer::g_Renderer, obj.texture, NULL, &rect_cursor);
-	}
+	///* Print the dynamic objects */
+	//for (GObject& obj : Objects_Manager::objects) {
+	//	if (!obj.x && obj.y)
+	//		continue;
+	//	rect_cursor = obj.movingUnit.hitBox;
+	//	SDL_RenderCopy(Renderer::g_Renderer, obj.texture, NULL, &rect_cursor);
+	//}
 }

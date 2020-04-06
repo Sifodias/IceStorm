@@ -73,14 +73,14 @@ void Objects_Manager::loadObjects()
 				currentObject.texture = Textures_Manager::findTexture(buffer);
 				goto next;
 			}
-			if (identify(buffer, "width: ")) {
-				currentObject.rect.w = stoi(buffer);
-				goto next;
-			}
-			if (identify(buffer, "height: ")) {
-				currentObject.rect.h = stoi(buffer);
-				goto next;
-			}
+			//if (identify(buffer, "width: ")) {
+			//	currentObject.rect.w = stoi(buffer);
+			//	goto next;
+			//}
+			//if (identify(buffer, "height: ")) {
+			//	currentObject.rect.h = stoi(buffer);
+			//	goto next;
+			//}
 			if (identify(buffer, "type: ")) {
 				currentObject.type = buffer;
 				goto next;
@@ -100,16 +100,16 @@ void Objects_Manager::loadObjects()
 				currentObject.content = buffer;
 				goto next;
 			}
-			if (identify(buffer, "x: ")) {
-				currentObject.x = std::stoi(buffer);
-				currentObject.movingUnit.hitBox.x = std::stoi(buffer);
-				goto next;
-			}
-			if (identify(buffer, "y: ")) {
-				currentObject.y = std::stoi(buffer);
-				currentObject.movingUnit.hitBox.y = std::stoi(buffer);
-				goto next;
-			}
+			//if (identify(buffer, "x: ")) {
+			//	currentObject.x = std::stoi(buffer);
+			//	currentObject.movingUnit.hitBox.x = std::stoi(buffer);
+			//	goto next;
+			//}
+			//if (identify(buffer, "y: ")) {
+			//	currentObject.y = std::stoi(buffer);
+			//	currentObject.movingUnit.hitBox.y = std::stoi(buffer);
+			//	goto next;
+			//}
 		next:
 			std::getline(*tempStream, buffer);
 		}
@@ -199,14 +199,14 @@ void Objects_Manager::fillObject(GObject& obj, string data) {
 			obj.texture = Textures_Manager::findTexture(obj.textureName);
 			continue;
 		}
-		if (identify(data, "width: ")) {
-			obj.rect.w = stoi(getAndClear(data));
-			continue;
-		}
-		if (identify(data, "height: ")) {
-			obj.rect.h = stoi(getAndClear(data));
-			continue;
-		}
+		//if (identify(data, "width: ")) {
+		//	obj.rect.w = stoi(getAndClear(data));
+		//	continue;
+		//}
+		//if (identify(data, "height: ")) {
+		//	obj.rect.h = stoi(getAndClear(data));
+		//	continue;
+		//}
 		if (identify(data, "type: ")) {
 			obj.type = getAndClear(data);
 			continue;
@@ -227,14 +227,14 @@ void Objects_Manager::fillObject(GObject& obj, string data) {
 			obj.content = getAndClear(data);
 			continue;
 		}
-		if (identify(data, "x: ")) {
-			obj.x = std::stoi(getAndClear(data));
-			continue;
-		}
-		if (identify(data, "y: ")) {
-			obj.y = std::stoi(getAndClear(data));
-			continue;
-		}
+		//if (identify(data, "x: ")) {
+		//	obj.x = std::stoi(getAndClear(data));
+		//	continue;
+		//}
+		//if (identify(data, "y: ")) {
+		//	obj.y = std::stoi(getAndClear(data));
+		//	continue;
+		//}
 		cout << "Error: Unknown field in: " << data << endl;
 		break;
 	}
@@ -304,16 +304,14 @@ void Objects_Manager::saveObjects() {
 		if (!obj.textureName.empty())
 			ofs << "texture: " << obj.textureName << endl;
 
-		if (obj.rect.w > 0 && obj.rect.h > 0) {
-			ofs << "width: " << obj.rect.w << endl;
-			ofs << "height: " << obj.rect.h << endl;
-		}
-
-		if (obj.x)
-			ofs << "x: " << obj.x << endl;
-
-		if (obj.y)
-			ofs << "y: " << obj.y << endl;
+		//if (obj.rect.w > 0 && obj.rect.h > 0) {
+		//	ofs << "width: " << obj.rect.w << endl;
+		//	ofs << "height: " << obj.rect.h << endl;
+		//}
+		//if (obj.x)
+		//	ofs << "x: " << obj.x << endl;
+		//if (obj.y)
+		//	ofs << "y: " << obj.y << endl;
 
 		if (!obj.content.empty())
 			ofs << "content: " << obj.content << endl;
@@ -323,5 +321,10 @@ void Objects_Manager::saveObjects() {
 	ofs << endl << endl << "EOF";
 	ofs.close();
 
+}
 
+tuple<GObject, GObject> Objects_Manager::newDoors(string levelName) {
+	GObject& dest = createObject("texture: A2.png, type: DOOR, flags: INV, content: 1");
+	GObject& from = createObject("texture: A.png, type: DOOR, flags: CONTACT INV, content: 0 " + to_string(dest.ID) + " " +  levelName);
+	return { from, dest };
 }

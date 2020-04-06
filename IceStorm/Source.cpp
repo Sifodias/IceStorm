@@ -13,6 +13,6 @@ int main(int argc, char* argv[])
 
 /*
 TODO :
-	- Need to fix memory leak for img_struct and sprite_group
+	- Links between rooms
 
 */

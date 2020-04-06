@@ -26,3 +26,5 @@ using namespace std;
 #define ALPHAR 195
 #define ALPHAG 134
 #define ALPHAB 255
+
+#define SHOWINV false
