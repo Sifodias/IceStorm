@@ -228,11 +228,11 @@ void Moving_Unit::doMoves()
 	while (tempDistancex * speedX > 0 || tempDistancey * speedY > 0) {
 		if ((tempDistancex < 0 && speedX > 0) || (tempDistancex > 0 && speedX < 0)) {
 			tempDistancex = 0;
-			//speedX = 0;
+			speedX = 0;
 		}
 		if ((tempDistancey < 0 && speedY > 0) || (tempDistancey > 0 && speedY < 0)) {
 			tempDistancey = 0;
-			//speedY = 0;
+			speedY = 0;
 		}
 		tempReqt.x = hitBox.x + tempDistancex;
 		tempReqt.y = hitBox.y + tempDistancey;
@@ -265,7 +265,16 @@ void Moving_Unit::doMoves()
 
 	timerA = timerB;
 
-
+	if (mainDirection == 1 || mainDirection == -1) {
+		if (!speedY && speedX) {
+			mainDirection = 2 * abs(speedX) / speedX;
+		}
+	}
+	if (mainDirection == 2 || mainDirection == -2) {
+		if (speedY && !speedX) {
+			mainDirection = 1 * abs(speedY) / speedY;
+		}
+	}
 }
 
 void Moving_Unit::move(SDL_Event& e)
