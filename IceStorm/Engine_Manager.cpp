@@ -15,20 +15,12 @@
 void init_game()
 {
 	Renderer::initAll();
-	Map::loadLevel("ripof");
 	Textures_Manager::init();
 	Objects_Manager::init();
 	Text_Printer::init();
 	Camera::init();
 	Character::init();
 	//Events_Manager::addToQueue(testTitle);
-
-}
-
-int filterEvents(SDL_Event* e) {
-	if (e->type != SDL_KEYDOWN && SDL_KEYUP && SDL_QUIT && SDL_SYSWMEVENT && SDL_WINDOWEVENT)
-		return 1;	//not cool event
-	return 0;	//cool event
 }
 
 
@@ -40,7 +32,7 @@ void handleRoutines(SDL_Event e) {
 	Events_Manager::routine();
 	Textures_Manager::printFrame();
 	Text_Printer::handleRoutine(e);
-	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+
 	SDL_RenderPresent(Renderer::g_Renderer);
 
 

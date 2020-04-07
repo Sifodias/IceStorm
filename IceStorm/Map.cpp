@@ -87,42 +87,39 @@ int Map::getIdObject(double ay, int iy, double ax, int ix, int plan) {
 	return 0;
 }
 int Map::getID(int ix, int iy, int plan) {
-	if (iy < matrix[plan].size())
-		if (ix < matrix[plan][iy].size()) {
-			return matrix[plan][iy][ix];
-		}
+	if (plan < matrix.size())
+		if (iy < matrix[plan].size())
+			if (ix < matrix[plan][iy].size()) {
+				return matrix[plan][iy][ix];
+			}
 	return 0;
 }
+
 bool Map::isItSolid(SDL_Rect reqt)
 {
-	//faire une grille gridh x gridw
-	//tester pour chaque pt de la grille que pas solide
-	for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
-		for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-			if (Objects_Manager::findObject(getIdObject(reqt.y, iy,
-				reqt.x, ix)).checkFlag("SOLID")) {
-				return true;
-			}
-			if (ix + 1 > (int)(reqt.w / GRID_W)) {
-				if (Objects_Manager::findObject(getIdObject(reqt.y, iy,
-					reqt.x + reqt.w - 1, 0)).checkFlag("SOLID"))
-					return true;
-			}
-		}
-		if (iy + 1 > (int)(reqt.h / GRID_H)) {
-			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-				if (Objects_Manager::findObject(getIdObject(reqt.y + reqt.h - 1, 0, reqt.x, ix)
-				).checkFlag("SOLID")) {
-					return true;
+	int x, y = 0;
+	for (std::vector<std::vector<int>>& plan : matrix) {
+		for (std::vector<int>& line : plan) {
+			x = 0;
+			for (int id : line) {
+				if (!id) {
+					x += GRID_W;
+					continue;
 				}
-				if (ix + 1 > (int)(reqt.w / GRID_W)) {
-					if (Objects_Manager::findObject(getIdObject(reqt.y + reqt.h - 1, 0, reqt.x + reqt.w - 1, 0)
-					).checkFlag("SOLID")) {
-						return true;
-					}
+				GObject& obj = Objects_Manager::findObject(id);
+				SDL_Rect obj_rect = { x, y, GRID_W, GRID_H };
+				if (obj.imgIndex) {
+					obj_rect.w = Textures_Manager::imgList[obj.imgIndex].surface->w;
+					obj_rect.h = Textures_Manager::imgList[obj.imgIndex].surface->h;
 				}
+
+				if (SDL_HasIntersection(&obj_rect, &reqt) && obj.checkFlag("SOLID"))
+					return true;
+
+
+				x += GRID_W;
 			}
-			break;
+			y += GRID_H;
 		}
 	}
 
@@ -132,48 +129,38 @@ bool Map::isItSolid(SDL_Rect reqt)
 
 void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> trigger only CONTACT type 
 {
-	GObject tempObj;
+	/* Coat the reqt with 1 pixel large coating */
+	reqt.x -= 1; reqt.y -= 1; reqt.w += 1; reqt.h += 1;
 
-	for (int i = 0; i < Map::matrix.size(); i++) {
-		for (int iy = 0; iy <= (int)(reqt.h / GRID_H); iy++) {
-			for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-				if (getIdObject(reqt.y - 1, iy, reqt.x - 1, ix, i)) {
-					tempObj = Objects_Manager::findObject(getIdObject(reqt.y - 1, iy, reqt.x - 1, ix, i));
-					goto found;
+	int x, y = 0;
+	for (std::vector<std::vector<int>>& plan : matrix) {
+		for (std::vector<int>& line : plan) {
+			x = 0;
+			for (int id : line) {
+				if (!id) {
+					x += GRID_W;
+					continue;
 				}
-				if (ix + 1 > (int)(reqt.w / GRID_W)) {
-					if (getIdObject(reqt.y - 1, iy, reqt.x + reqt.w, 0, i)) {
-						tempObj = Objects_Manager::findObject(getIdObject(reqt.y - 1, iy, reqt.x + reqt.w, 0, i));
-						goto found;
+
+				GObject& obj = Objects_Manager::findObject(id);
+				SDL_Rect obj_rect = { x, y, GRID_W, GRID_H };
+				if (obj.imgIndex) {
+					obj_rect.w = Textures_Manager::imgList[obj.imgIndex].surface->w;
+					obj_rect.h = Textures_Manager::imgList[obj.imgIndex].surface->h;
+				}
+
+				if (SDL_HasIntersection(&obj_rect, &reqt)) {
+					if (contact) {
+						if (obj.checkFlag("CONTACT"))
+							obj.trigger();
 					}
+					else
+						obj.trigger();
 				}
+
+				x += GRID_W;
 			}
-			if (iy + 1 > (int)(reqt.h / GRID_H)) {
-				for (int ix = 0; ix <= (int)(reqt.w / GRID_W); ix++) {
-					if (getIdObject(reqt.y + reqt.h, 0, reqt.x, ix, i)) {
-						tempObj = Objects_Manager::findObject(getIdObject(reqt.y + reqt.h, 0, reqt.x, ix, i));
-						goto found;
-					}
-					if (ix + 1 > (int)(reqt.w / GRID_W)) {
-						if (getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w, 0, i)) {
-							tempObj = Objects_Manager::findObject(getIdObject(reqt.y + reqt.h, 0, reqt.x + reqt.w, 0, i));
-							goto found;
-						}
-					}
-				}
-				break;
-			}
-		}
-	found:
-		if (tempObj.ID) {
-			if (contact) {
-				for (int i = 0; i < tempObj.flags.size(); i++) {
-					if (!tempObj.flags[i].compare("CONTACT"))
-						tempObj.trigger();
-				}
-			}
-			else
-				tempObj.trigger();
+			y += GRID_H;
 		}
 	}
 }

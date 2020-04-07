@@ -2,10 +2,17 @@
 #include "Renderer.h"
 #include "Sprites_Handler.h"
 #include "Objects_Manager.h"
+#include "Character.h"
+#include "Builder.h"
+#include "Text_Printer.h"
 
 
 std::vector<std::function<void()>> eventsQueue;
 bool busy = 0;
+
+typedef enum {
+	TEXT_FLUSHED
+} cond;
 
 void Events_Manager::routine()
 {
@@ -32,7 +39,7 @@ void Events_Manager::testTitle()
 	SDL_Rect container{ Renderer::SCREEN_W / 2 - 32, Renderer::SCREEN_H / 2 - 32, 500, 500 };
 	Text_Printer::addToQueue("IceStorm", &container, 1, 0, NULL, 0);
 	SDL_Event e{};
-	
+
 	Uint32 timerA = SDL_GetTicks();
 	Uint32 timerB = SDL_GetTicks();
 	while (timerB - timerA < 2000) {
@@ -84,7 +91,7 @@ void Events_Manager::testTitle()
 
 		choiceRect.y = container.y - 32 + choice * 32;
 		SDL_RenderClear(Renderer::g_Renderer);
-		SDL_RenderCopy(Renderer::g_Renderer, choiceTick.texture, NULL, &choiceRect);
+		//SDL_RenderCopy(Renderer::g_Renderer, choiceTick.texture, NULL, &choiceRect);
 		Text_Printer::handleRoutine(e);
 		SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderPresent(Renderer::g_Renderer);
@@ -93,6 +100,58 @@ void Events_Manager::testTitle()
 
 	if (choice == 1)
 		Renderer::quitAll();
-	
 
+
+}
+
+void routinesBlock(SDL_Event& e) {
+	SDL_RenderClear(Renderer::g_Renderer);
+	Builder::routine(e);
+	Character::characterRoutine(e);
+	Textures_Manager::printFrame();
+	Text_Printer::handleRoutine(e);
+
+	SDL_RenderPresent(Renderer::g_Renderer);
+}
+
+void waitLoop(cond c) {
+	SDL_Event e;
+	while (1) {
+		if (SDL_PollEvent(&e) != 0) {
+			SDL_FlushEvent(SDL_MOUSEMOTION);			//This useless event overloads the event queue
+			if (e.type == SDL_QUIT) {
+				Renderer::quitAll();
+				break;
+			}
+		}
+
+		routinesBlock(e);
+
+		switch (c) {
+		case TEXT_FLUSHED:
+			if (!Text_Printer::busy) {
+				return;
+			}
+			break;
+		}
+	}
+}
+
+
+void Events_Manager::floweyCin() {
+	Character::lockMovements(true);
+	Character::textures.setCurrentGroup("up");
+	Character::textures.setIdle(true);
+
+	auto& flowey = Objects_Manager::findObject("flowey_dead");
+	flowey.imgIndex = Textures_Manager::findIndex("maindown.png");
+	
+	print("I like trains.");
+	
+	waitLoop(TEXT_FLUSHED);
+	
+	print("Also, I hate you.");
+
+	waitLoop(TEXT_FLUSHED);
+	Character::lockMovements(false);
 }

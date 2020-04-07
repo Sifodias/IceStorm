@@ -8,4 +8,5 @@ namespace Events_Manager {
 	void addToQueue(std::function<void()>);
 
 	void testTitle();
+	void floweyCin();
 };

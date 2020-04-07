@@ -46,27 +46,28 @@ flags :
 
 class GObject {
 public:
-	GObject() : ID(0), type("GENERIC"), texture(NULL), x(0), y(0), flagTrigger(false) {
-		rect.w = -1;
-		rect.h = -1;
+	GObject() : ID(0), type("GENERIC"), x(0), y(0), flagTrigger(false), contact_triggered(false), imgIndex(0) {
 	};
 	int ID;
 	std::string target;
 	std::vector<std::string> targetnames;
 	std::vector<std::string> flags;
 	std::string type;
-	SDL_Texture* texture;
+	
 	SpritesHandler textures;
 	std::string textureName;
+
+	int imgIndex; //index in vector of img_struct
+
 	int x;
 	int y;
-	SDL_Rect rect;
 	std::string content;
 	Moving_Unit movingUnit;
 
 	void routine();
 
 	bool flagTrigger; //prevent infinite trigger
+	bool contact_triggered;
 
 	void trigger();
 	bool checkFlag(std::string flag);

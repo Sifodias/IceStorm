@@ -34,7 +34,7 @@ void Text_Printer::init() {
 	while (!tempStream->eof()) {
 		getline(*tempStream, catcher);
 		catcher.insert(0, "./Polices/");
-		std::cout << catcher << std::endl;
+		//std::cout << catcher << std::endl;
 		tempVec.push_back(TTF_OpenFont(catcher.c_str(), 200));
 	}
 
@@ -56,7 +56,7 @@ void Text_Printer::init() {
 	timerA = timerB = SDL_GetTicks();
 	defaultRect.h = 8; defaultRect.x = 30;
 	defaultRect.w = 8; defaultRect.y = 30;
-	defaultContainer.h = 28; defaultContainer.x = 79;
+	defaultContainer.h = 28; defaultContainer.x = 20; // For icon included, 79;
 	defaultContainer.w = 220; defaultContainer.y = 208;
 	flagOverflow = 0;
 	dialogBox = Textures_Manager::findTexture("dialog_box_clean.png");
@@ -107,21 +107,13 @@ void Text_Printer::addToQueue(std::string str,
 	SDL_Rect * container, int immediate, int policeID, SDL_Rect * rect, bool showDialogBox)
 {
 	if (!str.size()) return;
-	if (queue.size() > 10000) {
-		if (!flagOverflow) {
-			flagOverflow = 1;
-			std::cout << "Beaucoup trop de texte en queue : " << queue.size() << std::endl;
-		}
-		return;
-	}
-	else flagOverflow = 0;
 	if (rect == NULL) rect = &defaultRect;
 	if (container == NULL) container = &defaultContainer;
 	if (policeID > lettersVec.size() - 1) {
 		std::cout << "Invalid index for Police ! index : " << policeID << std::endl;
 		return;
 	}
-	NodeQueue tempNode{ str, *rect, policeID, 0 , *container, 0, showDialogBox };
+	NodeQueue tempNode{ str, *rect, policeID, 0 , *container, 0, showDialogBox, 0, 0 };
 	if (!immediate)
 		queue.push_back(tempNode);
 	else imQueue.push_back(tempNode);
@@ -166,8 +158,8 @@ void Text_Printer::handleRoutine(SDL_Event e)
 		if (queue.front().showDialogBox) {
 			SDL_RenderCopy(Renderer::g_Renderer, dialogBox,
 				NULL, &dialogRect);
-			SDL_Rect bite = { 2, 202, 55, 36 };
-			SDL_RenderCopy(Renderer::g_Renderer, Textures_Manager::findTexture("testc.png"), NULL, &bite);
+			//SDL_Rect bite = { 2, 202, 55, 36 };
+			//SDL_RenderCopy(Renderer::g_Renderer, Textures_Manager::findTexture("testc.png"), NULL, &bite);
 		}
 	}
 	keepGoin(e, queue);

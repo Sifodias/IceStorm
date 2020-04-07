@@ -14,6 +14,8 @@ GObject* currentObject = NULL;
 int currentPlan = 0;
 vector<int> cmdDone(123, 0);
 
+using namespace std;
+
 bool Builder::checkKey(int key) {
 	if (key < 0 || key > cmdDone.size() - 1) return false;
 	else return cmdDone[key];
@@ -78,7 +80,7 @@ void Builder::fetch()
 				printInfo(*currentObject);
 			}
 			else if (Objects_Manager::identify(buffer, "plan")) {
-				cout << "Current plan : " << currentPlan << endl;
+				std::cout << "Current plan : " << currentPlan << endl;
 			}
 			else
 				goto unknownCMD;
@@ -149,10 +151,10 @@ void Builder::printInfo(GObject& printObject)
 		cout << "type: " << printObject.type << endl;
 	if (printObject.textureName.size())
 		cout << "texture: " << printObject.textureName << endl;
-	if (printObject.rect.w > 0) {
-		cout << "width: " << printObject.rect.w << endl;
-		cout << "height: " << printObject.rect.h << endl;
-	}
+	//if (printObject.rect.w > 0) {
+	//	cout << "width: " << printObject.rect.w << endl;
+	//	cout << "height: " << printObject.rect.h << endl;
+	//}
 	if (printObject.content.size())
 		cout << "content: " << printObject.content << endl;
 	if (printObject.x != 0 && printObject.y != 0)
@@ -247,7 +249,7 @@ void Builder::routine(SDL_Event& e)
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_t: {
-			Character::movingUnit.lockMovements();
+			//Character::movingUnit.lockMovements(true);
 			fetch();
 			break;
 		}
@@ -286,8 +288,8 @@ void Builder::routine(SDL_Event& e)
 			placeElement(x, y, currentPlan);
 			currentObject->movingUnit.hitBox.x = ((x + Camera::getX()) / GRID_W) * GRID_W;
 			currentObject->movingUnit.hitBox.y = ((y + Camera::getY()) / GRID_H) * GRID_H;
-			currentObject->x = ((x + Camera::getX()) / GRID_W) * GRID_W;
-			currentObject->y = ((y + Camera::getY()) / GRID_H) * GRID_H;
+			//currentObject->x = ((x + Camera::getX()) / GRID_W) * GRID_W;
+			//currentObject->y = ((y + Camera::getY()) / GRID_H) * GRID_H;
 			break;
 		}
 		case SDLK_r: {

@@ -15,6 +15,9 @@ typedef struct t_nodequeue {
 	SDL_Rect container;
 	bool lock;
 	bool showDialogBox;
+
+	Uint32 timerWaitA;
+	Uint32 timerWaitB;
 } NodeQueue;
 
 namespace Text_Printer {
@@ -33,3 +36,10 @@ namespace Text_Printer {
 	extern bool busy;
 };
 
+/* 
+Text formatting :
+
+#<n> = wait of n ms in the middle of a line
+Example:  "I love ... #300 you"
+
+*/

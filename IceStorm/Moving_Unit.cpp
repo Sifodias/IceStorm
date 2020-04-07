@@ -31,7 +31,7 @@ void speedRestrainer(double& speedX, double& speedY, SDL_Rect rect) {
 Moving_Unit::Moving_Unit(SDL_Rect hitbox_i, int cspeed, int jspeed, int gravityEnabled, int noclip_i) {
 	hitBox = hitbox_i; move_speed = cspeed;
 	jump_speed = jspeed; gravity_affected = gravityEnabled;
-	noclip = noclip_i; mainDirection = 1; jumpLock = 0; movementsLock = 1;
+	noclip = noclip_i; mainDirection = 1; jumpLock = 0; movementsLock = 0;
 	speedX = speedY = 0;
 	timerA = timerB = SDL_GetTicks();
 }
@@ -285,20 +285,16 @@ void Moving_Unit::move(SDL_Event& e)
 		doMoves();
 	}
 	if (movementsLock == 1) {
-		movementsLock = 0;
+		//movementsLock = 0;
 		timerA = timerB = SDL_GetTicks();
 	}
 }
 
-void Moving_Unit::lockMovements()
+void Moving_Unit::lockMovements(bool lock)
 {
-	movementsLock = 1;
+	movementsLock = lock;
 }
 
-void Moving_Unit::unlockMovements()
-{
-	movementsLock = 0;
-}
 
 void Moving_Unit::teleport(int x, int y)
 {

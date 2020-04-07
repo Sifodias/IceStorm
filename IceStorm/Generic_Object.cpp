@@ -5,52 +5,26 @@
 #include "Character.h"
 #include "Map.h"
 #include "Camera.h"
+#include "Events_Manager.h"
 
-//using namespace std;
 
 void GObject::routine()
 {
-	if (!type.compare("ENEMY")) {
-		for (int i = 0; i < flags.size(); i++) {
-			if (!flags[i].compare("PATTERN")) {
-				switch (movingUnit.mainDirection) {
-				case 1:
-					if (!Objects_Manager::findObject(std::to_string
-					(Map::getIdObject(movingUnit.hitBox.y + movingUnit.hitBox.h + 1, 0, movingUnit.hitBox.x, 0)))
-						.type.compare("PATTERN")) {
-						movingUnit.speedY = movingUnit.move_speed;
-					}
-					break;
-				case -1:
-
-					break;
-
-				case 2:
-
-					break;
-
-				case -2:
-
-					break;
-				}
-
-
-				break;
-			}
-		}
-	}
-	//movingUnit.move();
 }
 
 
 void GObject::trigger()
 {
-	flagTrigger = 1;
-	for (int i = 0; i < targetnames.size(); i++) {
-		if (!Objects_Manager::findObject(targetnames[i]).flagTrigger)
-			Objects_Manager::findObject(targetnames[i]).trigger();
+	if (checkFlag("CONTACT") && contact_triggered) {
+		return;
 	}
-	if (!type.compare("BUTTON")) {
+
+	flagTrigger = 1;
+	for (string& name : targetnames) {
+		if (!Objects_Manager::findObject(name).flagTrigger)
+			Objects_Manager::findObject(name).trigger();
+	}
+	if (type == "BUTTON") {
 		if (checkFlag("CONTACT")) {
 			if (checkFlag("PRINT"))
 				if (!Text_Printer::busy)
@@ -59,7 +33,7 @@ void GObject::trigger()
 		}
 	}
 
-	if (!type.compare("DIALOG")) {
+	if (type == "DIALOG") {
 		if (!Text_Printer::busy) {
 			if (content[0] == '|') {
 				DialogEngine::dialogSelector(content);
@@ -69,11 +43,7 @@ void GObject::trigger()
 		}
 	}
 
-	if (!type.compare("TELEPORT")) {
-		Character::movingUnit.teleport(x, y);
-	}
-	
-	if (!type.compare("DOOR")) {
+	if (type == "DOOR") {
 		istringstream iss(content);
 		string word;
 		iss >> word;
@@ -99,20 +69,22 @@ void GObject::trigger()
 		}
 
 	}
-	
-	/*
-	if (!type.compare("CAMBLOCK")) {
 
+	if (type == "EVENT_SCRIPTED") {
+		if (content == "|script1") {
+			Events_Manager::addToQueue(Events_Manager::floweyCin);
+		}
 	}
-	*/
-
+	contact_triggered = true;
 	flagTrigger = 0;
 }
 
 bool GObject::checkFlag(string flag)
 {
-	for (auto i = flags.begin(); i != flags.end(); ++i) {
-		if (!i->compare(flag)) return true;
+	for (string& str : flags) {
+		if (str == flag) {
+			return true;
+		}
 	}
 	return false;
 }

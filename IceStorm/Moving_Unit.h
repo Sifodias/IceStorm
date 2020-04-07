@@ -12,8 +12,7 @@ public:
 	void addMoves(SDL_Event& e);
 	void doMoves();
 	void move(SDL_Event& e);
-	void lockMovements();
-	void unlockMovements();
+	void lockMovements(bool lock);
 	void teleport(int x, int y);
 
 	double speedX;

@@ -1,10 +1,8 @@
-sign.png
 wall2.png
 wall2left.png
 wall2right.png
 wall2down.png
 wall1.png
-dialog_box.png
 dialog_box_clean.png
 testc.png
 t1.png

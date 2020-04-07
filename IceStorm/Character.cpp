@@ -11,30 +11,39 @@ Moving_Unit Character::movingUnit;
 ifstream* saveFile = NULL;
 string charaMark;
 string map_name;
+bool movementLocked = false;
+
+
+void Character::lockMovements(bool lock) {
+	Character::movingUnit.lockMovements(lock);
+	textures.setIdle(lock);
+	movementLocked = lock;
+}
 
 void Character::characterRoutine(SDL_Event& e)
 {
 	movingUnit.move(e);
-	switch (movingUnit.mainDirection) {
-	case -2:
-		textures.setCurrentGroup("left");
-		textures.setIdle(movingUnit.speedX == 0);
-		break;
-	case 2:
-		textures.setCurrentGroup("right");
-		textures.setIdle(movingUnit.speedX == 0);
-		break;
-	case -1:
-		textures.setCurrentGroup("up");
-		textures.setIdle(movingUnit.speedY == 0);
-		break;
+	if (!movementLocked) {
+		switch (movingUnit.mainDirection) {
+		case -2:
+			textures.setCurrentGroup("left");
+			textures.setIdle(movingUnit.speedX == 0);
+			break;
+		case 2:
+			textures.setCurrentGroup("right");
+			textures.setIdle(movingUnit.speedX == 0);
+			break;
+		case -1:
+			textures.setCurrentGroup("up");
+			textures.setIdle(movingUnit.speedY == 0);
+			break;
 
-	case 1:
-		textures.setCurrentGroup("down");
-		textures.setIdle(movingUnit.speedY == 0);
-		break;
+		case 1:
+			textures.setCurrentGroup("down");
+			textures.setIdle(movingUnit.speedY == 0);
+			break;
+		}
 	}
-
 	if (e.type == SDL_KEYDOWN) {
 		if (e.key.keysym.sym == SDLK_j) {
 			Map::trigger(movingUnit.hitBox, movingUnit.mainDirection, false);

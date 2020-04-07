@@ -70,7 +70,7 @@ void Objects_Manager::loadObjects()
 			}
 			if (identify(buffer, "texture: ")) {
 				currentObject.textureName = buffer;
-				currentObject.texture = Textures_Manager::findTexture(buffer);
+				currentObject.imgIndex = Textures_Manager::findIndex(buffer);
 				goto next;
 			}
 			//if (identify(buffer, "width: ")) {
@@ -196,7 +196,7 @@ void Objects_Manager::fillObject(GObject& obj, string data) {
 		}
 		if (identify(data, "texture: ")) {
 			obj.textureName = getAndClear(data);
-			obj.texture = Textures_Manager::findTexture(obj.textureName);
+			obj.imgIndex = Textures_Manager::findIndex(obj.textureName);
 			continue;
 		}
 		//if (identify(data, "width: ")) {

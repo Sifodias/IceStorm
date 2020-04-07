@@ -47,7 +47,7 @@ void Renderer::initAll()
 		flags = SDL_WINDOW_SHOWN;
 		g_Window = SDL_CreateWindow("The Rising Shadows Engine", SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED, ((int)(current.h / SCREEN_H)-2) * SCREEN_W,
-			((int)(current.h / SCREEN_H)-1) * SCREEN_H, flags);
+			((int)(current.h / SCREEN_H)-2) * SCREEN_H, flags);
 	}
 	if (g_Window == NULL) {
 		printf("Can't create the window : %s\n", SDL_GetError());
@@ -59,6 +59,7 @@ void Renderer::initAll()
 	}
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
 	SDL_RenderSetLogicalSize(g_Renderer, SCREEN_W, SCREEN_H);
+	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 }
 
 bool Renderer::saveScreenshotBMP(std::string filepath) {

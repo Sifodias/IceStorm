@@ -173,7 +173,8 @@ content: 1
 
 ID: 74
 target: flowey_dead
-type: GENERIC
+targetnames: flowey_desc
+type: BUTTON
 texture: flowey_dead.png
 
 
@@ -189,6 +190,20 @@ flags: CONTACT INV
 type: DOOR
 texture: A.png
 content: 0 75 ripof
+
+
+ID: 77
+target: flowey_desc
+type: DIALOG
+content: |deadFlowey
+
+
+ID: 78
+target: floweyCin
+flags: CONTACT INV
+type: EVENT_SCRIPTED
+texture: testc.png
+content: |script1
 
 
 
