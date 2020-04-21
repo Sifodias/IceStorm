@@ -8,14 +8,15 @@
 #include "Events_Manager.h"
 
 
-void GObject::routine()
+void GObject::routine(SDL_Event& e)
 {
+	movingUnit.move(e);
 }
 
 
 void GObject::trigger()
 {
-	if (checkFlag("CONTACT") && contact_triggered) {
+	if (checkFlag("CONTACT") && contact_triggered && !checkFlag("PERMANENT")) {
 		return;
 	}
 

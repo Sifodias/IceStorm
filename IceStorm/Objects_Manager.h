@@ -15,11 +15,13 @@ namespace Objects_Manager {
 	bool identify(string& target, string wanted);
 	void loadObjects();
 	void saveObjects();
-	GObject createObject(string data);
+	GObject& createObject(string data);
 	void fillObject(GObject& obj, string data);
 	void editObject(string data);
+	void deleteObject(int id);
+
 	tuple<GObject, GObject> newDoors(string levelName);
-	void objectsRoutine();
+	void objectsRoutine(SDL_Event& e);
 
 	extern vector<GObject> objects;
 };

@@ -135,7 +135,7 @@ void Textures_Manager::printFrame()
 	}
 
 	/* Print the character */
-	rect_cursor = (SDL_Rect)Character::movingUnit.hitBox;
+	rect_cursor = Character::movingUnit.hitBox.sdl();
 	rect_cursor.x -= Camera::getX();
 	rect_cursor.y -= Camera::getY();
 	rect_cursor.y -= CHAR_H - CHAR_HITBOX_H;
@@ -143,11 +143,14 @@ void Textures_Manager::printFrame()
 	rect_cursor.w = CHAR_W;
 	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &rect_cursor);
 
-	///* Print the dynamic objects */
-	//for (GObject& obj : Objects_Manager::objects) {
-	//	if (!obj.x && obj.y)
-	//		continue;
-	//	rect_cursor = obj.movingUnit.hitBox;
-	//	SDL_RenderCopy(Renderer::g_Renderer, obj.texture, NULL, &rect_cursor);
-	//}
+	/* Print the dynamic objects */
+	for (GObject& obj : Objects_Manager::objects) {
+		if (!obj.checkFlag("DYNAMIC"))
+			continue;
+		rect_cursor = obj.movingUnit.hitBox.sdl();
+		rect_cursor.x -= Camera::getX();
+		rect_cursor.y -= Camera::getY();
+
+		SDL_RenderCopy(Renderer::g_Renderer, obj.textures.currentFrame(), NULL, &rect_cursor);
+	}
 }

@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include "Textures_Manager.h"
+#include "Global_Flags.h"
 
 class sprite_group {
 public:
@@ -25,15 +26,15 @@ public:
 };
 
 
-//need to be able to handle spritesheets
 class SpritesHandler {
 public:
 	SpritesHandler();
 	SDL_Texture* currentFrame();
 	void setCurrentGroup(std::string group);
 	void addGroup(std::string sheet_name, int width_per_sprite, int height_per_sprite, int offsetX, int offsetY, int row_index, int nb_of_frames,
-		std::string group_name, int speed = 100, SDL_Color alpha = { 195, 134, 255 });
+		std::string group_name, int speed = 100, SDL_Color alpha = { ALPHAR, ALPHAG, ALPHAB });
 	void setIdle(bool idle);
+	void setSingleFrame(std::string textureName);	//For objects with just a single texture
 
 private:
 	int currentGroup;

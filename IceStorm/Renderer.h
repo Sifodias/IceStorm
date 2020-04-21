@@ -4,7 +4,6 @@
 
 namespace Renderer {
 	void initAll();		//Inits SDL modules
-	bool saveScreenshotBMP(std::string filepath);
 	void quitAll();		//Closes SDL modules
 
 	extern int SCREEN_W;

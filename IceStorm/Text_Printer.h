@@ -4,6 +4,7 @@
 #include <string>
 #include <array>
 #include "Global_Flags.h"
+#include <SDL_mixer.h>
 
 #define print(a) Text_Printer::addToQueue(a)
 
@@ -18,6 +19,7 @@ typedef struct t_nodequeue {
 
 	Uint32 timerWaitA;
 	Uint32 timerWaitB;
+	//Mix_Chunk*  
 } NodeQueue;
 
 namespace Text_Printer {
@@ -40,6 +42,6 @@ namespace Text_Printer {
 Text formatting :
 
 #<n> = wait of n ms in the middle of a line
-Example:  "I love ... #300 you"
+Example:  "I love ... #300# you"
 
 */

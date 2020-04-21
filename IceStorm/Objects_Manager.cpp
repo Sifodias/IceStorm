@@ -70,17 +70,12 @@ void Objects_Manager::loadObjects()
 			}
 			if (identify(buffer, "texture: ")) {
 				currentObject.textureName = buffer;
-				currentObject.imgIndex = Textures_Manager::findIndex(buffer);
+				currentObject.imgIndex = Textures_Manager::findIndex(currentObject.textureName);
+				currentObject.useSpritesHandler = true;
+				currentObject.textures.setSingleFrame(currentObject.textureName);
 				goto next;
 			}
-			//if (identify(buffer, "width: ")) {
-			//	currentObject.rect.w = stoi(buffer);
-			//	goto next;
-			//}
-			//if (identify(buffer, "height: ")) {
-			//	currentObject.rect.h = stoi(buffer);
-			//	goto next;
-			//}
+
 			if (identify(buffer, "type: ")) {
 				currentObject.type = buffer;
 				goto next;
@@ -100,16 +95,7 @@ void Objects_Manager::loadObjects()
 				currentObject.content = buffer;
 				goto next;
 			}
-			//if (identify(buffer, "x: ")) {
-			//	currentObject.x = std::stoi(buffer);
-			//	currentObject.movingUnit.hitBox.x = std::stoi(buffer);
-			//	goto next;
-			//}
-			//if (identify(buffer, "y: ")) {
-			//	currentObject.y = std::stoi(buffer);
-			//	currentObject.movingUnit.hitBox.y = std::stoi(buffer);
-			//	goto next;
-			//}
+
 		next:
 			std::getline(*tempStream, buffer);
 		}
@@ -117,12 +103,11 @@ void Objects_Manager::loadObjects()
 	}
 }
 
-void Objects_Manager::objectsRoutine()
+void Objects_Manager::objectsRoutine(SDL_Event& e)
 {
 	for (int i = 0; i < objects.size(); i++) {
-		objects[i].routine();
+		objects[i].routine(e);
 	}
-
 }
 
 GObject& Objects_Manager::findObject(string target) {
@@ -197,16 +182,11 @@ void Objects_Manager::fillObject(GObject& obj, string data) {
 		if (identify(data, "texture: ")) {
 			obj.textureName = getAndClear(data);
 			obj.imgIndex = Textures_Manager::findIndex(obj.textureName);
+			obj.useSpritesHandler = true;
+			obj.textures.setSingleFrame(obj.textureName);
 			continue;
 		}
-		//if (identify(data, "width: ")) {
-		//	obj.rect.w = stoi(getAndClear(data));
-		//	continue;
-		//}
-		//if (identify(data, "height: ")) {
-		//	obj.rect.h = stoi(getAndClear(data));
-		//	continue;
-		//}
+
 		if (identify(data, "type: ")) {
 			obj.type = getAndClear(data);
 			continue;
@@ -227,14 +207,7 @@ void Objects_Manager::fillObject(GObject& obj, string data) {
 			obj.content = getAndClear(data);
 			continue;
 		}
-		//if (identify(data, "x: ")) {
-		//	obj.x = std::stoi(getAndClear(data));
-		//	continue;
-		//}
-		//if (identify(data, "y: ")) {
-		//	obj.y = std::stoi(getAndClear(data));
-		//	continue;
-		//}
+
 		cout << "Error: Unknown field in: " << data << endl;
 		break;
 	}
@@ -255,7 +228,7 @@ void Objects_Manager::editObject(string data) {
 }
 
 //syntax in console : new ent <field1>: <value1>, <field2>: <value2> ...
-GObject Objects_Manager::createObject(string data) {
+GObject& Objects_Manager::createObject(string data) {
 	GObject new_obj;
 
 	std::vector<int> idsVec;
@@ -268,8 +241,9 @@ GObject Objects_Manager::createObject(string data) {
 
 	objects.push_back(new_obj);
 
-	return new_obj;
+	return objects.back();
 }
+
 
 
 //beware of new fields
@@ -280,6 +254,8 @@ void Objects_Manager::saveObjects() {
 	ofs.open(Paths::entData, std::ofstream::out | std::ofstream::trunc);
 
 	for (GObject& obj : objects) {
+		if (obj.checkFlag("DYNAMIC"))
+			continue;
 		ofs << "ID: " << obj.ID << endl;
 
 		if (!obj.target.empty())
@@ -304,15 +280,6 @@ void Objects_Manager::saveObjects() {
 		if (!obj.textureName.empty())
 			ofs << "texture: " << obj.textureName << endl;
 
-		//if (obj.rect.w > 0 && obj.rect.h > 0) {
-		//	ofs << "width: " << obj.rect.w << endl;
-		//	ofs << "height: " << obj.rect.h << endl;
-		//}
-		//if (obj.x)
-		//	ofs << "x: " << obj.x << endl;
-		//if (obj.y)
-		//	ofs << "y: " << obj.y << endl;
-
 		if (!obj.content.empty())
 			ofs << "content: " << obj.content << endl;
 		ofs << endl << endl;
@@ -327,4 +294,15 @@ tuple<GObject, GObject> Objects_Manager::newDoors(string levelName) {
 	GObject& dest = createObject("texture: A2.png, type: DOOR, flags: INV, content: 1");
 	GObject& from = createObject("texture: A.png, type: DOOR, flags: CONTACT INV, content: 0 " + to_string(dest.ID) + " " +  levelName);
 	return { from, dest };
+}
+
+void Objects_Manager::deleteObject(int id) {
+	int i = 0;
+	for (GObject& obj : objects) {
+		if (obj.ID == id) {
+			objects.erase(objects.begin() + i);
+			return;
+		}
+		i++;
+	}
 }

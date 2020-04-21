@@ -28,14 +28,17 @@ void speedRestrainer(double& speedX, double& speedY, SDL_Rect rect) {
 		speedY = 0;
 }
 
-Moving_Unit::Moving_Unit(SDL_Rect hitbox_i, int cspeed, int jspeed, int gravityEnabled, int noclip_i) {
-	hitBox = hitbox_i; move_speed = cspeed;
+Moving_Unit::Moving_Unit(SDL_Rect hitbox_i, bool inputControlled, int cspeed, int jspeed, int gravityEnabled, int noclip_i) {
+	hitBox = c_rect(hitbox_i);
+	move_speed = cspeed;
 	jump_speed = jspeed; gravity_affected = gravityEnabled;
 	noclip = noclip_i; mainDirection = 1; jumpLock = 0; movementsLock = 0;
-	speedX = speedY = 0;
+	speedX = 0; speedY = 0;
 	timerA = timerB = SDL_GetTicks();
+	isInputControlled = inputControlled;
+	follow_target = false;
+	target = NULL;
 }
-
 
 void Moving_Unit::handleMoves()
 {
@@ -125,7 +128,7 @@ void Moving_Unit::handleMoves()
 	}
 
 	if (!noclip)
-		speedRestrainer(speedX, speedY, hitBox);
+		speedRestrainer(speedX, speedY, hitBox.sdl());
 
 	if (!gravity_affected || noclip) {
 		jumpLock = 0;
@@ -135,7 +138,7 @@ void Moving_Unit::handleMoves()
 		return;
 	}
 	//else if gravity is enabled
-	SDL_Rect temprect = hitBox;
+	SDL_Rect temprect = hitBox.sdl();
 	temprect.y += 1;
 	if (Map::isItSolid(temprect)) {
 		jumpLock = 0;
@@ -195,8 +198,8 @@ void Moving_Unit::addMoves(SDL_Event& e)
 
 void Moving_Unit::doMoves()
 {
-	SDL_Rect tempReqt(hitBox);
-	SDL_Rect backup(hitBox);
+	c_rect tempReqt(hitBox);
+	c_rect backup(hitBox);
 	timerB = SDL_GetTicks();
 	double t = (double)(timerB - timerA) * 0.001;
 	if (t > 0.100) {
@@ -205,8 +208,8 @@ void Moving_Unit::doMoves()
 		return;
 	}
 	if (noclip) {
-		hitBox.x += (int)(t * speedX);
-		hitBox.y += (int)(t * speedY);
+		hitBox.x += t * speedX;
+		hitBox.y += t * speedY;
 		timerA = timerB;
 		return;
 	}
@@ -214,8 +217,8 @@ void Moving_Unit::doMoves()
 		speedY += (int)(GRAVITY * t);
 
 
-	int tempDistancex = (int)(t * speedX);
-	int tempDistancey = (int)(t * speedY);
+	int tempDistancex = t * speedX;
+	int tempDistancey = t * speedY;
 
 	//factor technique to get rid of stutter when speedx and y different and hit a wall
 	//useless when both speeds are equal
@@ -236,7 +239,7 @@ void Moving_Unit::doMoves()
 		}
 		tempReqt.x = hitBox.x + tempDistancex;
 		tempReqt.y = hitBox.y + tempDistancey;
-		if (!Map::isItSolid(tempReqt)) {
+		if (!Map::isItSolid(tempReqt.sdl())) {
 			hitBox.x += tempDistancex;
 			hitBox.y += tempDistancey;
 			break;
@@ -280,8 +283,13 @@ void Moving_Unit::doMoves()
 void Moving_Unit::move(SDL_Event& e)
 {
 	if (movementsLock == 0) {
-		addMoves(e);
-		handleMoves();
+		if (isInputControlled) {
+			addMoves(e);
+			handleMoves();
+		}
+		if (follow_target) {
+			updateFollow();
+		}
 		doMoves();
 	}
 	if (movementsLock == 1) {
@@ -295,7 +303,6 @@ void Moving_Unit::lockMovements(bool lock)
 	movementsLock = lock;
 }
 
-
 void Moving_Unit::teleport(int x, int y)
 {
 	hitBox.x = x;
@@ -303,3 +310,26 @@ void Moving_Unit::teleport(int x, int y)
 
 }
 
+void Moving_Unit::setLinearMovement(int speed, int angle)
+{
+	speedX = speed * cos(3.14 * angle / 180);
+	speedY = -speed * sin(3.14 * angle / 180);
+}
+
+void Moving_Unit::followTarget(Moving_Unit& to_follow, int speed) {
+	follow_target = true;
+	target = &to_follow;
+	speedX = speed;	//just so norm of speedX Y is equal to speed
+}
+
+void Moving_Unit::updateFollow() {
+	int x_aim = target->hitBox.x + target->hitBox.w/2 - hitBox.x - hitBox.w/2;
+	int y_aim = target->hitBox.y + target->hitBox.h/2 - hitBox.y - hitBox.h/2;
+	int speed = (int)sqrt(speedX * speedX + speedY * speedY);
+	int angle = 0;
+	if (!y_aim && x_aim < 0)
+		angle = 180;
+	else if (y_aim)
+		angle = -(abs(y_aim) / y_aim) * 180 * acos(x_aim / sqrt((x_aim * x_aim + y_aim * y_aim))) / 3.14;
+	setLinearMovement(speed, angle);
+}

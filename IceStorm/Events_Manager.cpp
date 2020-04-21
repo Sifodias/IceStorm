@@ -5,7 +5,7 @@
 #include "Character.h"
 #include "Builder.h"
 #include "Text_Printer.h"
-
+#include "Camera.h"
 
 std::vector<std::function<void()>> eventsQueue;
 bool busy = 0;
@@ -108,6 +108,7 @@ void routinesBlock(SDL_Event& e) {
 	SDL_RenderClear(Renderer::g_Renderer);
 	Builder::routine(e);
 	Character::characterRoutine(e);
+	Objects_Manager::objectsRoutine(e);
 	Textures_Manager::printFrame();
 	Text_Printer::handleRoutine(e);
 
@@ -139,19 +140,55 @@ void waitLoop(cond c) {
 
 
 void Events_Manager::floweyCin() {
-	Character::lockMovements(true);
-	Character::textures.setCurrentGroup("up");
-	Character::textures.setIdle(true);
+	//Character::lockMovements(true);
+	//Character::textures.setCurrentGroup("up");
+	//Character::textures.setIdle(true);
 
 	auto& flowey = Objects_Manager::findObject("flowey_dead");
 	flowey.imgIndex = Textures_Manager::findIndex("maindown.png");
-	
-	print("I like trains.");
-	
-	waitLoop(TEXT_FLUSHED);
-	
-	print("Also, I hate you.");
 
+	print("I like trains.");
+
+	print("Also #200 .#200 .#200 .#200 I hate you.");
+	waitLoop(TEXT_FLUSHED);
+
+	std::vector<int> pelleksID;
+
+	for (int i = 0; i < 4; i++)
+		pelleksID.push_back(Objects_Manager::createObject("texture: testc.png, flags: CONTACT DYNAMIC").ID);
+
+	for (int id : pelleksID) {
+		GObject& obj = Objects_Manager::findObject(id);
+		obj.movingUnit.noclip = true;
+		obj.movingUnit.followTarget(Character::movingUnit, 50);
+	}
+
+	Objects_Manager::findObject(pelleksID[0]).movingUnit.hitBox = { 110, 264, 5, 5 };
+	Objects_Manager::findObject(pelleksID[1]).movingUnit.hitBox = { 135, 242, 5, 5 };
+	Objects_Manager::findObject(pelleksID[2]).movingUnit.hitBox = { 170, 242, 5, 5 };
+	Objects_Manager::findObject(pelleksID[3]).movingUnit.hitBox = { 201, 264, 5, 5 };
+
+	SDL_Event e;
+	while (1) {
+		if (SDL_PollEvent(&e) != 0) {
+			SDL_FlushEvent(SDL_MOUSEMOTION);			//This useless event overloads the event queue
+			if (e.type == SDL_QUIT) {
+				Renderer::quitAll();
+				break;
+			}
+		}
+		routinesBlock(e);
+		for (int id : pelleksID) {
+			if (SDL_HasIntersection(&Character::movingUnit.hitBox.sdl(),
+				&Objects_Manager::findObject(pelleksID[0]).movingUnit.hitBox.sdl()))
+				goto out;
+		}
+	}
+out:
+	for (int id : pelleksID)
+		Objects_Manager::deleteObject(id);
+
+	print("I hope it hurts.");
 	waitLoop(TEXT_FLUSHED);
 	Character::lockMovements(false);
 }

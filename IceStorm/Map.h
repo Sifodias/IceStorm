@@ -13,7 +13,7 @@ namespace Map {
 	void trigger(SDL_Rect reqt, int direction, bool contact);
 	int getIdObject(double ay, int iy, double ax, int ix, int plan = 0);
 	int getID(int ix, int iy, int plan = 0);
-	void findOccurrence(int charry, int* ix, int* iy);
+	void findOccurrence(int charry, double* ix, double* iy);
 	void saveMatrix();
 	void checkMate(int plan);
 

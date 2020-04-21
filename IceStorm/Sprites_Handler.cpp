@@ -37,6 +37,21 @@ void SpritesHandler::setIdle(bool idle)
 	groups[currentGroup].idle = idle;
 }
 
+void SpritesHandler::setSingleFrame(std::string textureName)
+{
+	SDL_Texture* tex = Textures_Manager::findTexture(textureName);
+	if (tex == NULL) {
+		cout << "No texture found with name: " << textureName << endl;
+		return;
+	}
+
+	groups.clear();
+	currentGroup = 0;
+
+	std::vector<SDL_Texture*> texturesVec = { tex };
+	groups.push_back(sprite_group(texturesVec, 0, "single"));
+}
+
 
 
 SDL_Texture* SpritesHandler::currentFrame() {

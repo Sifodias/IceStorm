@@ -68,12 +68,20 @@ void Text_Printer::printText(NodeQueue& node) {
 	SDL_Rect blitRect = node.container;
 	blitRect.w = node.rect.w; blitRect.h = node.rect.h;
 	for (auto i = 0; i <= node.iterator; i++) {
+		/* Skip the wait time codes */
+		while (node.str[i] == '#') {
+			i++;
+			while (node.str[i] != ' ' && node.str[i] != '\0') {
+				i++;
+			}
+		}
+
 		//check if there is enough space for the word, if not we jump a line
 		if (i == 0 || node.str[i] == ' ') {
 			int y = i;
 			while (node.str[y] == ' ') y++;
-			while (node.str[y] != ' ' && node.str[y] != '\0')
-				y++;
+			while (node.str[y] != ' ' && node.str[y] != '\0') y++;
+
 			//if out of limit
 			if (blitRect.x + ((y - i) * blitRect.w) > node.container.w + node.container.x) {
 				if (blitRect.y + 2 * blitRect.h > node.container.h + node.container.y) {
@@ -92,6 +100,7 @@ void Text_Printer::printText(NodeQueue& node) {
 				}
 			}
 		}
+
 		if (node.str[i] < 0 || node.str[i] > 127) {
 			SDL_RenderCopy(Renderer::g_Renderer, lettersVec[node.policeID]['?'],
 				NULL, &blitRect);
@@ -100,11 +109,11 @@ void Text_Printer::printText(NodeQueue& node) {
 			NULL, &blitRect);
 		blitRect.x += blitRect.w;
 	}
-	if (node.str[node.iterator] == '\0') node.lock = 1;
+	if (node.str[node.iterator] == '\0') node.lock = true;
 }
 
 void Text_Printer::addToQueue(std::string str,
-	SDL_Rect * container, int immediate, int policeID, SDL_Rect * rect, bool showDialogBox)
+	SDL_Rect* container, int immediate, int policeID, SDL_Rect* rect, bool showDialogBox)
 {
 	if (!str.size()) return;
 	if (rect == NULL) rect = &defaultRect;
@@ -119,36 +128,62 @@ void Text_Printer::addToQueue(std::string str,
 	else imQueue.push_back(tempNode);
 }
 
-void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue> & iQueue) {
-	if (iQueue.size() > 0) {
-		if (&iQueue == &queue)
+void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue>& q) {
+	if (q.size() > 0) {
+		if (&q == &queue)
 			busy = 1;
-		for (int i = 0; i < iQueue.size(); i++) {
-			printText(iQueue[i]);
-			if (iQueue[i].lock) {
-				if (e.type == SDL_KEYDOWN && (&iQueue == &queue) &&
-					(!standStill || iQueue.size() > 1)) {
+
+		int i = 0;
+		for (NodeQueue& node : q) {
+			printText(node);
+			if (node.lock) {
+				if (e.type == SDL_KEYDOWN && (&q == &queue) &&
+					(!standStill || q.size() > 1)) {
 					if (e.key.keysym.sym == SDLK_j) {
-						while (iQueue[i].str[iQueue[i].iterator] == ' ')
-							iQueue[i].iterator++;
-						iQueue[i].str.erase(i, iQueue[i].iterator);
-						iQueue[i].lock = i;
-						iQueue[i].iterator = i;
-						if (iQueue[i].iterator == iQueue[i].str.size())
-							iQueue.erase(iQueue.begin(), iQueue.begin() + 1);
+						while (node.str[node.iterator] == ' ')
+							node.iterator++;
+						node.str.erase(0, node.iterator);
+						node.lock = false;
+						node.iterator = 0;
+
+						if (!node.str.size())
+							q.erase(q.begin() + i);
 					}
 				}
-				if (&iQueue == &queue) return;
-				continue;
 			}
-			if (timerB - timerA > PRINT_SPEED && iQueue[i].iterator != iQueue[i].str.size()) {
-				iQueue[i].iterator++;
-				//timerA = timerB = SDL_GetTicks();
+			if (node.str[node.iterator] == '#') {
+				string timeBuf;
+				node.iterator++;
+				while (node.str[node.iterator] != ' ' && node.str[node.iterator] != '\0')
+					timeBuf += node.str[node.iterator++];
+
+				Uint32 waitTime = 0;
+				try {
+					waitTime = stoi(timeBuf);
+				}
+				catch (std::exception&) {
+					std::cout << "Wait time mentionned is not a number: " << timeBuf << endl;
+				}
+				node.timerWaitA = waitTime;
 			}
-			if (&iQueue == &queue) return;
+			if (node.timerWaitA != 0) {
+				Uint32 delta = SDL_GetTicks() - node.timerWaitB;
+				node.timerWaitB = SDL_GetTicks();
+				node.timerWaitA = std::max(0, (int)node.timerWaitA - (int)delta);
+			}
+
+			else if (timerB - timerA > PRINT_SPEED && node.iterator != node.str.size()) {
+				node.iterator++;
+				timerA = timerB = SDL_GetTicks();
+			}
+
+
+			if (&q == &queue) return;	//We should print the first node in the queue only
+
+			i++;
 		}
 	}
-	else if (&iQueue == &queue) busy = 0;
+	else if (&q == &queue) busy = 0;
 }
 
 void Text_Printer::handleRoutine(SDL_Event e)
@@ -178,7 +213,7 @@ void Text_Printer::flush(int i)
 }
 
 void Text_Printer::quit() {
-	for (std::array<SDL_Texture*, 127>& police : lettersVec) {
+	for (std::array<SDL_Texture*, 127> & police : lettersVec) {
 		for (SDL_Texture* texture : police) {
 			SDL_DestroyTexture(texture);
 		}

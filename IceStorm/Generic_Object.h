@@ -35,10 +35,12 @@ type :
 	ENEMY,
 	CAMBLOCKX,
 	CAMBLOCKY,
-	PATTERN  //it's itself a pattern
+	PATTERN,  //it's itself a pattern
+	DYNAMIC   //Not present in the tilemap
 
 flags :
 	CONTACT,	//triggered when contact
+	PERMANENT,	//can be triggered unlimited times
 	PATTERN,//follows a pattern
 	SOLID
 
@@ -46,7 +48,8 @@ flags :
 
 class GObject {
 public:
-	GObject() : ID(0), type("GENERIC"), x(0), y(0), flagTrigger(false), contact_triggered(false), imgIndex(0) {
+	GObject() : ID(0), type("GENERIC"), x(0), y(0), flagTrigger(false), contact_triggered(false), imgIndex(0),
+		useSpritesHandler(false) {
 	};
 	int ID;
 	std::string target;
@@ -55,6 +58,7 @@ public:
 	std::string type;
 	
 	SpritesHandler textures;
+	bool useSpritesHandler;
 	std::string textureName;
 
 	int imgIndex; //index in vector of img_struct
@@ -64,7 +68,7 @@ public:
 	std::string content;
 	Moving_Unit movingUnit;
 
-	void routine();
+	void routine(SDL_Event& e);
 
 	bool flagTrigger; //prevent infinite trigger
 	bool contact_triggered;

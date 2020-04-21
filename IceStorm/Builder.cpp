@@ -308,11 +308,22 @@ void Builder::routine(SDL_Event& e)
 			Map::checkMate(currentPlan);
 			break;
 		}
-		case SDLK_z: {
-			cout << Map::isItSolid(Character::movingUnit.hitBox);
-		}
+		//case SDLK_z: {
+		//	cout << Map::isItSolid(Character::movingUnit.hitBox);
+		//	break;
+		//}
 		case SDLK_x: {
 			Textures_Manager::showInvisibleEnts = !Textures_Manager::showInvisibleEnts;
+			break;
+		}
+		case SDLK_z: {
+			int x, y;
+			SDL_GetMouseState(&x, &y);
+			int width, height;
+			SDL_GetWindowSize(Renderer::g_Window, &width, &height);
+			x = (int)((x / (double)width) * Renderer::SCREEN_W);
+			y = (int)((y / (double)height) * Renderer::SCREEN_H);
+			cout << x + Camera::getX() << " " << y + Camera::getY() << endl;
 		}
 		}
 	}

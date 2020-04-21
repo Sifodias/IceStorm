@@ -46,18 +46,18 @@ void Character::characterRoutine(SDL_Event& e)
 	}
 	if (e.type == SDL_KEYDOWN) {
 		if (e.key.keysym.sym == SDLK_j) {
-			Map::trigger(movingUnit.hitBox, movingUnit.mainDirection, false);
+			Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, false);
 		}
 	}
 	else
-		Map::trigger(movingUnit.hitBox, movingUnit.mainDirection, true);
+		Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, true);
 
 }
 
 void Character::init()
 {
 	SDL_Rect hitty = { 0, 0, CHAR_HITBOX_W, CHAR_HITBOX_H };
-	movingUnit = Moving_Unit(hitty);
+	movingUnit = Moving_Unit(hitty, true);
 	textures.addGroup("frisk.png", 19, 29, 5, 21, 0, 4, "down", 250);
 	textures.addGroup("frisk.png", 17, 29, 5, 21, 2, 2, "left", 250);
 	textures.addGroup("frisk.png", 17, 29, 5, 21, 4, 2, "right", 250);

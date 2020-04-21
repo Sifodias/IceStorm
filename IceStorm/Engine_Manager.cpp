@@ -20,7 +20,7 @@ void init_game()
 	Text_Printer::init();
 	Camera::init();
 	Character::init();
-	//Events_Manager::addToQueue(testTitle);
+	//Events_Manager::addToQueue(Events_Manager::testTitle);
 }
 
 
@@ -29,6 +29,7 @@ void handleRoutines(SDL_Event e) {
 	SDL_RenderClear(Renderer::g_Renderer);
 	Builder::routine(e);
 	Character::characterRoutine(e);
+	Objects_Manager::objectsRoutine(e);
 	Events_Manager::routine();
 	Textures_Manager::printFrame();
 	Text_Printer::handleRoutine(e);
