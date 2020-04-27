@@ -7,6 +7,8 @@
 #include "Text_Printer.h"
 #include "Camera.h"
 
+#define ob(...) Objects_Manager::findObject(__VA_ARGS__)
+
 std::vector<std::function<void()>> eventsQueue;
 bool busy = 0;
 
@@ -14,6 +16,15 @@ typedef enum {
 	TEXT_FLUSHED
 } cond;
 
+void condQuit(SDL_Event& e) {
+	if (SDL_PollEvent(&e) != 0) {
+		SDL_FlushEvent(SDL_MOUSEMOTION);			//This useless event overloads the event queue
+		if (e.type == SDL_QUIT) {
+			Renderer::quitAll();
+			exit(0);
+		}
+	}
+}
 void Events_Manager::routine()
 {
 	if (busy)
@@ -115,19 +126,15 @@ void routinesBlock(SDL_Event& e) {
 	SDL_RenderPresent(Renderer::g_Renderer);
 }
 
-void waitLoop(cond c) {
+void whileBlock() {
 	SDL_Event e;
+	condQuit(e);
+	routinesBlock(e);
+}
+
+void waitLoop(cond c) {
 	while (1) {
-		if (SDL_PollEvent(&e) != 0) {
-			SDL_FlushEvent(SDL_MOUSEMOTION);			//This useless event overloads the event queue
-			if (e.type == SDL_QUIT) {
-				Renderer::quitAll();
-				break;
-			}
-		}
-
-		routinesBlock(e);
-
+		whileBlock();
 		switch (c) {
 		case TEXT_FLUSHED:
 			if (!Text_Printer::busy) {
@@ -141,46 +148,71 @@ void waitLoop(cond c) {
 
 void Events_Manager::floweyCin() {
 	//Character::lockMovements(true);
-	//Character::textures.setCurrentGroup("up");
 	//Character::textures.setIdle(true);
 
-	auto& flowey = Objects_Manager::findObject("flowey_dead");
-	flowey.imgIndex = Textures_Manager::findIndex("maindown.png");
+	Character::textures.setSingleFrame("heart.png");
+	Character::movingUnit.hitBox.w = Textures_Manager::findSurface("heart.png")->w;
+	Character::movingUnit.hitBox.h = Textures_Manager::findSurface("heart.png")->h;
+	Character::useMainOffsets = false;
+
+	int idFlow = Objects_Manager::createObject("texture: flowey_dead.png, flags: CONTACT DYNAMIC").ID;
+	ob(idFlow).movingUnit.hitBox = { 150, 290, 21, 21 };
+	ob(idFlow).textures.clear();
+	ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 2, 8, "dancing", 120);
+	ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 1, 5, "appear", 100, true);
+	ob(idFlow).textures.setCurrentGroup("appear");
+
+	while (1) {
+		whileBlock();
+		if (ob(idFlow).textures.signalDone)
+			break;
+	}
 
 	print("I like trains.");
 
 	print("Also #200 .#200 .#200 .#200 I hate you.");
 	waitLoop(TEXT_FLUSHED);
 
+	//vector<int> wallID;
+	//for (int a = 0; a < 5; a++) {
+	//	for (int b = 0; b < 5; b++) {
+	//		if (a != 0 && a != 4) {
+	//			if (b != 0 && b != 4) {
+	//				continue;
+	//			}
+	//		}
+	//		wallID.push_back(Objects_Manager::createObject("texture: heart.png, flags: SOLID DYNAMIC").ID);
+	//		ob(wallID.back()).movingUnit.hitBox = { 120.0 + b * GRID_W, 360.0 + a * GRID_H, GRID_W, GRID_H };
+	//	}
+	//}
+
+
+	ob(idFlow).textures.setCurrentGroup("dancing");
 	std::vector<int> pelleksID;
 
-	for (int i = 0; i < 4; i++)
-		pelleksID.push_back(Objects_Manager::createObject("texture: testc.png, flags: CONTACT DYNAMIC").ID);
+	for (int i = 0; i < 4; i++) {
+		pelleksID.push_back(Objects_Manager::createObject("flags: CONTACT DYNAMIC").ID);
+	}
+		
 
 	for (int id : pelleksID) {
 		GObject& obj = Objects_Manager::findObject(id);
 		obj.movingUnit.noclip = true;
 		obj.movingUnit.followTarget(Character::movingUnit, 50);
+		obj.textures.clear();
+		obj.textures.addGroup("bullet.png", 7, 7, 0, 0, 0, 2, "shot", 100);
+		obj.textures.setCurrentGroup("shot");
 	}
 
-	Objects_Manager::findObject(pelleksID[0]).movingUnit.hitBox = { 110, 264, 5, 5 };
-	Objects_Manager::findObject(pelleksID[1]).movingUnit.hitBox = { 135, 242, 5, 5 };
-	Objects_Manager::findObject(pelleksID[2]).movingUnit.hitBox = { 170, 242, 5, 5 };
-	Objects_Manager::findObject(pelleksID[3]).movingUnit.hitBox = { 201, 264, 5, 5 };
+	ob(pelleksID[0]).movingUnit.hitBox = { 110, 264, 7, 7 };
+	ob(pelleksID[1]).movingUnit.hitBox = { 135, 242, 7, 7 };
+	ob(pelleksID[2]).movingUnit.hitBox = { 170, 242, 7, 7 };
+	ob(pelleksID[3]).movingUnit.hitBox = { 201, 264, 7, 7 };
 
-	SDL_Event e;
 	while (1) {
-		if (SDL_PollEvent(&e) != 0) {
-			SDL_FlushEvent(SDL_MOUSEMOTION);			//This useless event overloads the event queue
-			if (e.type == SDL_QUIT) {
-				Renderer::quitAll();
-				break;
-			}
-		}
-		routinesBlock(e);
+		whileBlock();
 		for (int id : pelleksID) {
-			if (SDL_HasIntersection(&Character::movingUnit.hitBox.sdl(),
-				&Objects_Manager::findObject(pelleksID[0]).movingUnit.hitBox.sdl()))
+			if (SDL_HasIntersection(&Character::movingUnit.hitBox.sdl(), &ob(id).movingUnit.hitBox.sdl()))
 				goto out;
 		}
 	}
@@ -190,5 +222,15 @@ out:
 
 	print("I hope it hurts.");
 	waitLoop(TEXT_FLUSHED);
-	Character::lockMovements(false);
+
+	Character::textures.addGroup("frisk.png", 19, 29, 5, 21, 0, 4, "down", 250);
+	Character::textures.addGroup("frisk.png", 17, 29, 5, 21, 2, 2, "left", 250);
+	Character::textures.addGroup("frisk.png", 17, 29, 5, 21, 4, 2, "right", 250);
+	Character::textures.addGroup("frisk.png", 19, 29, 5, 21, 6, 4, "up", 250);
+	Character::movingUnit.hitBox.w = CHAR_HITBOX_W;
+	Character::movingUnit.hitBox.h = CHAR_HITBOX_H;
+	Character::useMainOffsets = true;
+
+	//Character::textures.setIdle(false);
+	//Character::lockMovements(false);
 }

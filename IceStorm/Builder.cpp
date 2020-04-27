@@ -308,10 +308,10 @@ void Builder::routine(SDL_Event& e)
 			Map::checkMate(currentPlan);
 			break;
 		}
-		//case SDLK_z: {
-		//	cout << Map::isItSolid(Character::movingUnit.hitBox);
-		//	break;
-		//}
+				   //case SDLK_z: {
+				   //	cout << Map::isItSolid(Character::movingUnit.hitBox);
+				   //	break;
+				   //}
 		case SDLK_x: {
 			Textures_Manager::showInvisibleEnts = !Textures_Manager::showInvisibleEnts;
 			break;
@@ -323,7 +323,13 @@ void Builder::routine(SDL_Event& e)
 			SDL_GetWindowSize(Renderer::g_Window, &width, &height);
 			x = (int)((x / (double)width) * Renderer::SCREEN_W);
 			y = (int)((y / (double)height) * Renderer::SCREEN_H);
-			cout << x + Camera::getX() << " " << y + Camera::getY() << endl;
+			cout << (x + Camera::getX()) - ((x + Camera::getX()) % GRID_W) << " " << (y + Camera::getY()) - ((y + Camera::getY()) % GRID_H) << endl;
+
+			break;
+		}
+		case SDLK_v: {
+			Textures_Manager::showGrid = !Textures_Manager::showGrid;
+			break;
 		}
 		}
 	}
@@ -385,6 +391,6 @@ void Builder::trace(int set, int plan)
 }
 
 void Builder::newDoor(string levelname) {
-	auto[a,b] = Objects_Manager::newDoors(levelname);
+	auto [a, b] = Objects_Manager::newDoors(levelname);
 	printInfo(a); printInfo(b);
 }

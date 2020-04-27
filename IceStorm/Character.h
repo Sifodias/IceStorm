@@ -14,4 +14,6 @@ namespace Character
 
 	extern SpritesHandler textures;
 	extern Moving_Unit movingUnit;
+
+	extern bool useMainOffsets;	// if not, hitbox dim & blit will be according to surf dimensions
 };

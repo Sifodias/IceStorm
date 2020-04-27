@@ -9,7 +9,6 @@ namespace Objects_Manager {
 	void init();
 
 	GObject& findObject(string target);
-
 	GObject& findObject(int id);
 
 	bool identify(string& target, string wanted);

@@ -14,10 +14,11 @@ SDL_Texture* crop_surface(SDL_Surface* sprite_sheet, int x, int y, int width, in
 
 SpritesHandler::SpritesHandler() {
 	currentGroup = 0;
+	signalDone = false;
 }
 
 void SpritesHandler::addGroup(std::string sheet_name, int width_per_sprite, int height_per_sprite, int offsetX, int offsetY, int row_index, int nb_of_frames,
-	std::string group_name, int speed, SDL_Color alpha) {
+	std::string group_name, int speed, bool playOnce, SDL_Color alpha) {
 
 	std::vector<SDL_Texture*> texturesVec;
 
@@ -26,10 +27,10 @@ void SpritesHandler::addGroup(std::string sheet_name, int width_per_sprite, int 
 
 	for (int i = 0; i < nb_of_frames; i++) {
 		SDL_Texture* texture = crop_surface(surface, (offsetX + width_per_sprite) * i + offsetX, (offsetY + height_per_sprite) * row_index + offsetY,
-																												width_per_sprite, height_per_sprite);
+			width_per_sprite, height_per_sprite);
 		texturesVec.push_back(texture);
 	}
-	groups.push_back(sprite_group(texturesVec, speed, group_name));
+	groups.push_back(sprite_group(texturesVec, speed, group_name, playOnce));
 }
 
 void SpritesHandler::setIdle(bool idle)
@@ -55,19 +56,44 @@ void SpritesHandler::setSingleFrame(std::string textureName)
 
 
 SDL_Texture* SpritesHandler::currentFrame() {
-	if (groups[currentGroup].idle) {
-		return groups[currentGroup].textures[0];
+	auto& cg = groups[currentGroup];
+	if (cg.idle) {
+		return cg.textures[0];
 	}
-	int index = (int)((SDL_GetTicks()) / groups[currentGroup].speed) % (groups[currentGroup].textures.size());
-	return groups[currentGroup].textures[index];
+	int index = 0;
+	if (cg.speed) {
+		if (SDL_GetTicks() - cg.timerA > cg.speed) {
+			cg.index += 1;
+			cg.index = cg.index % cg.textures.size();
+			cg.timerA = SDL_GetTicks();
+		}
+	}
+
+	if (cg.index == cg.textures.size() - 1) {
+		signalDone = true;
+		groups[currentGroup].done = true;
+	}
+
+	if (cg.done && cg.playOnce)
+		return cg.textures.back();
+
+	
+	return cg.textures[cg.index];
 }
 
 void SpritesHandler::setCurrentGroup(std::string group_name) {
 	for (int i = 0; i < groups.size(); i++) {
+		groups[i].done = false;
 		if (groups[i].name == group_name) {
+			//if(currentGroup != i)
+			//	groups[i].timerA = SDL_GetTicks();
 			currentGroup = i;
-			return;
 		}
 	}
-	std::cout << "ERROR: SPRITE GROUP NOT FOUND (name: " << group_name << ")" << std::endl;
+	signalDone = false;
+	//std::cout << "ERROR: SPRITE GROUP NOT FOUND (name: " << group_name << ")" << std::endl;
+}
+
+void SpritesHandler::clear() {
+	groups.clear();
 }

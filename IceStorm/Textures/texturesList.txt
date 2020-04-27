@@ -43,3 +43,6 @@ A2.png
 B.png
 B2.png
 flowey_dead.png
+heart.png
+grid.png
+bullet.png

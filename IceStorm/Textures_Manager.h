@@ -26,5 +26,6 @@ namespace Textures_Manager {
 	int findIndex(std::string name);
 
 	extern bool showInvisibleEnts;
+	extern bool showGrid;
 	extern std::vector<img_struct> imgList;
 };

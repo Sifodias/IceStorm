@@ -7,6 +7,7 @@
 
 SpritesHandler Character::textures;
 Moving_Unit Character::movingUnit;
+bool Character::useMainOffsets;
 
 ifstream* saveFile = NULL;
 string charaMark;
@@ -57,6 +58,8 @@ void Character::characterRoutine(SDL_Event& e)
 void Character::init()
 {
 	SDL_Rect hitty = { 0, 0, CHAR_HITBOX_W, CHAR_HITBOX_H };
+	useMainOffsets = true;
+
 	movingUnit = Moving_Unit(hitty, true);
 	textures.addGroup("frisk.png", 19, 29, 5, 21, 0, 4, "down", 250);
 	textures.addGroup("frisk.png", 17, 29, 5, 21, 2, 2, "left", 250);

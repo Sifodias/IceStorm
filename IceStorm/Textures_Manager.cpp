@@ -15,7 +15,7 @@
 
 std::vector<img_struct> Textures_Manager::imgList;
 bool Textures_Manager::showInvisibleEnts = SHOWINV;
-
+bool Textures_Manager::showGrid = false;
 
 void Textures_Manager::init()
 {
@@ -105,16 +105,21 @@ void Textures_Manager::printFrame()
 			x_limit_index = std::min((Camera::getX() + Camera::outerRect.w + GRID_W) / GRID_W, (int)plan[y].size());
 
 			for (int x = 0; x < x_limit_index; x++, rect_cursor.x += rect_cursor.w) {
-				if (!Map::getID(x, y, i))
+				if (!Map::getID(x, y, i)) {
+					if (showGrid) {
+						SDL_Rect out = { rect_cursor.x, rect_cursor.y, GRID_W, GRID_H };
+						SDL_RenderCopy(Renderer::g_Renderer, Textures_Manager::findTexture("grid.png"), NULL, &out);
+					}
 					continue;
+				}
 
 				GObject& currentObj = Objects_Manager::findObject(Map::getID(x, y, i));
 				SDL_Rect out = rect_cursor;
-				
+
 				SDL_Surface* tempSrf = imgList[currentObj.imgIndex].surface;
 
 				if (tempSrf != NULL) {
-					out.w = tempSrf->w; 
+					out.w = tempSrf->w;
 					out.h = tempSrf->h;
 				}
 
@@ -127,6 +132,11 @@ void Textures_Manager::printFrame()
 				}
 
 				SDL_RenderCopy(Renderer::g_Renderer, to_print, NULL, &out);
+
+				if (showGrid) {
+					out.w = GRID_W; out.h = GRID_H;
+					SDL_RenderCopy(Renderer::g_Renderer, Textures_Manager::findTexture("grid.png"), NULL, &out);
+				}
 			}
 		}
 
@@ -134,14 +144,6 @@ void Textures_Manager::printFrame()
 		i++;
 	}
 
-	/* Print the character */
-	rect_cursor = Character::movingUnit.hitBox.sdl();
-	rect_cursor.x -= Camera::getX();
-	rect_cursor.y -= Camera::getY();
-	rect_cursor.y -= CHAR_H - CHAR_HITBOX_H;
-	rect_cursor.h = CHAR_H;
-	rect_cursor.w = CHAR_W;
-	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &rect_cursor);
 
 	/* Print the dynamic objects */
 	for (GObject& obj : Objects_Manager::objects) {
@@ -153,4 +155,19 @@ void Textures_Manager::printFrame()
 
 		SDL_RenderCopy(Renderer::g_Renderer, obj.textures.currentFrame(), NULL, &rect_cursor);
 	}
+
+	/* Print the character */
+	rect_cursor = Character::movingUnit.hitBox.sdl();
+	rect_cursor.x -= Camera::getX();
+	rect_cursor.y -= Camera::getY();
+	if (Character::useMainOffsets) {
+		rect_cursor.y -= CHAR_H - CHAR_HITBOX_H;
+		rect_cursor.w = CHAR_W;
+		rect_cursor.h = CHAR_H;
+	}
+	else {
+		rect_cursor.w = Character::movingUnit.hitBox.w;
+		rect_cursor.h = Character::movingUnit.hitBox.h;
+	}
+	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &rect_cursor);
 }
