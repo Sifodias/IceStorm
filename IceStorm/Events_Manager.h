@@ -9,4 +9,5 @@ namespace Events_Manager {
 
 	void testTitle();
 	void floweyCin();
+	void etalonage();
 };

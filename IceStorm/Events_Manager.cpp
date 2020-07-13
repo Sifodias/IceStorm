@@ -147,21 +147,22 @@ void waitLoop(cond c) {
 
 
 void Events_Manager::floweyCin() {
-	//Character::lockMovements(true);
-	//Character::textures.setIdle(true);
+	//	Character::lockMovements(true);
+		//Character::textures.setIdle(true);
 
 	Character::textures.setSingleFrame("heart.png");
 	Character::movingUnit.hitBox.w = Textures_Manager::findSurface("heart.png")->w;
 	Character::movingUnit.hitBox.h = Textures_Manager::findSurface("heart.png")->h;
 	Character::useMainOffsets = false;
 
-	int idFlow = Objects_Manager::createObject("texture: flowey_dead.png, flags: CONTACT DYNAMIC").ID;
+	int idFlow = Objects_Manager::createObject("flags: DYNAMIC").ID;
 	ob(idFlow).movingUnit.hitBox = { 150, 290, 21, 21 };
 	ob(idFlow).textures.clear();
 	ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 2, 8, "dancing", 120);
-	ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 1, 5, "appear", 100, true);
+	ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 1, 5, "appear", 80, true);
 	ob(idFlow).textures.setCurrentGroup("appear");
 
+	/* Wait that the animation is done */
 	while (1) {
 		whileBlock();
 		if (ob(idFlow).textures.signalDone)
@@ -173,27 +174,29 @@ void Events_Manager::floweyCin() {
 	print("Also #200 .#200 .#200 .#200 I hate you.");
 	waitLoop(TEXT_FLUSHED);
 
-	//vector<int> wallID;
-	//for (int a = 0; a < 5; a++) {
-	//	for (int b = 0; b < 5; b++) {
-	//		if (a != 0 && a != 4) {
-	//			if (b != 0 && b != 4) {
-	//				continue;
-	//			}
-	//		}
-	//		wallID.push_back(Objects_Manager::createObject("texture: heart.png, flags: SOLID DYNAMIC").ID);
-	//		ob(wallID.back()).movingUnit.hitBox = { 120.0 + b * GRID_W, 360.0 + a * GRID_H, GRID_W, GRID_H };
-	//	}
-	//}
+	//Character::lockMovements(false);
+
+	vector<int> wallID;
+	for (int a = 0; a < 5; a++) {
+		for (int b = 0; b < 5; b++) {
+			if (a != 0 && a != 4) {
+				if (b != 0 && b != 4) {
+					continue;
+				}
+			}
+			wallID.push_back(Objects_Manager::createObject("texture: heart.png, flags: SOLID DYNAMIC").ID);
+			ob(wallID.back()).movingUnit.hitBox = { 110.0 + b * GRID_W, 360.0 + a * GRID_H, GRID_W, GRID_H };
+		}
+	}
 
 
 	ob(idFlow).textures.setCurrentGroup("dancing");
 	std::vector<int> pelleksID;
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 4; i++)
 		pelleksID.push_back(Objects_Manager::createObject("flags: CONTACT DYNAMIC").ID);
-	}
-		
+
+
 
 	for (int id : pelleksID) {
 		GObject& obj = Objects_Manager::findObject(id);
@@ -219,6 +222,8 @@ void Events_Manager::floweyCin() {
 out:
 	for (int id : pelleksID)
 		Objects_Manager::deleteObject(id);
+	for (int id : wallID)
+		Objects_Manager::deleteObject(id);
 
 	print("I hope it hurts.");
 	waitLoop(TEXT_FLUSHED);
@@ -233,4 +238,54 @@ out:
 
 	//Character::textures.setIdle(false);
 	//Character::lockMovements(false);
+}
+
+void Events_Manager::etalonage() {
+	SDL_ShowCursor(SDL_DISABLE);
+	SDL_Event e;
+	std::vector<int> time_values = { 500, 1000, 2000, 4000, 6000 };
+	int i = 0;
+	while (1) {
+		for (int r = 0; r < 256; r += 255) {
+			for (int g = 0; g < 256; g += 255) {
+				for (int b = 0; b < 256; b += 255) {
+					if (SDL_PollEvent(&e) != 0) {
+						SDL_FlushEvent(SDL_MOUSEMOTION);
+						if (e.type == SDL_QUIT) {
+							Renderer::quitAll();
+							exit(0);
+						}
+					}
+					if (e.type == SDL_KEYDOWN) {
+						if (e.key.keysym.sym == SDLK_j) {
+							i = ++i % time_values.size();
+						}
+					}
+					Uint32 timerA = SDL_GetTicks();
+					Uint32 timerB = SDL_GetTicks();
+					while (timerB - timerA < time_values[i]) {
+						if (SDL_PollEvent(&e) != 0) {
+							SDL_FlushEvent(SDL_MOUSEMOTION);
+							if (e.type == SDL_QUIT) {
+								Renderer::quitAll();
+								exit(0);
+							}
+						}
+						if (e.type == SDL_KEYDOWN) {
+							if (e.key.keysym.sym == SDLK_j) {
+								i = ++i % time_values.size();
+							}
+						}
+						timerB = SDL_GetTicks();
+					}
+					SDL_RenderClear(Renderer::g_Renderer);
+					SDL_SetRenderDrawColor(Renderer::g_Renderer, r, g, b, 0);
+					SDL_RenderPresent(Renderer::g_Renderer);
+
+
+				}
+			}
+		}
+
+	}
 }

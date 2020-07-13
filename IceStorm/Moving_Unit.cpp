@@ -1,6 +1,7 @@
 #include "Moving_Unit.h"
 #include "Map.h"
 #include <iostream>
+#include "Objects_Manager.h"
 
 bool rectEquals(SDL_Rect a, SDL_Rect b) {
 	if (a.x == b.x
@@ -14,17 +15,17 @@ bool rectEquals(SDL_Rect a, SDL_Rect b) {
 
 void speedRestrainer(double& speedX, double& speedY, SDL_Rect rect) {
 	rect.x += 1;
-	if (speedX > 0 && Map::isItSolid(rect))
+	if (speedX > 0 && (Map::isItSolid(rect) || Objects_Manager::solidIntersect(rect)))
 		speedX = 0;
 	rect.x -= 2;
-	if (speedX < 0 && Map::isItSolid(rect))
+	if (speedX < 0 && (Map::isItSolid(rect) || Objects_Manager::solidIntersect(rect)))
 		speedX = 0;
 	rect.x += 1;
 	rect.y += 1;
-	if (speedY > 0 && Map::isItSolid(rect))
+	if (speedY > 0 && (Map::isItSolid(rect) || Objects_Manager::solidIntersect(rect)))
 		speedY = 0;
 	rect.y -= 2;
-	if (speedY < 0 && Map::isItSolid(rect))
+	if (speedY < 0 && (Map::isItSolid(rect) || Objects_Manager::solidIntersect(rect)))
 		speedY = 0;
 }
 
@@ -140,7 +141,7 @@ void Moving_Unit::handleMoves()
 	//else if gravity is enabled
 	SDL_Rect temprect = hitBox.sdl();
 	temprect.y += 1;
-	if (Map::isItSolid(temprect)) {
+	if (Map::isItSolid(temprect) || Objects_Manager::solidIntersect(temprect)) {
 		jumpLock = 0;
 
 	}
@@ -239,7 +240,7 @@ void Moving_Unit::doMoves()
 		}
 		tempReqt.x = hitBox.x + tempDistancex;
 		tempReqt.y = hitBox.y + tempDistancey;
-		if (!Map::isItSolid(tempReqt.sdl())) {
+		if (!Map::isItSolid(tempReqt.sdl()) && !Objects_Manager::solidIntersect(tempReqt.sdl())) {
 			hitBox.x += tempDistancex;
 			hitBox.y += tempDistancey;
 			break;

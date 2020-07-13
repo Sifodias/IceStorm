@@ -20,7 +20,7 @@ void init_game()
 	Text_Printer::init();
 	Camera::init();
 	Character::init();
-	//Events_Manager::addToQueue(Events_Manager::testTitle);
+	Events_Manager::addToQueue(Events_Manager::etalonage);
 }
 
 
@@ -73,3 +73,4 @@ void engineQuit() {
 	}
 	Text_Printer::quit();
 }
+

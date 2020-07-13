@@ -7,7 +7,7 @@
 #include <string>
 #include "Map.h"
 
-#define FULLSCREEN 0
+#define FULLSCREEN 1
 
 SDL_Renderer* Renderer::g_Renderer = NULL;
 SDL_Window* Renderer::g_Window = NULL;

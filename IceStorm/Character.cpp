@@ -48,10 +48,13 @@ void Character::characterRoutine(SDL_Event& e)
 	if (e.type == SDL_KEYDOWN) {
 		if (e.key.keysym.sym == SDLK_j) {
 			Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, false);
+			Objects_Manager::trigger(movingUnit.hitBox.sdl(), false);
 		}
 	}
-	else
+	else {
 		Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, true);
+		Objects_Manager::trigger(movingUnit.hitBox.sdl(), true);
+	}
 
 }
 

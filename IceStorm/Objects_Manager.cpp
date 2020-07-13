@@ -110,6 +110,27 @@ void Objects_Manager::objectsRoutine(SDL_Event& e)
 	}
 }
 
+void Objects_Manager::trigger(SDL_Rect& rect, bool contact)
+{
+	for (GObject& obj : objects) {
+		if (SDL_HasIntersection(&rect, &obj.movingUnit.hitBox.sdl())) {
+			if (contact && obj.checkFlag("CONTACT") || !contact)
+				obj.trigger();
+		}
+	}
+}
+
+bool Objects_Manager::solidIntersect(SDL_Rect& rect)
+{
+	for (GObject& obj : objects) {
+		if (SDL_HasIntersection(&rect, &obj.movingUnit.hitBox.sdl())) {
+			if (obj.checkFlag("SOLID"))
+				return true;
+		}
+	}
+	return false;
+}
+
 GObject& Objects_Manager::findObject(string target) {
 	int temp;
 	try {
@@ -232,10 +253,10 @@ GObject& Objects_Manager::createObject(string data) {
 	GObject new_obj;
 
 	std::vector<int> idsVec;
-	for( GObject& obj : objects) {
+	for (GObject& obj : objects) {
 		idsVec.push_back(obj.ID);
 	}
-	new_obj.ID = *std::max_element(idsVec.begin(), idsVec.end())+1;
+	new_obj.ID = *std::max_element(idsVec.begin(), idsVec.end()) + 1;
 
 	fillObject(new_obj, data);
 
@@ -243,8 +264,6 @@ GObject& Objects_Manager::createObject(string data) {
 
 	return objects.back();
 }
-
-
 
 //beware of new fields
 void Objects_Manager::saveObjects() {
@@ -276,7 +295,7 @@ void Objects_Manager::saveObjects() {
 		}
 
 		ofs << "type: " << obj.type << endl;
-		
+
 		if (!obj.textureName.empty())
 			ofs << "texture: " << obj.textureName << endl;
 
@@ -292,7 +311,7 @@ void Objects_Manager::saveObjects() {
 
 tuple<GObject, GObject> Objects_Manager::newDoors(string levelName) {
 	GObject& dest = createObject("texture: A2.png, type: DOOR, flags: INV, content: 1");
-	GObject& from = createObject("texture: A.png, type: DOOR, flags: CONTACT INV, content: 0 " + to_string(dest.ID) + " " +  levelName);
+	GObject& from = createObject("texture: A.png, type: DOOR, flags: CONTACT INV, content: 0 " + to_string(dest.ID) + " " + levelName);
 	return { from, dest };
 }
 
