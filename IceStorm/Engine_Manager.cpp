@@ -11,7 +11,6 @@
 #include "Events_Manager.h"
 
 
-
 void init_game()
 {
 	Renderer::initAll();
@@ -20,7 +19,7 @@ void init_game()
 	Text_Printer::init();
 	Camera::init();
 	Character::init();
-	Events_Manager::addToQueue(Events_Manager::etalonage);
+	//Events_Manager::addToQueue(Events_Manager::etalonage);
 }
 
 
@@ -51,6 +50,7 @@ int main_event_loop(void*)
 			}
 		}
 		handleRoutines(e);
+
 	}
 	return 0;
 }

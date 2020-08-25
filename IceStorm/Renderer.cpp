@@ -17,7 +17,7 @@ int Renderer::SCREEN_H = 240;
 
 void Renderer::initAll()
 {
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC) < 0)
 		std::cout << "Can't load the SDL: " << SDL_GetError() << endl;
 	
 	if (!IMG_Init(IMG_INIT_PNG))

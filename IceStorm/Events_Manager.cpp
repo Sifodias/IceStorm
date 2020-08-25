@@ -243,7 +243,7 @@ out:
 void Events_Manager::etalonage() {
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_Event e;
-	std::vector<int> time_values = { 500, 1000, 2000, 4000, 6000 };
+	std::vector<Uint32> time_values = { 6000, 4000, 2000, 1000, 500 };
 	int i = 0;
 	while (1) {
 		for (int r = 0; r < 256; r += 255) {
@@ -260,6 +260,9 @@ void Events_Manager::etalonage() {
 						if (e.key.keysym.sym == SDLK_j) {
 							i = ++i % time_values.size();
 						}
+						if (e.key.keysym.sym == SDLK_n) {
+							i = 0;
+						}
 					}
 					Uint32 timerA = SDL_GetTicks();
 					Uint32 timerB = SDL_GetTicks();
@@ -274,6 +277,9 @@ void Events_Manager::etalonage() {
 						if (e.type == SDL_KEYDOWN) {
 							if (e.key.keysym.sym == SDLK_j) {
 								i = ++i % time_values.size();
+							}
+							if (e.key.keysym.sym == SDLK_n) {
+								i = 0;
 							}
 						}
 						timerB = SDL_GetTicks();

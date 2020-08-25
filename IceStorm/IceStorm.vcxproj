@@ -131,6 +131,7 @@
     <ClCompile Include="Builder.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Dialog_Engine.cpp" />
     <ClCompile Include="Events_Manager.cpp" />
     <ClCompile Include="Fight_Handler.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Builder.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Controller.h" />
     <ClInclude Include="Dialog_Engine.h" />
     <ClInclude Include="Events_Manager.h" />
     <ClInclude Include="Fight_Handler.h" />
