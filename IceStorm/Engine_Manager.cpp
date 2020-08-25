@@ -9,7 +9,7 @@
 #include "Camera.h"
 #include "Builder.h"
 #include "Events_Manager.h"
-
+#include "Controller.h"
 
 void init_game()
 {
@@ -19,6 +19,7 @@ void init_game()
 	Text_Printer::init();
 	Camera::init();
 	Character::init();
+	Controller::init();
 	//Events_Manager::addToQueue(Events_Manager::etalonage);
 }
 
@@ -49,8 +50,8 @@ int main_event_loop(void*)
 				break;
 			}
 		}
+		
 		handleRoutines(e);
-
 	}
 	return 0;
 }

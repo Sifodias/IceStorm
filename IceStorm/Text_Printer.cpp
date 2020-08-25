@@ -6,6 +6,7 @@
 #include "Textures_Manager.h"
 #include "Renderer.h"
 #include "Paths.h"
+#include "Controller.h"
 
 std::vector<std::array<SDL_Texture*, 127>> lettersVec;
 std::vector<NodeQueue> Text_Printer::queue;
@@ -137,9 +138,8 @@ void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue>& q) {
 		for (NodeQueue& node : q) {
 			printText(node);
 			if (node.lock) {
-				if (e.type == SDL_KEYDOWN && (&q == &queue) &&
-					(!standStill || q.size() > 1)) {
-					if (e.key.keysym.sym == SDLK_j) {
+				if ((&q == &queue) && (!standStill || q.size() > 1)) {
+					if (Controller::checkAction(e, "action")) {
 						while (node.str[node.iterator] == ' ')
 							node.iterator++;
 						node.str.erase(0, node.iterator);

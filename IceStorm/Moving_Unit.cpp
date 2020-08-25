@@ -2,6 +2,7 @@
 #include "Map.h"
 #include <iostream>
 #include "Objects_Manager.h"
+#include "Controller.h"
 
 bool rectEquals(SDL_Rect a, SDL_Rect b) {
 	if (a.x == b.x
@@ -43,12 +44,11 @@ Moving_Unit::Moving_Unit(SDL_Rect hitbox_i, bool inputControlled, int cspeed, in
 
 void Moving_Unit::handleMoves()
 {
-	const Uint8* state = SDL_GetKeyboardState(NULL);
 	int out = 0;
 	while (!out && movesY.size()) {
 		switch (movesY.back()) {
 		case -1:
-			if (state[SDL_SCANCODE_W] && !jumpLock) {
+			if (Controller::checkActionState("up") && !jumpLock) {
 				if (gravity_affected && !noclip) {
 					speedY = -jump_speed;
 					jumpLock = 1;
@@ -60,7 +60,7 @@ void Moving_Unit::handleMoves()
 			break;
 
 		case 1:
-			if (state[SDL_SCANCODE_S]) {
+			if (Controller::checkActionState("down")) {
 				speedY = move_speed;
 				out = 1;
 			}
@@ -73,14 +73,14 @@ void Moving_Unit::handleMoves()
 	while (!out && movesX.size()) {
 		switch (movesX.back()) {
 		case 2:
-			if (state[SDL_SCANCODE_D]) {
+			if (Controller::checkActionState("right")) {
 				speedX = move_speed;
 				out = 1;
 			}
 			else movesX.pop_back();
 			break;
 		case -2:
-			if (state[SDL_SCANCODE_A]) {
+			if (Controller::checkActionState("left")) {
 				speedX = -move_speed;
 				out = 1;
 			}
@@ -93,7 +93,7 @@ void Moving_Unit::handleMoves()
 	while (!out && direction.size()) {
 		switch (direction.back()) {
 		case -1:
-			if (state[SDL_SCANCODE_W]) {
+			if (Controller::checkActionState("up")) {
 				mainDirection = -1;
 				out = 1;
 			}
@@ -101,7 +101,7 @@ void Moving_Unit::handleMoves()
 			break;
 
 		case 1:
-			if (state[SDL_SCANCODE_S]) {
+			if (Controller::checkActionState("down")) {
 				mainDirection = 1;
 				out = 1;
 			}
@@ -109,14 +109,14 @@ void Moving_Unit::handleMoves()
 			break;
 
 		case 2:
-			if (state[SDL_SCANCODE_D]) {
+			if (Controller::checkActionState("right")) {
 				mainDirection = 2;
 				out = 1;
 			}
 			else direction.pop_back();
 			break;
 		case -2:
-			if (state[SDL_SCANCODE_A]) {
+			if (Controller::checkActionState("left")) {
 				mainDirection = -2;
 				out = 1;
 			}
@@ -149,51 +149,45 @@ void Moving_Unit::handleMoves()
 
 void Moving_Unit::addMoves(SDL_Event& e)
 {
-	if (e.type == SDL_KEYDOWN)
-	{
-		switch (e.key.keysym.sym)
-		{
-		case SDLK_w:
-			if (!movesY.size())
-				movesY.push_back(-1);
-			else if (movesY.back() != -1)
-				movesY.push_back(-1);
-			if (!direction.size())
-				direction.push_back(-1);
-			else if (direction.back() != -1)
-				direction.push_back(-1);
-			break;
-		case SDLK_s:
-			if (!movesY.size())
-				movesY.push_back(1);
-			else if (movesY.back() != 1)
-				movesY.push_back(1);
-			if (!direction.size())
-				direction.push_back(1);
-			else if (direction.back() != 1)
-				direction.push_back(1);
-			break;
-		case SDLK_d:
-			if (!movesX.size())
-				movesX.push_back(2);
-			else if (movesX.back() != 2)
-				movesX.push_back(2);
-			if (!direction.size())
-				direction.push_back(2);
-			else if (direction.back() != 2)
-				direction.push_back(2);
-			break;
-		case SDLK_a:
-			if (!movesX.size())
-				movesX.push_back(-2);
-			else if (movesX.back() != -2)
-				movesX.push_back(-2);
-			if (!direction.size())
-				direction.push_back(-2);
-			else if (direction.back() != -2)
-				direction.push_back(-2);
-			break;
-		}
+	if (Controller::checkAction(e, "up")) {
+		if (!movesY.size())
+			movesY.push_back(-1);
+		else if (movesY.back() != -1)
+			movesY.push_back(-1);
+		if (!direction.size())
+			direction.push_back(-1);
+		else if (direction.back() != -1)
+			direction.push_back(-1);
+	}
+	if (Controller::checkAction(e, "down")) {
+		if (!movesY.size())
+			movesY.push_back(1);
+		else if (movesY.back() != 1)
+			movesY.push_back(1);
+		if (!direction.size())
+			direction.push_back(1);
+		else if (direction.back() != 1)
+			direction.push_back(1);
+	}
+	if (Controller::checkAction(e, "right")) {
+		if (!movesX.size())
+			movesX.push_back(2);
+		else if (movesX.back() != 2)
+			movesX.push_back(2);
+		if (!direction.size())
+			direction.push_back(2);
+		else if (direction.back() != 2)
+			direction.push_back(2);
+	}
+	if (Controller::checkAction(e, "left")) {
+		if (!movesX.size())
+			movesX.push_back(-2);
+		else if (movesX.back() != -2)
+			movesX.push_back(-2);
+		if (!direction.size())
+			direction.push_back(-2);
+		else if (direction.back() != -2)
+			direction.push_back(-2);
 	}
 }
 
@@ -324,8 +318,8 @@ void Moving_Unit::followTarget(Moving_Unit& to_follow, int speed) {
 }
 
 void Moving_Unit::updateFollow() {
-	int x_aim = target->hitBox.x + target->hitBox.w/2 - hitBox.x - hitBox.w/2;
-	int y_aim = target->hitBox.y + target->hitBox.h/2 - hitBox.y - hitBox.h/2;
+	int x_aim = target->hitBox.x + target->hitBox.w / 2 - hitBox.x - hitBox.w / 2;
+	int y_aim = target->hitBox.y + target->hitBox.h / 2 - hitBox.y - hitBox.h / 2;
 	int speed = (int)sqrt(speedX * speedX + speedY * speedY);
 	int angle = 0;
 	if (!y_aim && x_aim < 0)

@@ -4,6 +4,7 @@
 #include "Engine_Manager.h"
 #include "Paths.h"
 #include "Objects_Manager.h"
+#include "Controller.h"
 
 SpritesHandler Character::textures;
 Moving_Unit Character::movingUnit;
@@ -45,11 +46,9 @@ void Character::characterRoutine(SDL_Event& e)
 			break;
 		}
 	}
-	if (e.type == SDL_KEYDOWN) {
-		if (e.key.keysym.sym == SDLK_j) {
-			Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, false);
-			Objects_Manager::trigger(movingUnit.hitBox.sdl(), false);
-		}
+	if (Controller::checkAction(e, "action")) {
+		Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, false);
+		Objects_Manager::trigger(movingUnit.hitBox.sdl(), false);
 	}
 	else {
 		Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, true);
