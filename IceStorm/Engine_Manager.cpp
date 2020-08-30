@@ -39,7 +39,7 @@ void handleRoutines(SDL_Event e) {
 
 }
 
-int main_event_loop(void*)
+int main_event_loop()
 {
 	SDL_Event e;
 	while (1) {
@@ -50,8 +50,11 @@ int main_event_loop(void*)
 				break;
 			}
 		}
-		
+		if (Controller::checkAction(e, "jaja"))
+			Controller::rumbleTest();
+
 		handleRoutines(e);
+
 	}
 	return 0;
 }

@@ -36,18 +36,18 @@ void Controller::init() {
 					cout << "Warning: Unable to initialize rumble! SDL Error: " << SDL_GetError() << endl;
 				}
 			}
-
 		}
 	}
 
 	//Dummy cfg (todo: need to load from save)
-	inputs_controller["action"] = SDL_CONTROLLER_BUTTON_A;
+	inputs_controller["use"] = SDL_CONTROLLER_BUTTON_A;
 	inputs_controller["up"] = SDL_CONTROLLER_BUTTON_DPAD_UP;
 	inputs_controller["down"] = SDL_CONTROLLER_BUTTON_DPAD_DOWN;
 	inputs_controller["left"] = SDL_CONTROLLER_BUTTON_DPAD_LEFT;
 	inputs_controller["right"] = SDL_CONTROLLER_BUTTON_DPAD_RIGHT;
+	inputs_controller["jaja"] = SDL_CONTROLLER_BUTTON_Y;
 
-	inputs_keyboard["action"] = SDLK_j;
+	inputs_keyboard["use"] = SDLK_j;
 	inputs_keyboard["up"] = SDLK_w;
 	inputs_keyboard["down"] = SDLK_s;
 	inputs_keyboard["left"] = SDLK_a;
@@ -58,14 +58,10 @@ void Controller::init() {
 void Controller::rumbleTest() {
 	while (1) {
 		if (SDL_HapticRumblePlay(gControllerHaptic, 1, 3000) != 0) {
-			cout << "Warning: Unable to play rumble! %s\n" << SDL_GetError() << endl;
+			cout << "Warning: Unable to play rumble! SDL Error: " << SDL_GetError() << endl;
 		}
 		SDL_Delay(3200);
 	}
-}
-
-bool Controller::isKeyPressed(SDL_Event& e) {
-	return e.type == SDL_KEYDOWN || e.type == SDL_JOYBUTTONDOWN || e.type == SDL_JOYAXISMOTION;
 }
 
 bool Controller::checkAction(SDL_Event& e, std::string action) {

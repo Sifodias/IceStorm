@@ -8,7 +8,6 @@
 namespace Controller {
 	void init();
 	void rumbleTest();
-	bool isKeyPressed(SDL_Event& e);
 	bool checkAction(SDL_Event& e, std::string);
 	bool checkActionState(std::string);		//checks if key corresponding to action is currently pressed
 	bool close();

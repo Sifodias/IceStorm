@@ -139,7 +139,7 @@ void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue>& q) {
 			printText(node);
 			if (node.lock) {
 				if ((&q == &queue) && (!standStill || q.size() > 1)) {
-					if (Controller::checkAction(e, "action")) {
+					if (Controller::checkAction(e, "use")) {
 						while (node.str[node.iterator] == ' ')
 							node.iterator++;
 						node.str.erase(0, node.iterator);

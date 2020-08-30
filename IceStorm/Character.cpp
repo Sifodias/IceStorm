@@ -46,7 +46,7 @@ void Character::characterRoutine(SDL_Event& e)
 			break;
 		}
 	}
-	if (Controller::checkAction(e, "action")) {
+	if (Controller::checkAction(e, "use")) {
 		Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, false);
 		Objects_Manager::trigger(movingUnit.hitBox.sdl(), false);
 	}
