@@ -6,5 +6,3 @@ Language: C++
 IDE: Visual Studio 2019
 
 Libs: SDL2
-
-by Sifodias (Ilan Coronel)
