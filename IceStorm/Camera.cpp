@@ -42,9 +42,9 @@ int Camera::getX() {
 		if (outerRect.x < 0)
 			return 0;
 
-		double max = 0;
+		double max1 = 0;
 		for (int y = 0; y < Map::matrix[0].size(); y++)
-			max = std::fmax(max, Map::matrix[0][y].size());
+			max1 = std::max(max1, (double)Map::matrix[0][y].size());
 
 
 		double max2 = outerRect.w / 2 + Character::movingUnit.hitBox.x + GRID_W * 5;
@@ -72,12 +72,12 @@ int Camera::getX() {
 			return ((r + l) / 2) - (outerRect.w) / 2 + GRID_W / 2;
 	bypass:
 		if (!flagChanged)
-			return (int)std::fmin(std::abs(max*GRID_W - outerRect.w), outerRect.x);
+			return (int)std::min(std::abs(max1*GRID_W - outerRect.w), (double)outerRect.x);
 
 		if (max2 < Character::movingUnit.hitBox.x)
-			return (int)std::fmax(outerRect.x, max2 + GRID_W);
+			return (int)std::max((double)outerRect.x, max2 + GRID_W);
 
-		return (int)std::fmin(outerRect.x, max2 - outerRect.w);
+		return (int)std::min((double)outerRect.x, max2 - outerRect.w);
 	}
 
 	else {
@@ -125,12 +125,12 @@ int Camera::getY() {
 			return ((r + l) / 2) - (outerRect.h) / 2 + GRID_H / 2;
 	bypass:
 		if (!flagChanged)
-			return (int)std::fmin(std::abs((double)(Map::matrix[0].size()*GRID_H - outerRect.h)), outerRect.y);
+			return (int)std::min(std::abs((double)(Map::matrix[0].size()*GRID_H - outerRect.h)), (double)outerRect.y);
 
 		if (max2 < Character::movingUnit.hitBox.y)
-			return (int)std::fmax(outerRect.y, max2 + GRID_H);
+			return (int)std::max((double)outerRect.y, max2 + GRID_H);
 
-		return (int)std::fmin(outerRect.y, max2 - outerRect.h);
+		return (int)std::min((double)outerRect.y, max2 - outerRect.h);
 	}
 
 	else {

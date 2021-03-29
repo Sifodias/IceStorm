@@ -1,4 +1,3 @@
-#pragma once
 #include "Objects_Manager.h"
 #include <sstream>
 #include <ostream>
@@ -110,20 +109,22 @@ void Objects_Manager::objectsRoutine(SDL_Event& e)
 	}
 }
 
-void Objects_Manager::trigger(SDL_Rect& rect, bool contact)
+void Objects_Manager::trigger(SDL_Rect rect, bool contact)
 {
 	for (GObject& obj : objects) {
-		if (SDL_HasIntersection(&rect, &obj.movingUnit.hitBox.sdl())) {
+		SDL_Rect tempRect = obj.movingUnit.hitBox.sdl();
+		if (SDL_HasIntersection(&rect, &tempRect)) {
 			if (contact && obj.checkFlag("CONTACT") || !contact)
 				obj.trigger();
 		}
 	}
 }
 
-bool Objects_Manager::solidIntersect(SDL_Rect& rect)
+bool Objects_Manager::solidIntersect(SDL_Rect rect)
 {
 	for (GObject& obj : objects) {
-		if (SDL_HasIntersection(&rect, &obj.movingUnit.hitBox.sdl())) {
+		SDL_Rect tempRect = obj.movingUnit.hitBox.sdl();
+		if (SDL_HasIntersection(&rect, &tempRect)) {
 			if (obj.checkFlag("SOLID"))
 				return true;
 		}

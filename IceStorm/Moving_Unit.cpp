@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Objects_Manager.h"
 #include "Controller.h"
+#include <math.h>
 
 bool rectEquals(SDL_Rect a, SDL_Rect b) {
 	if (a.x == b.x

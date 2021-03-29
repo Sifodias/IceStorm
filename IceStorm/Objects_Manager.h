@@ -22,8 +22,8 @@ namespace Objects_Manager {
 	tuple<GObject, GObject> newDoors(string levelName);
 	void objectsRoutine(SDL_Event& e);
 
-	void trigger(SDL_Rect& rect, bool contact);
-	bool solidIntersect(SDL_Rect& rect);
+	void trigger(SDL_Rect rect, bool contact);
+	bool solidIntersect(SDL_Rect rect);
 
 	extern vector<GObject> objects;
 };

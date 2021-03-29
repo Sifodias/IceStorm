@@ -215,7 +215,9 @@ void Events_Manager::floweyCin() {
 	while (1) {
 		whileBlock();
 		for (int id : pelleksID) {
-			if (SDL_HasIntersection(&Character::movingUnit.hitBox.sdl(), &ob(id).movingUnit.hitBox.sdl()))
+			SDL_Rect tempRect1 = Character::movingUnit.hitBox.sdl();
+			SDL_Rect tempRect2 = ob(id).movingUnit.hitBox.sdl();
+			if (SDL_HasIntersection(&tempRect1, &tempRect2))
 				goto out;
 		}
 	}
