@@ -1,8 +1,2 @@
 # IceStorm
-A 2D Adventure Game made from scratch
-
-Language: C++
-
-IDE: Visual Studio 2019
-
-Libs: SDL2
+A 2D adventure game engine made from scratch using the SDL2 libs
