@@ -34,7 +34,7 @@ void Textures_Manager::init()
 	while (!tempStream->eof()) {
 		getline(*tempStream, catcher);
 
-		SDL_Surface* new_surface = IMG_Load(("./Textures/" + catcher).c_str());
+		SDL_Surface* new_surface = IMG_Load((Paths::texturesPath + catcher).c_str());
 		if (new_surface == NULL) {
 			std::cout << "Image not loaded ! Error: " << SDL_GetError() << std::endl;
 			continue;
