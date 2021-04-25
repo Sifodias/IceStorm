@@ -7,6 +7,7 @@
 #include "Renderer.h"
 #include "Paths.h"
 #include "Controller.h"
+#include <filesystem>
 
 std::vector<std::array<SDL_Texture*, 127>> lettersVec;
 std::vector<NodeQueue> Text_Printer::queue;
@@ -22,21 +23,13 @@ bool Text_Printer::busy = 0;
 bool Text_Printer::standStill = 0;
 
 void Text_Printer::init() {
-	std::ifstream* tempStream = loadFile(Paths::asciiPath);
-	if (!tempStream) {
-		printf("ERROR : policeList not loaded\n");
-		return;
-	}
-
-	std::string catcher;
 	std::vector<TTF_Font*> tempVec;
-	tempStream->clear();
-	tempStream->seekg(0);
-	while (!tempStream->eof()) {
-		getline(*tempStream, catcher);
-		catcher.insert(0, "./Polices/");
-		//std::cout << catcher << std::endl;
-		tempVec.push_back(TTF_OpenFont(catcher.c_str(), 200));
+	for (const auto &entry : std::filesystem::directory_iterator(Paths::asciiPath))
+	{
+		if (!std::filesystem::is_regular_file(entry) || entry.path().extension() != ".fon")
+			continue;
+
+		tempVec.push_back(TTF_OpenFont(entry.path().c_str(), 200));
 	}
 
 	char tempStr[2] = "A";
@@ -45,10 +38,10 @@ void Text_Printer::init() {
 	SDL_Surface* textSurface = NULL;
 	std::array<SDL_Texture*, 127> tempLetters = { NULL };
 
-	for (auto i = tempVec.begin(); i != tempVec.end(); ++i) {
+	for (TTF_Font* i : tempVec) {
 		for (int y = 0; y < 127; y++) {
 			tempStr[0] = y;
-			textSurface = TTF_RenderText_Solid(*i, tempStr, textColor);
+			textSurface = TTF_RenderText_Solid(i, tempStr, textColor);
 			tempLetters[y] = SDL_CreateTextureFromSurface(Renderer::g_Renderer, textSurface);
 		}
 		lettersVec.push_back(tempLetters);

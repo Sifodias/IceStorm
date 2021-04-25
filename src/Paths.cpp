@@ -1,9 +1,7 @@
 #include "Paths.h"
 
 string Paths::levelPath = "./Levels/";
-string Paths::texturesListPath = "./Textures/texturesList.txt";
 string Paths::texturesPath = "./Textures/";
-string Paths::asciiPath = "./Polices/asciiList.txt";
+string Paths::asciiPath = "./Polices/";
 string Paths::entData = "./Entities/ent_data.txt";
-string Paths::dialogs = "./Dialogs/dialog.txt";
 string Paths::saveData = "./Saves/"; // save.txt"
