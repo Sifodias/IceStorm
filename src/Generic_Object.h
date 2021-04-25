@@ -36,7 +36,8 @@ type :
 	CAMBLOCKX,
 	CAMBLOCKY,
 	PATTERN,  //it's itself a pattern
-	DYNAMIC   //Not present in the tilemap
+	DYNAMIC,   //Not present in the tilemap
+	SOUND
 
 flags :
 	CONTACT,	//triggered when contact

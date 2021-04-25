@@ -96,10 +96,17 @@ content: |deadFlowey
 
 ID: 78
 target: floweyCin
+targetnames: sampleSound
 flags: CONTACT INV
 type: EVENT_SCRIPTED
 texture: testc.png
 content: |script1
+
+
+ID: 79
+target: sampleSound
+type: SOUND
+content: headspin.mp3
 
 
 

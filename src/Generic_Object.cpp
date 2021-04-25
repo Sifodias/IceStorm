@@ -6,7 +6,7 @@
 #include "Map.h"
 #include "Camera.h"
 #include "Events_Manager.h"
-
+#include "Audio_Manager.h"
 
 void GObject::routine(SDL_Event& e)
 {
@@ -68,7 +68,10 @@ void GObject::trigger()
 				Camera::lockCamX(0, false);
 			}
 		}
+	}
 
+	if (type == "SOUND"){
+		Audio_Manager::play(content);
 	}
 
 	if (type == "EVENT_SCRIPTED") {

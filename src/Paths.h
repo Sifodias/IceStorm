@@ -5,10 +5,9 @@ using namespace std;
 
 namespace Paths {
 	extern string levelPath;
-	extern string texturesListPath;
 	extern string texturesPath;
 	extern string asciiPath;
 	extern string entData;
-	extern string dialogs;
 	extern string saveData;
+	extern string musicPath;
 };

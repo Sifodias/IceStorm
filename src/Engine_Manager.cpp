@@ -10,6 +10,7 @@
 #include "Builder.h"
 #include "Events_Manager.h"
 #include "Controller.h"
+#include "Audio_Manager.h"
 
 void init_game()
 {
@@ -20,6 +21,8 @@ void init_game()
 	Camera::init();
 	Character::init();
 	Controller::init();
+	Audio_Manager::init();
+	
 	//Events_Manager::addToQueue(Events_Manager::etalonage);
 }
 
