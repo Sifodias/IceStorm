@@ -18,15 +18,14 @@ typedef enum {
 
 void condQuit(SDL_Event& e) {
 	if (SDL_PollEvent(&e) != 0) {
-		SDL_FlushEvent(SDL_MOUSEMOTION);			//This useless event overloads the event queue
+		SDL_FlushEvent(SDL_MOUSEMOTION); //This useless event overloads the event queue
 		if (e.type == SDL_QUIT) {
 			Renderer::quitAll();
 			exit(0);
 		}
 	}
 }
-void Events_Manager::routine()
-{
+void Events_Manager::routine() {
 	if (busy)
 		return;
 
@@ -36,8 +35,7 @@ void Events_Manager::routine()
 	}
 }
 
-void Events_Manager::addToQueue(std::function<void()> event)
-{
+void Events_Manager::addToQueue(std::function<void()> event) {
 	eventsQueue.push_back(event);
 }
 
@@ -45,8 +43,7 @@ int choiceMenu(int numchoices, int xFirstChoice, int offset) {
 	return 0;
 }
 
-void Events_Manager::testTitle()
-{
+void Events_Manager::testTitle() {
 	SDL_Rect container{ Renderer::SCREEN_W / 2 - 32, Renderer::SCREEN_H / 2 - 32, 500, 500 };
 	Text_Printer::addToQueue("IceStorm", &container, 1, 0, NULL, 0);
 	SDL_Event e{};
@@ -69,11 +66,11 @@ void Events_Manager::testTitle()
 
 	int choice = 0;
 	GObject choiceTick = Objects_Manager::findObject("choiceTick");
-	SDL_Rect choiceRect{ container.x - 20,container.y - 32, 5, 10 };
+	SDL_Rect choiceRect{ container.x - 20, container.y - 32, 5, 10 };
 	int lock = 0;
 	while (1) {
 		if (SDL_PollEvent(&e) != 0) {
-			SDL_FlushEvent(SDL_MOUSEMOTION);			//This useless event overloads the event queue
+			SDL_FlushEvent(SDL_MOUSEMOTION); //This useless event overloads the event queue
 			if (e.type == SDL_QUIT) {
 				Renderer::quitAll();
 				break;
@@ -111,8 +108,6 @@ void Events_Manager::testTitle()
 
 	if (choice == 1)
 		Renderer::quitAll();
-
-
 }
 
 void routinesBlock(SDL_Event& e) {
@@ -137,18 +132,17 @@ void waitLoop(cond c) {
 		whileBlock();
 		switch (c) {
 		case TEXT_FLUSHED:
-			if (!Text_Printer::busy) {
-				return;
-			}
-			break;
+		if (!Text_Printer::busy) {
+			return;
+		}
+		break;
 		}
 	}
 }
 
-
 void Events_Manager::floweyCin() {
 	//	Character::lockMovements(true);
-		//Character::textures.setIdle(true);
+	//Character::textures.setIdle(true);
 
 	Character::textures.setSingleFrame("heart.png");
 	Character::movingUnit.hitBox.w = Textures_Manager::findSurface("heart.png")->w;
@@ -189,14 +183,11 @@ void Events_Manager::floweyCin() {
 		}
 	}
 
-
 	ob(idFlow).textures.setCurrentGroup("dancing");
 	std::vector<int> pelleksID;
 
 	for (int i = 0; i < 4; i++)
 		pelleksID.push_back(Objects_Manager::createObject("flags: CONTACT DYNAMIC").ID);
-
-
 
 	for (int id : pelleksID) {
 		GObject& obj = Objects_Manager::findObject(id);
@@ -289,11 +280,8 @@ void Events_Manager::etalonage() {
 					SDL_RenderClear(Renderer::g_Renderer);
 					SDL_SetRenderDrawColor(Renderer::g_Renderer, r, g, b, 0);
 					SDL_RenderPresent(Renderer::g_Renderer);
-
-
 				}
 			}
 		}
-
 	}
 }

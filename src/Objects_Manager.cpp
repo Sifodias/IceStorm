@@ -20,8 +20,7 @@ void Objects_Manager::init() {
 	loadObjects();
 }
 
-bool Objects_Manager::identify(string& target, string wanted)
-{
+bool Objects_Manager::identify(string& target, string wanted) {
 	string tempTarget = target;
 	if (target.size() < wanted.size()) return false;
 	tempTarget.erase(wanted.size(), target.size());
@@ -32,8 +31,7 @@ bool Objects_Manager::identify(string& target, string wanted)
 	else return false;
 }
 
-void Objects_Manager::loadObjects()
-{
+void Objects_Manager::loadObjects() {
 	std::string buffer;
 	tempStream->seekg(0);
 	std::getline(*tempStream, buffer);
@@ -102,15 +100,13 @@ void Objects_Manager::loadObjects()
 	}
 }
 
-void Objects_Manager::objectsRoutine(SDL_Event& e)
-{
+void Objects_Manager::objectsRoutine(SDL_Event& e) {
 	for (int i = 0; i < objects.size(); i++) {
 		objects[i].routine(e);
 	}
 }
 
-void Objects_Manager::trigger(SDL_Rect rect, bool contact)
-{
+void Objects_Manager::trigger(SDL_Rect rect, bool contact) {
 	for (GObject& obj : objects) {
 		SDL_Rect tempRect = obj.movingUnit.hitBox.sdl();
 		if (SDL_HasIntersection(&rect, &tempRect)) {
@@ -120,8 +116,7 @@ void Objects_Manager::trigger(SDL_Rect rect, bool contact)
 	}
 }
 
-bool Objects_Manager::solidIntersect(SDL_Rect rect)
-{
+bool Objects_Manager::solidIntersect(SDL_Rect rect) {
 	for (GObject& obj : objects) {
 		SDL_Rect tempRect = obj.movingUnit.hitBox.sdl();
 		if (SDL_HasIntersection(&rect, &tempRect)) {

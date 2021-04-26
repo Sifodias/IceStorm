@@ -8,14 +8,12 @@
 #include "Events_Manager.h"
 #include "Audio_Manager.h"
 
-void GObject::routine(SDL_Event& e)
-{
+void GObject::routine(SDL_Event& e) {
 	movingUnit.move(e);
 }
 
 
-void GObject::trigger()
-{
+void GObject::trigger() {
 	if (checkFlag("CONTACT") && contact_triggered && !checkFlag("PERMANENT")) {
 		return;
 	}
@@ -25,6 +23,7 @@ void GObject::trigger()
 		if (!Objects_Manager::findObject(name).flagTrigger)
 			Objects_Manager::findObject(name).trigger();
 	}
+
 	if (type == "BUTTON") {
 		if (checkFlag("CONTACT")) {
 			if (checkFlag("PRINT"))
@@ -70,7 +69,7 @@ void GObject::trigger()
 		}
 	}
 
-	if (type == "SOUND"){
+	if (type == "SOUND") {
 		Audio_Manager::play(content);
 	}
 
@@ -83,8 +82,7 @@ void GObject::trigger()
 	flagTrigger = 0;
 }
 
-bool GObject::checkFlag(string flag)
-{
+bool GObject::checkFlag(string flag) {
 	for (string& str : flags) {
 		if (str == flag) {
 			return true;

@@ -15,7 +15,7 @@ using namespace std;
 void Controller::init() {
 
 	if (SDL_NumJoysticks() < 1) {
-		cout << "Warning: No joysticks connected!" << endl;
+		cout << "Warning: No joystick connected!" << endl;
 	}
 	else {
 		//Load joystick

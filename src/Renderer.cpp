@@ -15,16 +15,15 @@ int Renderer::SCREEN_W = 320;
 int Renderer::SCREEN_H = 240;
 
 
-void Renderer::initAll()
-{
+void Renderer::initAll() {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC) < 0)
 		std::cout << "Can't load the SDL: " << SDL_GetError() << endl;
-	
+
 	if (!IMG_Init(IMG_INIT_PNG))
-		std::cout << "Can't load SDL_Image: "<< SDL_GetError() << endl;
-	
+		std::cout << "Can't load SDL_Image: " << SDL_GetError() << endl;
+
 	if (TTF_Init() == -1)
-		std::cout << "Can't load SDL_ttf: "<< TTF_GetError() << endl;
+		std::cout << "Can't load SDL_ttf: " << TTF_GetError() << endl;
 
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 		std::cout << "Can't load SDL_mixer: " << Mix_GetError() << endl;
@@ -32,7 +31,7 @@ void Renderer::initAll()
 	SDL_DisplayMode current;
 	if (SDL_GetCurrentDisplayMode(0, &current))
 		std::cout << SDL_GetError() << endl;
-	
+
 	Uint32 flags;
 	if (FULLSCREEN) {
 		flags = SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN;
@@ -42,25 +41,24 @@ void Renderer::initAll()
 	else {
 		flags = SDL_WINDOW_SHOWN;
 		g_Window = SDL_CreateWindow("The Rising Shadows Engine", SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED, ((int)(current.h / SCREEN_H)-2) * SCREEN_W,
-			((int)(current.h / SCREEN_H)-2) * SCREEN_H, flags);
+			SDL_WINDOWPOS_UNDEFINED, ((int)(current.h / SCREEN_H) - 2) * SCREEN_W,
+			((int)(current.h / SCREEN_H) - 2) * SCREEN_H, flags);
 	}
 
-	if (g_Window == NULL) 
+	if (g_Window == NULL)
 		std::cout << "Can't create the window: " << SDL_GetError() << endl;
-	
+
 	g_Renderer = SDL_CreateRenderer(g_Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (g_Renderer == NULL)
-		std::cout << "Can't create the renderer: "<< SDL_GetError() << endl;
-	
+		std::cout << "Can't create the renderer: " << SDL_GetError() << endl;
+
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
 	SDL_RenderSetLogicalSize(g_Renderer, SCREEN_W, SCREEN_H);
 	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 }
 
 
-void Renderer::quitAll()
-{
+void Renderer::quitAll() {
 	engineQuit();
 	SDL_DestroyWindow(g_Window);
 	SDL_DestroyRenderer(g_Renderer);

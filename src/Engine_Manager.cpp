@@ -12,8 +12,7 @@
 #include "Controller.h"
 #include "Audio_Manager.h"
 
-void init_game()
-{
+void init_game() {
 	Renderer::initAll();
 	Textures_Manager::init();
 	Objects_Manager::init();
@@ -22,13 +21,11 @@ void init_game()
 	Character::init();
 	Controller::init();
 	Audio_Manager::init();
-	
+
 	//Events_Manager::addToQueue(Events_Manager::etalonage);
 }
 
-
 void handleRoutines(SDL_Event e) {
-	
 	SDL_RenderClear(Renderer::g_Renderer);
 	Builder::routine(e);
 	Character::characterRoutine(e);
@@ -38,16 +35,13 @@ void handleRoutines(SDL_Event e) {
 	Text_Printer::handleRoutine(e);
 
 	SDL_RenderPresent(Renderer::g_Renderer);
-
-
 }
 
-int main_event_loop()
-{
+int main_event_loop() {
 	SDL_Event e;
 	while (1) {
 		if (SDL_PollEvent(&e) != 0) {
-			SDL_FlushEvent(SDL_MOUSEMOTION);			//This useless event overloads the event queue
+			SDL_FlushEvent(SDL_MOUSEMOTION); //This useless event overloads the event queue
 			if (e.type == SDL_QUIT) {
 				Renderer::quitAll();
 				break;
@@ -57,13 +51,11 @@ int main_event_loop()
 			Controller::rumbleTest();
 
 		handleRoutines(e);
-
 	}
 	return 0;
 }
 
-std::ifstream* loadFile(std::string path)
-{
+std::ifstream* loadFile(std::string path) {
 	std::ifstream* level_stream = new ifstream;
 	level_stream->open(path.c_str());
 	if (!(*level_stream)) {
@@ -80,4 +72,3 @@ void engineQuit() {
 	}
 	Text_Printer::quit();
 }
-
