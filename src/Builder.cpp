@@ -10,7 +10,7 @@
 #include "Paths.h"
 #include <tuple>
 
-GObject* currentObject = NULL;
+GObject* Builder::currentObject = NULL;
 int currentPlan = 0;
 vector<int> cmdDone(123, 0);
 

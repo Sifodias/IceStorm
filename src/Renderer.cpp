@@ -41,8 +41,12 @@ void Renderer::initAll() {
 	else {
 		flags = SDL_WINDOW_SHOWN;
 		g_Window = SDL_CreateWindow("The Rising Shadows Engine", SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED, ((int)(current.h / SCREEN_H) - 2) * SCREEN_W,
-			((int)(current.h / SCREEN_H) - 2) * SCREEN_H, flags);
+			SDL_WINDOWPOS_UNDEFINED,
+			//((int)(current.h / SCREEN_H) ) * SCREEN_W,
+			current.w,
+			//((int)(current.h / SCREEN_H)) * SCREEN_H,
+			current.h-150,
+			flags);
 	}
 
 	if (g_Window == NULL)

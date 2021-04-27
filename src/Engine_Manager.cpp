@@ -11,6 +11,7 @@
 #include "Events_Manager.h"
 #include "Controller.h"
 #include "Audio_Manager.h"
+#include "Editor.h"
 
 void init_game() {
 	Renderer::initAll();
@@ -21,11 +22,11 @@ void init_game() {
 	Character::init();
 	Controller::init();
 	Audio_Manager::init();
-
+	Editor::init();
 	//Events_Manager::addToQueue(Events_Manager::etalonage);
 }
 
-void handleRoutines(SDL_Event e) {
+void handleRoutines(SDL_Event& e) {
 	SDL_RenderClear(Renderer::g_Renderer);
 	Builder::routine(e);
 	Character::characterRoutine(e);
@@ -33,6 +34,7 @@ void handleRoutines(SDL_Event e) {
 	Events_Manager::routine();
 	Textures_Manager::printFrame();
 	Text_Printer::handleRoutine(e);
+	Editor::routine(e);
 
 	SDL_RenderPresent(Renderer::g_Renderer);
 }

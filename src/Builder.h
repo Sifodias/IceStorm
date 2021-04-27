@@ -25,6 +25,8 @@ namespace Builder {
 	void clean();
 	void newDoor(string levelname);
 
+	extern GObject* currentObject;
+
 };
 
 /*
