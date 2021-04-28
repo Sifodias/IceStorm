@@ -164,7 +164,7 @@ void Builder::printInfo(GObject& printObject)
 
 void Builder::createObject(string buffer)
 {
-	printInfo(Objects_Manager::createObject(buffer));
+	currentObject = &Objects_Manager::createObject(buffer);
 }
 
 void Builder::editObject(string str)
@@ -283,13 +283,18 @@ void Builder::routine(SDL_Event& e)
 			SDL_GetMouseState(&x, &y);
 			int width, height;
 			SDL_GetWindowSize(Renderer::g_Window, &width, &height);
-			x = (int)((x / (double)width) * Renderer::SCREEN_W);
-			y = (int)((y / (double)height) * Renderer::SCREEN_H);
+
+			double factor = (double)height / Renderer::SCREEN_H;
+			
+			double offset = (width - factor * Renderer::SCREEN_W) / 2;
+			offset /=factor;
+
+			x = (x / factor)-offset;
+			y /= factor;
+
 			placeElement(x, y, currentPlan);
 			currentObject->movingUnit.hitBox.x = ((x + Camera::getX()) / GRID_W) * GRID_W;
 			currentObject->movingUnit.hitBox.y = ((y + Camera::getY()) / GRID_H) * GRID_H;
-			//currentObject->x = ((x + Camera::getX()) / GRID_W) * GRID_W;
-			//currentObject->y = ((y + Camera::getY()) / GRID_H) * GRID_H;
 			break;
 		}
 		case SDLK_r: {
@@ -308,23 +313,12 @@ void Builder::routine(SDL_Event& e)
 			Map::checkMate(currentPlan);
 			break;
 		}
-				   //case SDLK_z: {
-				   //	cout << Map::isItSolid(Character::movingUnit.hitBox);
-				   //	break;
-				   //}
 		case SDLK_x: {
 			Textures_Manager::showInvisibleEnts = !Textures_Manager::showInvisibleEnts;
 			break;
 		}
 		case SDLK_z: {
-			int x, y;
-			SDL_GetMouseState(&x, &y);
-			int width, height;
-			SDL_GetWindowSize(Renderer::g_Window, &width, &height);
-			x = (int)((x / (double)width) * Renderer::SCREEN_W);
-			y = (int)((y / (double)height) * Renderer::SCREEN_H);
-			cout << (x + Camera::getX()) - ((x + Camera::getX()) % GRID_W) << " " << (y + Camera::getY()) - ((y + Camera::getY()) % GRID_H) << endl;
-
+			createObject("");
 			break;
 		}
 		case SDLK_v: {

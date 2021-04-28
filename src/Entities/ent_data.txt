@@ -41,7 +41,7 @@ texture: entry.png
 
 ID: 70
 target: nullWall
-flags: SOLID
+flags: SOLID INV
 type: GENERIC
 
 
@@ -97,16 +97,27 @@ content: |deadFlowey
 ID: 78
 target: floweyCin
 targetnames: sampleSound
-flags: CONTACT INV
+flags: CONTACT
 type: EVENT_SCRIPTED
-texture: testc.png
 content: |script1
 
 
 ID: 79
 target: sampleSound
 type: SOUND
-content: null
+content: headspin.mp3
+
+
+ID: 80
+type: GENERIC
+
+
+ID: 81
+type: GENERIC
+
+
+ID: 82
+type: GENERIC
 
 
 

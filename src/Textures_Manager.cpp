@@ -135,11 +135,13 @@ void Textures_Manager::printFrame()
 
 				/* If the object has no texture and we must display every ent, give generic texture */
 				to_print = to_print != NULL ? to_print : (showInvisibleEnts ? findTexture("inv.png") : NULL);
+				if (currentObj.useSpritesHandler){
+					to_print = currentObj.textures.currentFrame();
+				}
 				if (!showInvisibleEnts && currentObj.checkFlag("INV"))
 				{
 					to_print = NULL;
 				}
-
 				SDL_RenderCopy(Renderer::g_Renderer, to_print, NULL, &out);
 
 				if (showGrid)

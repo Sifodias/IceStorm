@@ -13,6 +13,7 @@
 #include "Audio_Manager.h"
 #include "Editor.h"
 #include "imgui_impl_sdl.h"
+
 void init_game() {
 	Renderer::initAll();
 	Textures_Manager::init();

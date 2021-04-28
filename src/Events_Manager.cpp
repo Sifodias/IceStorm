@@ -143,6 +143,9 @@ void waitLoop(cond c) {
 void Events_Manager::floweyCin() {
 	//	Character::lockMovements(true);
 	//Character::textures.setIdle(true);
+	ob(78).useSpritesHandler = true;
+	ob(78).textures.addGroup("t1.png", 20, 28, 0, 0, 0, 2, "hey", 250);
+	ob(78).textures.setCurrentGroup("hey");
 
 	Character::textures.setSingleFrame("heart.png");
 	Character::movingUnit.hitBox.w = Textures_Manager::findSurface("heart.png")->w;
@@ -152,7 +155,7 @@ void Events_Manager::floweyCin() {
 	int idFlow = Objects_Manager::createObject("flags: DYNAMIC").ID;
 	ob(idFlow).movingUnit.hitBox = { 150, 290, 21, 21 };
 	ob(idFlow).textures.clear();
-	ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 2, 8, "dancing", 120);
+	ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 2, 8, "dancing", 125);
 	ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 1, 5, "appear", 80, true);
 	ob(idFlow).textures.setCurrentGroup("appear");
 

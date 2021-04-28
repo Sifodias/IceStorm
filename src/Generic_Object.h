@@ -43,7 +43,8 @@ flags :
 	CONTACT,	//triggered when contact
 	PERMANENT,	//can be triggered unlimited times
 	PATTERN,//follows a pattern
-	SOLID
+	SOLID,
+	INV
 
 */
 
