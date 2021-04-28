@@ -6,6 +6,7 @@ SDL_GameController* Controller::gGameController = NULL;
 SDL_Haptic* Controller::gControllerHaptic = NULL;
 std::map<std::string, SDL_GameControllerButton> Controller::inputs_controller;
 std::map<std::string, SDL_Keycode> Controller::inputs_keyboard;
+bool Controller::blockInput = false;
 
 #define JOYSTICK_DEAD_ZONE 8000
 #define JOY_ENABLED true
@@ -65,6 +66,9 @@ void Controller::rumbleTest() {
 }
 
 bool Controller::checkAction(SDL_Event& e, std::string action) {
+	if (blockInput)
+		return false;
+
 	bool res = false;
 	if (gGameController != NULL) {
 		if (e.type == SDL_JOYBUTTONDOWN) {
@@ -102,6 +106,9 @@ bool Controller::checkAction(SDL_Event& e, std::string action) {
 }
 
 bool Controller::checkActionState(std::string action) {
+	if (blockInput)
+		return false;
+		
 	bool res = false;
 	if (gGameController != NULL) {
 		auto resCon = inputs_controller.find(action);

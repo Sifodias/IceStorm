@@ -5,6 +5,7 @@
 #include "imgui_stdlib.h"
 #include "Builder.h"
 #include <string>
+#include "imgui_impl_sdl.h"
 
 using namespace ImGui;
 
@@ -13,6 +14,7 @@ void Editor::init() {
     int w, h;
     SDL_GetWindowSize(Renderer::g_Window, &w, &h);
     ImGuiSDL::Initialize(Renderer::g_Renderer, w, h); //Needs actual dimensions of window
+    ImGui_ImplSDL2_Init(Renderer::g_Window);
 }
 
 static void ShowPlaceholderObject(const char* prefix, int uid) {
@@ -60,11 +62,9 @@ static void ShowPlaceholderObject(const char* prefix, int uid) {
         ImGui::TableSetColumnIndex(1);
         ImGui::SetNextItemWidth(-FLT_MIN);
 
-
         ImGui::InputText("target##current", &cur->target);
 
         ImGui::NextColumn();
-
 
         ImGui::TreePop();
     }
@@ -94,6 +94,9 @@ void Editor::routine(SDL_Event& e) {
     SDL_GetWindowSize(Renderer::g_Window, &w, &h);
 
     ImGuiIO& io = GetIO();
+    
+    ImGui_ImplSDL2_NewFrame(Renderer::g_Window);
+
     int wheel = 0;
     if (e.type == SDL_WINDOWEVENT) {
         if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
@@ -104,10 +107,6 @@ void Editor::routine(SDL_Event& e) {
     else if (e.type == SDL_MOUSEWHEEL)
         wheel = e.wheel.y;
 
-    else if (e.type == SDL_KEYDOWN) {
-        io.AddInputCharacter(e.key.keysym.sym);
-    }
-
     int mouseX, mouseY;
     const int buttons = SDL_GetMouseState(&mouseX, &mouseY);
 
@@ -115,7 +114,7 @@ void Editor::routine(SDL_Event& e) {
     io.MouseDown[0] = buttons & SDL_BUTTON(SDL_BUTTON_LEFT);
     io.MouseDown[1] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
     io.MouseWheel = static_cast<float>(wheel);
-
+    
     SDL_RenderSetLogicalSize(Renderer::g_Renderer, w / 2, h / 2);
 
     NewFrame();

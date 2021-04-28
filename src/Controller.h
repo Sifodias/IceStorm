@@ -17,4 +17,5 @@ namespace Controller {
 	
 	extern SDL_GameController* gGameController;
 	extern SDL_Haptic* gControllerHaptic;
+	extern bool blockInput;
 }
