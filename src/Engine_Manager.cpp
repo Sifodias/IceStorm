@@ -24,7 +24,7 @@ void init_game() {
 	Controller::init();
 	Audio_Manager::init();
 	Editor::init();
-	//Events_Manager::addToQueue(Events_Manager::etalonage);
+	// Events_Manager::addToQueue(Events_Manager::testTitle);
 }
 
 void handleRoutines(SDL_Event& e) {

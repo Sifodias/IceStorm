@@ -1,0 +1,139 @@
+[
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 1,
+        "flags": [
+            "SOLID"
+        ],
+        "target": "wall_test",
+        "texture": "tile.png",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 2,
+        "flags": [
+            "SOLID"
+        ],
+        "target": "sign",
+        "targetnames": [
+            "dummymsg"
+        ],
+        "type": "GENERIC"
+    },
+    {
+        "ID": 3,
+        "content": "|firstTalkClean",
+        "target": "dummymsg",
+        "type": "DIALOG"
+    },
+    {
+        "ID": 69,
+        "target": "characterMarkerMap",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 21,
+        "target": "choiceTick",
+        "texture": "choice.png",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 22,
+        "target": "bck",
+        "texture": "entry.png",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 70,
+        "flags": [
+            "INV",
+            "SOLID"
+        ],
+        "target": "nullWall",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 71,
+        "target": "encounterbck",
+        "texture": "firstEncounter.png",
+        "type": "GLOBAL"
+    },
+    {
+        "ID": 72,
+        "content": "0 73 flowey",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "target": "doorA",
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 73,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "target": "doorA2",
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 74,
+        "target": "flowey_dead",
+        "targetnames": [
+            "flowey_desc"
+        ],
+        "texture": "flowey_dead.png",
+        "type": "BUTTON"
+    },
+    {
+        "ID": 75,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 76,
+        "content": "0 75 ripof",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 77,
+        "content": "|deadFlowey",
+        "target": "flowey_desc",
+        "type": "DIALOG"
+    },
+    {
+        "ID": 78,
+        "content": "|script1",
+        "flags": [
+            "CONTACT"
+        ],
+        "target": "floweyCin",
+        "targetnames": [
+            "sampleSound"
+        ],
+        "type": "EVENT_SCRIPTED"
+    },
+    {
+        "ID": 79,
+        "content": "headspin.mp3",
+        "target": "sampleSound",
+        "type": "SOUND"
+    }
+]

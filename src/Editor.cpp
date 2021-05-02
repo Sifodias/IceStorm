@@ -181,7 +181,7 @@ void Editor::routine(SDL_Event& e) {
 
     NewFrame();
 
-    ShowDemoWindow();
+    // ShowDemoWindow();
     showCurrentStuff();
 
     ImGui::Render();

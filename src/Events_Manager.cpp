@@ -99,7 +99,7 @@ void Events_Manager::testTitle() {
 
 		choiceRect.y = container.y - 32 + choice * 32;
 		SDL_RenderClear(Renderer::g_Renderer);
-		//SDL_RenderCopy(Renderer::g_Renderer, choiceTick.texture, NULL, &choiceRect);
+		// SDL_RenderCopy(Renderer::g_Renderer, choiceTick.texture, NULL, &choiceRect);
 		Text_Printer::handleRoutine(e);
 		SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderPresent(Renderer::g_Renderer);

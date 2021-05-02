@@ -6,6 +6,9 @@
 #include "Engine_Manager.h"
 #include "Textures_Manager.h"
 #include <algorithm>
+#include <nlohmann/json.hpp>
+#include <iomanip>
+using json = nlohmann::json;
 
 vector<GObject> Objects_Manager::objects;
 ifstream* tempStream = NULL;
@@ -32,71 +35,45 @@ bool Objects_Manager::identify(string& target, string wanted) {
 }
 
 void Objects_Manager::loadObjects() {
-	std::string buffer;
 	tempStream->seekg(0);
-	std::getline(*tempStream, buffer);
 
+	json objArray;
+	*tempStream >> objArray;
+	for (auto& ojs : objArray) {
+		GObject cur;
 
-	while (buffer.compare("EOF")) {
-		while (!buffer.size()) {
-			std::getline(*tempStream, buffer);
-			continue;
+		for (auto field : ojs.items()) {
+			if (field.key() == "ID")
+				cur.ID = ojs["ID"];
+
+			if (field.key() == "target")
+				cur.target = ojs["target"];
+
+			if (field.key() == "targetnames") {
+				for (auto tn : ojs["targetnames"])
+					cur.targetnames.push_back(tn);
+			}
+
+			if (field.key() == "texture") {
+				cur.textureName = ojs["texture"];
+				cur.imgIndex = Textures_Manager::findIndex(cur.textureName);
+				cur.useSpritesHandler = true;
+				cur.textures.setSingleFrame(cur.textureName);
+			}
+
+			if (field.key() == "type")
+				cur.type = ojs["type"];
+
+			if (field.key() == "flags") {
+				for (auto fn : ojs["flags"])
+					cur.flags.push_back(fn);
+			}
+
+			if (field.key() == "content")
+				cur.content = ojs["content"];
 		}
-		identify(buffer, "ID: ");
-		GObject currentObject;
-		currentObject.ID = std::stoi(buffer);
 
-		std::getline(*tempStream, buffer);
-		while (!identify(buffer, "ID: ") && buffer.compare("EOF")) {
-			//fill the element
-			if (identify(buffer, "target: ")) {
-				currentObject.target = buffer;
-				if (findObject(buffer).ID)
-					std::cout << "Objects with the same target : " << buffer <<
-					". Can result in unexpected behavior" << std::endl;
-
-				goto next;
-			}
-			if (identify(buffer, "targetnames: ")) {
-				istringstream iss(buffer);
-				string word;
-				while (iss >> word) {
-					currentObject.targetnames.push_back(word);
-				}
-				goto next;
-			}
-			if (identify(buffer, "texture: ")) {
-				currentObject.textureName = buffer;
-				currentObject.imgIndex = Textures_Manager::findIndex(currentObject.textureName);
-				currentObject.useSpritesHandler = true;
-				currentObject.textures.setSingleFrame(currentObject.textureName);
-				goto next;
-			}
-
-			if (identify(buffer, "type: ")) {
-				currentObject.type = buffer;
-				goto next;
-			}
-			if (identify(buffer, "flags: ")) {
-				istringstream iss(buffer);
-				string word;
-				while (iss >> word) {
-					currentObject.flags.push_back(word);
-				}
-				goto next;
-			}
-			if (identify(buffer, "crect: ")) {
-				goto next;
-			}
-			if (identify(buffer, "content: ")) {
-				currentObject.content = buffer;
-				goto next;
-			}
-
-		next:
-			std::getline(*tempStream, buffer);
-		}
-		objects.push_back(currentObject);
+		objects.push_back(cur);
 	}
 }
 
@@ -131,11 +108,7 @@ GObject& Objects_Manager::findObject(string target) {
 	int temp;
 	try {
 		temp = stoi(target);
-		for (GObject& obj : objects) {
-			if (obj.ID == temp)
-				return obj;
-		}
-		return objects[0];
+		return findObject(temp);
 	}
 	catch (exception&) {
 		for (GObject& obj : objects) {
@@ -175,16 +148,12 @@ string getAndClear(string& str) {
 	return ret;
 }
 
-/* TODO: Remove code duplication */
 void Objects_Manager::fillObject(GObject& obj, string data) {
 	while (!data.empty()) {
 		cleanSpaces(data);
 
 		if (identify(data, "target: ")) {
 			obj.target = getAndClear(data);
-			if (findObject(obj.target).ID)
-				std::cout << "Objects with the same target : " << obj.target <<
-				". Can result in unexpected behavior" << std::endl;
 			continue;
 		}
 		if (identify(data, "targetnames: ")) {
@@ -261,48 +230,51 @@ GObject& Objects_Manager::createObject(string data) {
 	return objects.back();
 }
 
-//beware of new fields
 void Objects_Manager::saveObjects() {
 	if (tempStream == NULL) return;
 	tempStream->close();
-	std::ofstream ofs;
-	ofs.open(Paths::entData, std::ofstream::out | std::ofstream::trunc);
+
+	std::ofstream ojs;
+	ojs.open(Paths::entData, std::ofstream::out | std::ofstream::trunc);
+
+	json objArray = json::array();
 
 	for (GObject& obj : objects) {
 		if (obj.checkFlag("DYNAMIC"))
 			continue;
-		ofs << "ID: " << obj.ID << endl;
+		objArray.push_back(json::object());
+		auto& curOb = objArray.back();
+
+		curOb["ID"] = obj.ID;
 
 		if (!obj.target.empty())
-			ofs << "target: " << obj.target << endl;
+			curOb["target"] = obj.target;
 
 		if (!obj.targetnames.empty()) {
-			ofs << "targetnames:";
-			for (int j = 0; j < obj.targetnames.size(); j++)
-				ofs << " " << obj.targetnames[j];
-			ofs << endl;
+			curOb["targetnames"] = json::array();
+			for (int j = 0; j < obj.targetnames.size(); j++) {
+				curOb["targetnames"].push_back(obj.targetnames[j]);
+			}
 		}
 
 		if (!obj.flags.empty()) {
-			ofs << "flags:";
-			for (int j = 0; j < obj.flags.size(); j++)
-				ofs << " " << obj.flags[j];
-			ofs << endl;
+			curOb["flags"] = json::array();
+			for (int j = 0; j < obj.flags.size(); j++) {
+				curOb["flags"].push_back(obj.flags[j]);
+			}
 		}
 
-		ofs << "type: " << obj.type << endl;
+		curOb["type"] = obj.type;
 
 		if (!obj.textureName.empty())
-			ofs << "texture: " << obj.textureName << endl;
+			curOb["texture"] = obj.textureName;
 
 		if (!obj.content.empty())
-			ofs << "content: " << obj.content << endl;
-		ofs << endl << endl;
+			curOb["content"] = obj.content;
 	}
 
-	ofs << endl << endl << "EOF";
-	ofs.close();
-
+	ojs << std::setw(4) << objArray << std::endl;
+	ojs.close();
 }
 
 tuple<GObject, GObject> Objects_Manager::newDoors(string levelName) {
