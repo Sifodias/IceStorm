@@ -5,7 +5,7 @@ using namespace std;
 #define GRID_H 20
 
 //Character
-#define CSPEED 150
+#define CSPEED 400
 
 #define JSPEED 350	//jump speed
 #define GRAVITY 1300

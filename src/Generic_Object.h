@@ -51,7 +51,7 @@ flags :
 class GObject {
 public:
 	GObject() : ID(0), type("GENERIC"), x(0), y(0), flagTrigger(false), contact_triggered(false), imgIndex(0),
-		useSpritesHandler(false) {
+		useSpritesHandler(false), enabled(true) {
 	};
 	int ID;
 	std::string target;
@@ -67,6 +67,7 @@ public:
 
 	int x;
 	int y;
+	bool enabled;
 	std::string content;
 	Moving_Unit movingUnit;
 

@@ -32,7 +32,8 @@
     {
         "ID": 69,
         "target": "characterMarkerMap",
-        "type": "GENERIC"
+        "type": "GENERIC",
+        "x": 10
     },
     {
         "ID": 21,
@@ -135,5 +136,23 @@
         "content": "headspin.mp3",
         "target": "sampleSound",
         "type": "SOUND"
+    },
+    {
+        "ID": 80,
+        "flags": [
+            "SOLID"
+        ],
+        "target": "gateway",
+        "targetnames": [
+            "meaning1"
+        ],
+        "texture": "gateway.png",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 92,
+        "content": "|meaning1",
+        "target": "meaning1",
+        "type": "DIALOG"
     }
 ]

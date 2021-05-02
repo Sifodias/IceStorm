@@ -12,7 +12,6 @@ void GObject::routine(SDL_Event& e) {
 	movingUnit.move(e);
 }
 
-
 void GObject::trigger() {
 	if (checkFlag("CONTACT") && contact_triggered && !checkFlag("PERMANENT")) {
 		return;

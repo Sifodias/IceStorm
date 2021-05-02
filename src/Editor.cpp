@@ -18,6 +18,22 @@ void Editor::init() {
     ImGuiSDL::Initialize(Renderer::g_Renderer, w, h); //Needs actual dimensions of window
     ImGui_ImplSDL2_Init(Renderer::g_Window);
 }
+
+static void addField(std::string field, bool& enabled) {
+    ImGui::TableSetColumnIndex(0);
+    ImGui::AlignTextToFramePadding();
+    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+    ImGui::TreeNodeEx(field.c_str(), flags, field.c_str());
+    ImGui::TableSetColumnIndex(1);
+    ImGui::SetNextItemWidth(-FLT_MIN);
+
+    ImGui::Checkbox("##value", &enabled);
+    ImGui::SetNextItemWidth(-FLT_MIN);
+
+    ImGui::TableNextRow();
+    ImGui::NextColumn();
+}
+
 static void addField(std::string field, std::string& str) {
     ImGui::TableSetColumnIndex(0);
     ImGui::AlignTextToFramePadding();
@@ -31,10 +47,20 @@ static void addField(std::string field, std::string& str) {
     ImGui::TableNextRow();
     ImGui::NextColumn();
 }
-static void addField(std::string field, int ID) {
-    std::string id = std::to_string(ID);
-    addField(field, id);
+static void addField(std::string field, int& value) {
+    ImGui::TableSetColumnIndex(0);
+    ImGui::AlignTextToFramePadding();
+    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+    ImGui::TreeNodeEx(field.c_str(), flags, field.c_str());
+    ImGui::TableSetColumnIndex(1);
+    ImGui::SetNextItemWidth(-FLT_MIN);
+
+    ImGui::InputInt(field.c_str(), &value);
+
+    ImGui::TableNextRow();
+    ImGui::NextColumn();
 }
+
 static void addField(std::string field, std::vector<std::string>& vec) {
     ImGui::TableSetColumnIndex(0);
     ImGui::AlignTextToFramePadding();
@@ -111,8 +137,9 @@ static void showCurrentObj(const char* prefix) {
     addField("targetnames:", cur->targetnames);
     addField("x:", cur->x);
     addField("y:", cur->y);
+    addField("Enabled", cur->enabled);
 
-    ImGui::TreePop();
+    // ImGui::TreePop();
     PopID();
 }
 
@@ -137,15 +164,15 @@ void showCurrentStuff() {
         showCurrentObj("Current ent:");
         ImGui::EndTable();
     }
-    if (ImGui::BeginTable("Actions", 2,
-        ImGuiTableFlags_Resizable
-        //| ImGuiTableFlags_NoBordersInBody
-        | ImGuiTableFlags_BordersInner
-        | ImGuiTableFlags_RowBg)) {
-            
+    // if (ImGui::BeginTable("Actions", 2,
+    //     ImGuiTableFlags_Resizable
+    //     //| ImGuiTableFlags_NoBordersInBody
+    //     | ImGuiTableFlags_BordersInner
+    //     | ImGuiTableFlags_RowBg)) {
 
-        ImGui::EndTable();
-    }
+
+    //     ImGui::EndTable();
+    // }
 
     ImGui::PopStyleVar();
     ImGui::End();

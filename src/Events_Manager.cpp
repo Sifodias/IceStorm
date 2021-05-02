@@ -144,7 +144,7 @@ void Events_Manager::floweyCin() {
 	//	Character::lockMovements(true);
 	//Character::textures.setIdle(true);
 	ob(78).useSpritesHandler = true;
-	ob(78).textures.addGroup("t1.png", 20, 28, 0, 0, 0, 2, "hey", 250);
+	ob(78).textures.addGroup("t1.png", 20, 28, 0, 0, 0, 2, "hey", 60);
 	ob(78).textures.setCurrentGroup("hey");
 
 	Character::textures.setSingleFrame("heart.png");

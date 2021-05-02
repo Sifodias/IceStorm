@@ -71,6 +71,12 @@ void Objects_Manager::loadObjects() {
 
 			if (field.key() == "content")
 				cur.content = ojs["content"];
+			
+			if (field.key() == "x")
+				cur.x = ojs["x"];
+
+			if (field.key() == "y")
+				cur.y = ojs["y"];
 		}
 
 		objects.push_back(cur);
@@ -271,6 +277,16 @@ void Objects_Manager::saveObjects() {
 
 		if (!obj.content.empty())
 			curOb["content"] = obj.content;
+		
+		if (obj.x != 0)
+			curOb["x"] = obj.x;
+		
+		if (obj.y != 0)
+			curOb["y"] = obj.y;
+			
+		// If the object is useless, do not store it
+		if (curOb.size() == 2 && obj.ID != 0)
+			objArray.erase(objArray.size()-1);
 	}
 
 	ojs << std::setw(4) << objArray << std::endl;

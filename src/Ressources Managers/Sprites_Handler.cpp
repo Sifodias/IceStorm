@@ -1,8 +1,7 @@
 #include "Sprites_Handler.h"
 #include "Renderer.h"
 
-SDL_Texture* crop_surface(SDL_Surface* sprite_sheet, int x, int y, int width, int height)
-{
+SDL_Texture* crop_surface(SDL_Surface* sprite_sheet, int x, int y, int width, int height) {
 	SDL_Surface* surface = SDL_CreateRGBSurface(sprite_sheet->flags, width, height, sprite_sheet->format->BitsPerPixel, sprite_sheet->format->Rmask, sprite_sheet->format->Gmask, sprite_sheet->format->Bmask, sprite_sheet->format->Amask);
 	SDL_Rect rect = { x, y, width, height };
 	SDL_BlitSurface(sprite_sheet, &rect, surface, 0);
@@ -33,13 +32,11 @@ void SpritesHandler::addGroup(std::string sheet_name, int width_per_sprite, int 
 	groups.push_back(sprite_group(texturesVec, speed, group_name, playOnce));
 }
 
-void SpritesHandler::setIdle(bool idle)
-{
+void SpritesHandler::setIdle(bool idle) {
 	groups[currentGroup].idle = idle;
 }
 
-void SpritesHandler::setSingleFrame(std::string textureName)
-{
+void SpritesHandler::setSingleFrame(std::string textureName) {
 	SDL_Texture* tex = Textures_Manager::findTexture(textureName);
 	if (tex == NULL) {
 		cout << "No texture found with name: " << textureName << endl;
@@ -56,6 +53,9 @@ void SpritesHandler::setSingleFrame(std::string textureName)
 
 
 SDL_Texture* SpritesHandler::currentFrame() {
+	if (groups.size() < currentGroup + 1) {
+		return NULL;
+	}
 	auto& cg = groups[currentGroup];
 	if (cg.idle) {
 		return cg.textures[0];
@@ -77,7 +77,7 @@ SDL_Texture* SpritesHandler::currentFrame() {
 	if (cg.done && cg.playOnce)
 		return cg.textures.back();
 
-	
+
 	return cg.textures[cg.index];
 }
 
