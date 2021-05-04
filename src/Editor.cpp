@@ -5,9 +5,12 @@
 #include "imgui_stdlib.h"
 #include "imgui_impl_sdl.h"
 #include "Builder.h"
-
+#include "Map.h"
 #include <string>
 #include <vector>
+#include <functional>
+#include <filesystem>
+#include "Paths.h"
 
 using namespace ImGui;
 
@@ -22,8 +25,8 @@ void Editor::init() {
 static void addField(std::string field, bool& enabled) {
     ImGui::TableSetColumnIndex(0);
     ImGui::AlignTextToFramePadding();
-    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-    ImGui::TreeNodeEx(field.c_str(), flags, field.c_str());
+    ImGui::Text(field.c_str());
+
     ImGui::TableSetColumnIndex(1);
     ImGui::SetNextItemWidth(-FLT_MIN);
 
@@ -34,24 +37,57 @@ static void addField(std::string field, bool& enabled) {
     ImGui::NextColumn();
 }
 
-static void addField(std::string field, std::string& str) {
+static void addField(std::string field, std::string& str, std::string button = "", std::function<void(std::string)> f = NULL) {
     ImGui::TableSetColumnIndex(0);
     ImGui::AlignTextToFramePadding();
-    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-    ImGui::TreeNodeEx(field.c_str(), flags, field.c_str());
+    ImGui::Text(field.c_str());
+
     ImGui::TableSetColumnIndex(1);
     ImGui::SetNextItemWidth(-FLT_MIN);
 
-    ImGui::InputText(field.c_str(), &str);
+    if (!button.empty()) {
+        if (ImGui::BeginTable(std::string(field + "##value").c_str(), 2)) {
+            TableNextRow();
+            ImGui::TableSetColumnIndex(0);
+            ImGui::AlignTextToFramePadding();
+            // ImGui::InputText(field.c_str(), &str);
+
+
+            std::string items = "";
+            std::vector<std::string> levels;
+            for (const auto& entry : std::filesystem::directory_iterator(Paths::levelPath)) {
+                if (!std::filesystem::is_regular_file(entry))
+                    continue;
+
+                items += entry.path().filename().c_str();
+                items += '\0';
+                levels.push_back(entry.path().filename());
+            }
+            static int item_current = 0;
+
+            ImGui::Combo("levels##value", &item_current, items.c_str());
+            Builder::door = levels[item_current];
+            // ImGui::SameLine();
+            ImGui::TableSetColumnIndex(1);
+            if (ImGui::Button(button.c_str()))
+                f(levels[item_current]);
+
+            ImGui::SetNextItemWidth(-FLT_MIN);
+            EndTable();
+        }
+    }
+    else
+        ImGui::InputText(field.c_str(), &str);
 
     ImGui::TableNextRow();
     ImGui::NextColumn();
 }
+
 static void addField(std::string field, int& value) {
     ImGui::TableSetColumnIndex(0);
     ImGui::AlignTextToFramePadding();
-    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-    ImGui::TreeNodeEx(field.c_str(), flags, field.c_str());
+
+    ImGui::Text(field.c_str());
     ImGui::TableSetColumnIndex(1);
     ImGui::SetNextItemWidth(-FLT_MIN);
 
@@ -65,19 +101,16 @@ static void addField(std::string field, std::vector<std::string>& vec) {
     ImGui::TableSetColumnIndex(0);
     ImGui::AlignTextToFramePadding();
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-    //ImGui::TreeNodeEx(field.c_str(), flags, field.c_str());
 
     if (ImGui::BeginTable(std::string(field + "Main").c_str(), 2)) {
         TableNextRow();
         ImGui::TableSetColumnIndex(0);
         ImGui::AlignTextToFramePadding();
-        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-        ImGui::TreeNodeEx(field.c_str(), flags, field.c_str());
+        ImGui::Text(field.c_str());
 
         ImGui::TableSetColumnIndex(1);
-        if (ImGui::Button("+")) {
+        if (ImGui::Button("+"))
             vec.insert(vec.begin(), "");
-        }
 
         ImGui::SetNextItemWidth(-FLT_MIN);
         EndTable();
@@ -106,7 +139,6 @@ static void addField(std::string field, std::vector<std::string>& vec) {
                 vec.erase(vec.begin() + (i - 1));
             }
 
-
             ImGui::SetNextItemWidth(-FLT_MIN);
             PopID();
         }
@@ -116,6 +148,7 @@ static void addField(std::string field, std::vector<std::string>& vec) {
     ImGui::TableNextRow();
     ImGui::NextColumn();
 }
+
 static void showCurrentObj(const char* prefix) {
     ImGui::TableNextRow();
     ImGui::TableSetColumnIndex(0);
@@ -127,7 +160,7 @@ static void showCurrentObj(const char* prefix) {
     // Text and Tree nodes are less high than framed widgets, using AlignTextToFramePadding() we add vertical spacing to make the tree lines equal high.
     ImGui::AlignTextToFramePadding();
 
-    // bool useSpritesHandler;  checkbox
+    // // bool useSpritesHandler;  checkbox
     addField("ID:", cur->ID);
     addField("target:", cur->target);
     addField("type:", cur->type);
@@ -139,7 +172,6 @@ static void showCurrentObj(const char* prefix) {
     addField("y:", cur->y);
     addField("Enabled", cur->enabled);
 
-    // ImGui::TreePop();
     PopID();
 }
 
@@ -164,16 +196,58 @@ void showCurrentStuff() {
         showCurrentObj("Current ent:");
         ImGui::EndTable();
     }
-    // if (ImGui::BeginTable("Actions", 2,
-    //     ImGuiTableFlags_Resizable
-    //     //| ImGuiTableFlags_NoBordersInBody
-    //     | ImGuiTableFlags_BordersInner
-    //     | ImGuiTableFlags_RowBg)) {
+
+    ImGui::PopStyleVar();
+    ImGui::End();
+}
+
+std::string toLoad;
+void showActions() {
+
+    if (!Begin("Actions")) {
+        End();
+        return;
+    }
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 2));
+
+    if (ImGui::BeginTable("Actions##value", 2,
+        ImGuiTableFlags_Resizable
+        //| ImGuiTableFlags_NoBordersInBody
+        | ImGuiTableFlags_BordersInner
+        | ImGuiTableFlags_RowBg)) {
+
+        ImGui::TableNextRow();
+        addField("Current plan:", Builder::currentPlan);
+        std::string dummy = Map::levelname;
+        addField("Current level:", dummy);
+        addField("Load level:", toLoad, "LOAD", Builder::loadLevel);
+
+        {   // It should be a function
+            ImGui::TableSetColumnIndex(0);
+            ImGui::AlignTextToFramePadding();
+            ImGui::Text("Set ent:");
+            ImGui::TableSetColumnIndex(1);
+            ImGui::SetNextItemWidth(-FLT_MIN);
+            if (ImGui::BeginTable(std::string("enty##value").c_str(), 2)) {
+                TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                ImGui::AlignTextToFramePadding();
+                static std::string entLoad;
+                ImGui::InputText("yee##value", &entLoad);
+                ImGui::TableSetColumnIndex(1);
+                if (ImGui::Button("LOAD"))
+                    Builder::currentObject = &Builder::fetchObject(entLoad);
+                ImGui::SetNextItemWidth(-FLT_MIN);
+                EndTable();
+            }
+        }
+
+        ImGui::TableNextRow();
+        ImGui::NextColumn();
 
 
-    //     ImGui::EndTable();
-    // }
-
+        ImGui::EndTable();
+    }
     ImGui::PopStyleVar();
     ImGui::End();
 }
@@ -208,8 +282,9 @@ void Editor::routine(SDL_Event& e) {
 
     NewFrame();
 
-    // ShowDemoWindow();
+    ShowDemoWindow();
     showCurrentStuff();
+    showActions();
 
     ImGui::Render();
     ImGuiSDL::Render(ImGui::GetDrawData());

@@ -61,7 +61,7 @@ void Controller::rumbleTest() {
 		if (SDL_HapticRumblePlay(gControllerHaptic, 1, 3000) != 0) {
 			cout << "Warning: Unable to play rumble! SDL Error: " << SDL_GetError() << endl;
 		}
-		SDL_Delay(3200);
+		// SDL_Delay(3200);
 	}
 }
 

@@ -109,8 +109,8 @@ void Textures_Manager::printFrame() {
 				if (tempSrf != NULL) {
 					out.w = tempSrf->w;
 					out.h = tempSrf->h;
-					out.x += currentObj.x;
-					out.y += currentObj.y;
+					// out.x += currentObj.x;
+					// out.y += currentObj.y;
 				}
 
 				SDL_Texture* to_print = imgList[currentObj.imgIndex].texture;

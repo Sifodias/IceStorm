@@ -5,13 +5,14 @@
 
 using namespace std;
 namespace Builder {
+	GObject& fetchObject(string name);
 	void fetch();
 	void zoom(int focus);
 	void trace(int set, int plan = 0);
 	void nearby();
 	void createObject(string buffer);
 	void editObject(string target);
-	void placeElement(int x, int y, int plan = 0);
+	void placeElement(int x, int y, int plan, bool secondary);
 	void saveLevel(std::string name);
 	void newLevel(std::string name);
 	void loadLevel(std::string name);
@@ -26,6 +27,9 @@ namespace Builder {
 	void newDoor(string levelname);
 
 	extern GObject* currentObject;
+	extern GObject* lastObject;
+	extern std::string door;
+	extern int currentPlan;
 
 };
 

@@ -86,6 +86,7 @@
         "locale": "cpp",
         "queue": "cpp",
         "semaphore": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "forward_list": "cpp"
     }
 }

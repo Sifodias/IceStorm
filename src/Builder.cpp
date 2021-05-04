@@ -1,18 +1,22 @@
-#include "Builder.h"
+#include <iostream>
 #include <string>
-#include "Objects_Manager.h"
+#include <tuple>
 #include <exception>
+#include "Builder.h"
+#include "Objects_Manager.h"
 #include "Map.h"
 #include "Camera.h"
 #include "Character.h"
-#include <iostream>
 #include "Renderer.h"
 #include "Paths.h"
-#include <tuple>
 
 GObject* Builder::currentObject = NULL;
-int currentPlan = 0;
+GObject* Builder::lastObject = NULL;
+std::string Builder::door;
+int Builder::currentPlan = 0;
 vector<int> cmdDone(123, 0);
+int idToPlace = 0;
+int lastIdToPlace = 0;
 
 using namespace std;
 
@@ -29,7 +33,7 @@ void Builder::setKey(int key) {
 	}
 }
 
-GObject& fetchObject(string name) {
+GObject& Builder::fetchObject(string name) {
 	try {
 		return Objects_Manager::findObject(stoi(name));
 	}
@@ -38,8 +42,7 @@ GObject& fetchObject(string name) {
 	}
 }
 
-void Builder::fetch()
-{
+void Builder::fetch() {
 	std::string buffer;
 	getline(std::cin, buffer);
 	while (buffer.compare("z")) {
@@ -98,6 +101,7 @@ void Builder::fetch()
 				}
 			}
 			else if (Objects_Manager::identify(buffer, "ent ")) {
+				lastObject = currentObject;
 				currentObject = &fetchObject(buffer);
 			}
 			else goto unknownCMD;
@@ -127,8 +131,7 @@ void Builder::loadEnts() {
 	Objects_Manager::init();
 }
 
-void Builder::printInfo(GObject& printObject)
-{
+void Builder::printInfo(GObject& printObject) {
 	cout << "-------------" << endl;
 	cout << "ID: " << printObject.ID << endl;
 	if (printObject.target.size())
@@ -162,13 +165,11 @@ void Builder::printInfo(GObject& printObject)
 	cout << "-------------" << endl;
 }
 
-void Builder::createObject(string buffer)
-{
+void Builder::createObject(string buffer) {
 	currentObject = &Objects_Manager::createObject(buffer);
 }
 
-void Builder::editObject(string str)
-{
+void Builder::editObject(string str) {
 	Objects_Manager::editObject(str);
 }
 
@@ -188,8 +189,7 @@ void Builder::setPlan(int plan) {
 
 }
 
-void Builder::newLevel(std::string name)
-{
+void Builder::newLevel(std::string name) {
 	std::ofstream level(Paths::levelPath + name);
 	level << "<0\n-\n\nEOF";
 	level.close();
@@ -218,14 +218,15 @@ void Builder::clean() {
 }
 
 void Builder::loadLevel(std::string name) {
+	if (name.empty()) {
+		std::cout << "ERROR: level name empty" << std::endl;
+		return;
+	}
 	Map::loadLevel(name);
 	Map::findOccurrence(69, &Character::movingUnit.hitBox.x, &Character::movingUnit.hitBox.y);
 }
 
-void Builder::placeElement(int x, int y, int plan) {
-	if (currentObject == NULL)
-		return;
-
+void Builder::placeElement(int x, int y, int plan = 0, bool secondary = false) {
 	if ((x + Camera::getX()) / GRID_W < 0
 		|| (y + Camera::getY()) / GRID_H < 0) return;
 
@@ -238,16 +239,13 @@ void Builder::placeElement(int x, int y, int plan) {
 		Map::matrix[plan][(int)((y + Camera::getY()) / GRID_H)].push_back(0);
 
 	Map::matrix[plan][(int)((y + Camera::getY()) / GRID_H)]
-		[(int)((x + Camera::getX()) / GRID_W)] = currentObject->ID;
+		[(int)((x + Camera::getX()) / GRID_W)] = secondary ? lastIdToPlace : idToPlace;
 
 }
 
-void Builder::routine(SDL_Event& e)
-{
-	if (e.type == SDL_KEYDOWN)
-	{
-		switch (e.key.keysym.sym)
-		{
+void Builder::routine(SDL_Event& e) {
+	if (e.type == SDL_KEYDOWN) {
+		switch (e.key.keysym.sym) {
 		case SDLK_t: {
 			//Character::movingUnit.lockMovements(true);
 			fetch();
@@ -269,13 +267,45 @@ void Builder::routine(SDL_Event& e)
 			break;
 		}
 		case SDLK_0: {
+			lastObject = currentObject;
 			currentObject = &fetchObject("0");
+			lastIdToPlace = idToPlace;
+			idToPlace = currentObject->ID;
 			break;
 		}
 		case SDLK_1: {
+			lastObject = currentObject;
 			currentObject = &fetchObject("1");
+			lastIdToPlace = idToPlace;
+			idToPlace = currentObject->ID;
 			break;
 		}
+		case SDLK_2: {
+			newDoor(door);
+			break;
+		}
+		case SDLK_g: {
+			if (lastObject == NULL)
+				break;
+			int x = -1; int y = -1;
+			SDL_GetMouseState(&x, &y);
+			int width, height;
+			SDL_GetWindowSize(Renderer::g_Window, &width, &height);
+
+			double factor = (double)height / Renderer::SCREEN_H;
+
+			double offset = (width - factor * Renderer::SCREEN_W) / 2;
+			offset /= factor;
+
+			x = (x / factor) - offset;
+			y /= factor;
+
+			placeElement(x, y, currentPlan, true);
+			lastObject->movingUnit.hitBox.x = ((x + Camera::getX()) / GRID_W) * GRID_W;
+			lastObject->movingUnit.hitBox.y = ((y + Camera::getY()) / GRID_H) * GRID_H;
+			break;
+		}
+
 		case SDLK_f: {
 			if (currentObject == NULL)
 				break;
@@ -285,11 +315,11 @@ void Builder::routine(SDL_Event& e)
 			SDL_GetWindowSize(Renderer::g_Window, &width, &height);
 
 			double factor = (double)height / Renderer::SCREEN_H;
-			
-			double offset = (width - factor * Renderer::SCREEN_W) / 2;
-			offset /=factor;
 
-			x = (x / factor)-offset;
+			double offset = (width - factor * Renderer::SCREEN_W) / 2;
+			offset /= factor;
+
+			x = (x / factor) - offset;
 			y /= factor;
 
 			placeElement(x, y, currentPlan);
@@ -327,6 +357,7 @@ void Builder::routine(SDL_Event& e)
 		}
 		}
 	}
+	currentObject = &Objects_Manager::findObject(idToPlace);
 }
 
 void Builder::zoom(int focus) {
@@ -338,45 +369,44 @@ void Builder::zoom(int focus) {
 	SDL_RenderSetLogicalSize(Renderer::g_Renderer, Camera::outerRect.w, Camera::outerRect.h);
 }
 
-void Builder::trace(int set, int plan)
-{
+void Builder::trace(int set, int plan) {
 	int retObj = 0;
 	switch (Character::movingUnit.mainDirection) {
 	case 1:
-		for (int i = 0; i < 100; i++) {
-			if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan)) {
-				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan);
-				break;
-			}
+	for (int i = 0; i < 100; i++) {
+		if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan)) {
+			retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan);
+			break;
 		}
-		break;
+	}
+	break;
 
 	case -1:
-		for (int i = 0; i > -100; i--) {
-			if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan)) {
-				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan);
-				break;
-			}
+	for (int i = 0; i > -100; i--) {
+		if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan)) {
+			retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan);
+			break;
 		}
-		break;
+	}
+	break;
 
 	case 2:
-		for (int i = 0; i < 100; i++) {
-			if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan)) {
-				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan);
-				break;
-			}
+	for (int i = 0; i < 100; i++) {
+		if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan)) {
+			retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan);
+			break;
 		}
-		break;
+	}
+	break;
 
 	case -2:
-		for (int i = 0; i > -100; i--) {
-			if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan)) {
-				retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan);
-				break;
-			}
+	for (int i = 0; i > -100; i--) {
+		if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan)) {
+			retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan);
+			break;
 		}
-		break;
+	}
+	break;
 	}
 	printInfo(fetchObject(std::to_string(retObj)));
 	if (set) {
@@ -386,5 +416,10 @@ void Builder::trace(int set, int plan)
 
 void Builder::newDoor(string levelname) {
 	auto [a, b] = Objects_Manager::newDoors(levelname);
-	printInfo(a); printInfo(b);
+	// printInfo(a); printInfo(b);
+	// currentObject = &a;
+	// lastObject = &b;
+	idToPlace = a;
+	lastIdToPlace = b;
+	std::cout << a  << " " << b << std::endl;
 }

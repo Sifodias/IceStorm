@@ -19,4 +19,5 @@ namespace Map {
 
 	
 	extern std::vector<std::vector<std::vector<int>>> matrix;	//the matrix of the level	|  the pair indexes represent front plans, the odds back plans
+	extern std::string levelname;
 };

@@ -86,6 +86,9 @@
     },
     {
         "ID": 74,
+        "flags": [
+            "SOLID"
+        ],
         "target": "flowey_dead",
         "targetnames": [
             "flowey_desc"
@@ -154,5 +157,233 @@
         "content": "|meaning1",
         "target": "meaning1",
         "type": "DIALOG"
+    },
+    {
+        "ID": 93,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 94,
+        "content": "0 93 ripof",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 95,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 96,
+        "content": "0 95 maintest.txt",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 97,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 98,
+        "content": "0 97 maintest.txt",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 99,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 100,
+        "content": "0 99 ripof",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 101,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 102,
+        "content": "0 101 maintest.txt",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 103,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 104,
+        "content": "0 103 maintest.txt",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 105,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 106,
+        "content": "0 105 maintest.txt",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 107,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 108,
+        "content": "0 107 maintest.txt",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 109,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 110,
+        "content": "0 109 maintest.txt",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 111,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 112,
+        "content": "0 111 maintest.txt",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 113,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 114,
+        "content": "0 113 maintest.txt",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 115,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 116,
+        "content": "0 115 maintest.txt",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
     }
 ]

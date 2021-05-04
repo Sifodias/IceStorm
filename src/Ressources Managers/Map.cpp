@@ -8,7 +8,7 @@ std::vector<std::vector<std::vector<int>>> Map::matrix;
 
 std::ifstream* currentLevel;
 bool changed = 1;
-std::string levelname = "";
+std::string Map::levelname = "";
 
 void Map::loadLevel(std::string name)
 {
@@ -130,11 +130,11 @@ bool Map::isItSolid(SDL_Rect reqt)
 void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> trigger only CONTACT type 
 {
 	/* Coat the reqt with 1 pixel large coating */
-	reqt.x -= 1; reqt.y -= 1; reqt.w += 1; reqt.h += 1;
+	reqt.x -= 1; reqt.y -= 1; reqt.w += 2; reqt.h += 2;
 
 	int x, y = 0;
-	for (std::vector<std::vector<int>>& plan : matrix) {
-		for (std::vector<int>& line : plan) {
+	for (std::vector<std::vector<int>> plan : matrix) {
+		for (std::vector<int> line : plan) {
 			x = 0;
 			for (int id : line) {
 				if (!id) {

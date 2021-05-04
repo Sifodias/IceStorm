@@ -245,3 +245,6 @@ ModelManifest.xml
 .fake/
 /glew-2.1.0
 src/IceStorm
+src/imgui.ini
+.vscode/settings.json
+src/imgui.ini

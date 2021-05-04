@@ -293,10 +293,18 @@ void Objects_Manager::saveObjects() {
 	ojs.close();
 }
 
-tuple<GObject, GObject> Objects_Manager::newDoors(string levelName) {
+GObject& Objects_Manager::getObject(int index) {
+	if (index < 0 || index >= objects.size()){
+		std::cout << "Error: Invalid index " << index << std::endl;
+		return objects[0];
+	}
+	return objects[index];
+}
+
+tuple<int, int> Objects_Manager::newDoors(string levelName) {
 	GObject& dest = createObject("texture: A2.png, type: DOOR, flags: INV, content: 1");
 	GObject& from = createObject("texture: A.png, type: DOOR, flags: CONTACT INV, content: 0 " + to_string(dest.ID) + " " + levelName);
-	return { from, dest };
+	return { from.ID, dest.ID };
 }
 
 void Objects_Manager::deleteObject(int id) {

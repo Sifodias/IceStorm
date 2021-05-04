@@ -18,8 +18,9 @@ namespace Objects_Manager {
 	void fillObject(GObject& obj, string data);
 	void editObject(string data);
 	void deleteObject(int id);
+	GObject& getObject(int index);
 
-	tuple<GObject, GObject> newDoors(string levelName);
+	tuple<int, int> newDoors(string levelName);
 	void objectsRoutine(SDL_Event& e);
 
 	void trigger(SDL_Rect rect, bool contact);

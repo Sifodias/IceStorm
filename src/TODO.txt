@@ -1,2 +1,0 @@
-- Improve sprite handler
-- do the fucking game.
