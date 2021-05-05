@@ -163,3 +163,9 @@ void Textures_Manager::printFrame() {
 	}
 	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &rect_cursor);
 }
+
+void Textures_Manager::quit(){
+	for (auto& strct : imgList){
+		strct.destroy_img_struct();
+	}
+}

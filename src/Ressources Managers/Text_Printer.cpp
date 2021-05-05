@@ -43,8 +43,10 @@ void Text_Printer::init() {
 			tempStr[0] = y;
 			textSurface = TTF_RenderText_Solid(i, tempStr, textColor);
 			tempLetters[y] = SDL_CreateTextureFromSurface(Renderer::g_Renderer, textSurface);
+			SDL_FreeSurface(textSurface);
 		}
 		lettersVec.push_back(tempLetters);
+		TTF_CloseFont(i);
 	}
 
 	timerA = timerB = SDL_GetTicks();

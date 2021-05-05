@@ -64,8 +64,8 @@ void Renderer::initAll() {
 
 void Renderer::quitAll() {
 	engineQuit();
-	SDL_DestroyWindow(g_Window);
 	SDL_DestroyRenderer(g_Renderer);
+	SDL_DestroyWindow(g_Window);
 	IMG_Quit();
 	TTF_Quit();
 	Mix_Quit();

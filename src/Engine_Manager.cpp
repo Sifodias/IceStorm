@@ -83,4 +83,5 @@ void engineQuit() {
 		Objects_Manager::saveObjects();
 	}
 	Text_Printer::quit();
+	Textures_Manager::quit();
 }
