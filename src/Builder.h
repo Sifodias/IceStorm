@@ -30,6 +30,8 @@ namespace Builder {
 	extern GObject* lastObject;
 	extern std::string door;
 	extern int currentPlan;
+	extern int idToPlace;
+	extern int lastIdToPlace;
 
 };
 

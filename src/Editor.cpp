@@ -30,7 +30,7 @@ static void addField(std::string field, bool& enabled) {
     ImGui::TableSetColumnIndex(1);
     ImGui::SetNextItemWidth(-FLT_MIN);
 
-    ImGui::Checkbox("##value", &enabled);
+    ImGui::Checkbox((field+"##value").c_str(), &enabled);
     ImGui::SetNextItemWidth(-FLT_MIN);
 
     ImGui::TableNextRow();
@@ -171,6 +171,7 @@ static void showCurrentObj(const char* prefix) {
     addField("x:", cur->x);
     addField("y:", cur->y);
     addField("Enabled", cur->enabled);
+    addField("Default enabled", cur->default_enabled);
 
     PopID();
 }
@@ -235,8 +236,11 @@ void showActions() {
                 static std::string entLoad;
                 ImGui::InputText("yee##value", &entLoad);
                 ImGui::TableSetColumnIndex(1);
-                if (ImGui::Button("LOAD"))
+                if (ImGui::Button("LOAD")){
                     Builder::currentObject = &Builder::fetchObject(entLoad);
+                    Builder::lastIdToPlace = Builder::idToPlace;
+                    Builder::idToPlace = Builder::currentObject->ID;
+                }
                 ImGui::SetNextItemWidth(-FLT_MIN);
                 EndTable();
             }

@@ -71,12 +71,17 @@ void Objects_Manager::loadObjects() {
 
 			if (field.key() == "content")
 				cur.content = ojs["content"];
-			
+
 			if (field.key() == "x")
 				cur.x = ojs["x"];
 
 			if (field.key() == "y")
 				cur.y = ojs["y"];
+
+			if (field.key() == "enabled") {
+				cur.default_enabled = ojs["enabled"];
+				cur.enabled = cur.default_enabled;
+			}
 		}
 
 		objects.push_back(cur);
@@ -277,16 +282,19 @@ void Objects_Manager::saveObjects() {
 
 		if (!obj.content.empty())
 			curOb["content"] = obj.content;
-		
+
 		if (obj.x != 0)
 			curOb["x"] = obj.x;
-		
+
 		if (obj.y != 0)
 			curOb["y"] = obj.y;
-			
+
+		if (!obj.default_enabled) {
+			curOb["enabled"] = false;
+		}
 		// If the object is useless, do not store it
 		if (curOb.size() == 2 && obj.ID != 0)
-			objArray.erase(objArray.size()-1);
+			objArray.erase(objArray.size() - 1);
 	}
 
 	ojs << std::setw(4) << objArray << std::endl;
@@ -294,7 +302,7 @@ void Objects_Manager::saveObjects() {
 }
 
 GObject& Objects_Manager::getObject(int index) {
-	if (index < 0 || index >= objects.size()){
+	if (index < 0 || index >= objects.size()) {
 		std::cout << "Error: Invalid index " << index << std::endl;
 		return objects[0];
 	}
@@ -303,7 +311,7 @@ GObject& Objects_Manager::getObject(int index) {
 
 tuple<int, int> Objects_Manager::newDoors(string levelName) {
 	GObject& dest = createObject("texture: A2.png, type: DOOR, flags: INV, content: 1");
-	GObject& from = createObject("texture: A.png, type: DOOR, flags: CONTACT INV, content: 0 " + to_string(dest.ID) + " " + levelName);
+	GObject& from = createObject("texture: A.png, type: DOOR, flags: CONTACT INV PERMANENT, content: 0 " + to_string(dest.ID) + " " + levelName);
 	return { from.ID, dest.ID };
 }
 

@@ -15,8 +15,8 @@ GObject* Builder::lastObject = NULL;
 std::string Builder::door;
 int Builder::currentPlan = 0;
 vector<int> cmdDone(123, 0);
-int idToPlace = 0;
-int lastIdToPlace = 0;
+int Builder::idToPlace = 0;
+int Builder::lastIdToPlace = 0;
 
 using namespace std;
 
@@ -167,6 +167,8 @@ void Builder::printInfo(GObject& printObject) {
 
 void Builder::createObject(string buffer) {
 	currentObject = &Objects_Manager::createObject(buffer);
+	lastIdToPlace = idToPlace;
+	idToPlace = currentObject->ID;
 }
 
 void Builder::editObject(string str) {
@@ -285,8 +287,8 @@ void Builder::routine(SDL_Event& e) {
 			break;
 		}
 		case SDLK_g: {
-			if (lastObject == NULL)
-				break;
+			// if (lastObject == NULL)
+			// 	break;
 			int x = -1; int y = -1;
 			SDL_GetMouseState(&x, &y);
 			int width, height;
@@ -301,14 +303,14 @@ void Builder::routine(SDL_Event& e) {
 			y /= factor;
 
 			placeElement(x, y, currentPlan, true);
-			lastObject->movingUnit.hitBox.x = ((x + Camera::getX()) / GRID_W) * GRID_W;
-			lastObject->movingUnit.hitBox.y = ((y + Camera::getY()) / GRID_H) * GRID_H;
+			// lastObject->movingUnit.hitBox.x = ((x + Camera::getX()) / GRID_W) * GRID_W;
+			// lastObject->movingUnit.hitBox.y = ((y + Camera::getY()) / GRID_H) * GRID_H;
 			break;
 		}
 
 		case SDLK_f: {
-			if (currentObject == NULL)
-				break;
+			// if (currentObject == NULL)
+			// 	break;
 			int x = -1; int y = -1;
 			SDL_GetMouseState(&x, &y);
 			int width, height;
@@ -323,8 +325,8 @@ void Builder::routine(SDL_Event& e) {
 			y /= factor;
 
 			placeElement(x, y, currentPlan);
-			currentObject->movingUnit.hitBox.x = ((x + Camera::getX()) / GRID_W) * GRID_W;
-			currentObject->movingUnit.hitBox.y = ((y + Camera::getY()) / GRID_H) * GRID_H;
+			// currentObject->movingUnit.hitBox.x = ((x + Camera::getX()) / GRID_W) * GRID_W;
+			// currentObject->movingUnit.hitBox.y = ((y + Camera::getY()) / GRID_H) * GRID_H;
 			break;
 		}
 		case SDLK_r: {
@@ -411,6 +413,9 @@ void Builder::trace(int set, int plan) {
 	printInfo(fetchObject(std::to_string(retObj)));
 	if (set) {
 		currentObject = &fetchObject(std::to_string(retObj));
+		lastIdToPlace = idToPlace;
+		idToPlace = currentObject->ID;
+
 	}
 }
 

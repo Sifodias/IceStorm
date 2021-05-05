@@ -9,17 +9,25 @@
 #include "Audio_Manager.h"
 
 void GObject::routine(SDL_Event& e) {
+	if (!enabled)
+		return;
 	movingUnit.move(e);
 }
 
 void GObject::trigger() {
+	if (!enabled)
+		return;
+
 	if (checkFlag("CONTACT") && contact_triggered && !checkFlag("PERMANENT")) {
 		return;
 	}
 
 	flagTrigger = 1;
 	for (string& name : targetnames) {
-		if (!Objects_Manager::findObject(name).flagTrigger)
+		if (type == "ENABLER") {
+			Objects_Manager::findObject(name).enabled = true;
+		}
+		else if (!Objects_Manager::findObject(name).flagTrigger)
 			Objects_Manager::findObject(name).trigger();
 	}
 

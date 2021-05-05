@@ -147,6 +147,7 @@
         ],
         "target": "gateway",
         "targetnames": [
+            "enabTel",
             "meaning1"
         ],
         "texture": "gateway.png",
@@ -190,6 +191,7 @@
         "ID": 96,
         "content": "0 95 maintest.txt",
         "flags": [
+            "PERMANENT",
             "CONTACT",
             "INV"
         ],
@@ -385,5 +387,113 @@
         ],
         "texture": "A.png",
         "type": "DOOR"
+    },
+    {
+        "ID": 117,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 118,
+        "content": "0 117 maintest.txt",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 119,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 120,
+        "content": "0 119 maintest.txt",
+        "flags": [
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 121,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 122,
+        "content": "0 121 maintest.txt",
+        "flags": [
+            "PERMANENT",
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 123,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 124,
+        "content": "0 123 meaning",
+        "flags": [
+            "PERMANENT",
+            "CONTACT",
+            "INV"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 125,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 126,
+        "content": "0 125 maintest.txt",
+        "enabled": false,
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "target": "telTest",
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 127,
+        "target": "enabTel",
+        "targetnames": [
+            "telTest"
+        ],
+        "type": "ENABLER"
     }
 ]
