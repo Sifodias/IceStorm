@@ -20,6 +20,8 @@ typedef struct t_nodequeue {
 	Uint32 timerWaitA;
 	Uint32 timerWaitB;
 	//Mix_Chunk*  
+
+	~t_nodequeue(){}
 } NodeQueue;
 
 namespace Text_Printer {
@@ -30,7 +32,7 @@ namespace Text_Printer {
 	void keepGoin(SDL_Event e, std::vector<NodeQueue>& iQueue);
 
 	void flush(int i); //1 for regular queue, 2 for immediate
-	void printText(NodeQueue& node);
+	void printText(int index, bool im);
 	void quit();
 
 	extern bool standStill;

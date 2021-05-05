@@ -84,4 +84,5 @@ void engineQuit() {
 	}
 	Text_Printer::quit();
 	Textures_Manager::quit();
+	Audio_Manager::quit();
 }

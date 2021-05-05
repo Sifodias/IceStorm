@@ -24,8 +24,7 @@ bool Text_Printer::standStill = 0;
 
 void Text_Printer::init() {
 	std::vector<TTF_Font*> tempVec;
-	for (const auto &entry : std::filesystem::directory_iterator(Paths::asciiPath))
-	{
+	for (const auto& entry : std::filesystem::directory_iterator(Paths::asciiPath)) {
 		if (!std::filesystem::is_regular_file(entry) || entry.path().extension() != ".fon")
 			continue;
 
@@ -60,10 +59,14 @@ void Text_Printer::init() {
 	dialogRect.h = 40; dialogRect.w = 320;
 }
 
-void Text_Printer::printText(NodeQueue& node) {
+void Text_Printer::printText(int index, bool im = false) {
+	auto& node = im ? imQueue[index] : queue[index];
 	SDL_Rect blitRect = node.container;
 	blitRect.w = node.rect.w; blitRect.h = node.rect.h;
-	for (auto i = 0; i <= node.iterator; i++) {
+	for (auto i = 0; i < node.iterator; i++) {
+		if (i >= node.str.size()) {
+			std::cout << "Text printer Error" << std::endl;
+		}
 		/* Skip the wait time codes */
 		while (node.str[i] == '#') {
 			i++;
@@ -109,8 +112,7 @@ void Text_Printer::printText(NodeQueue& node) {
 }
 
 void Text_Printer::addToQueue(std::string str,
-	SDL_Rect* container, int immediate, int policeID, SDL_Rect* rect, bool showDialogBox)
-{
+	SDL_Rect* container, int immediate, int policeID, SDL_Rect* rect, bool showDialogBox) {
 	if (!str.size()) return;
 	if (rect == NULL) rect = &defaultRect;
 	if (container == NULL) container = &defaultContainer;
@@ -130,19 +132,23 @@ void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue>& q) {
 			busy = 1;
 
 		int i = 0;
+		int index = 0;
 		for (NodeQueue& node : q) {
-			printText(node);
+			printText(index++);
 			if (node.lock) {
 				if ((&q == &queue) && (!standStill || q.size() > 1)) {
 					if (Controller::checkAction(e, "use")) {
 						while (node.str[node.iterator] == ' ')
 							node.iterator++;
+
 						node.str.erase(0, node.iterator);
 						node.lock = false;
 						node.iterator = 0;
 
-						if (!node.str.size())
+						if (node.str.empty()) {
 							q.erase(q.begin() + i);
+							continue;
+						}
 					}
 				}
 			}
@@ -181,8 +187,7 @@ void Text_Printer::keepGoin(SDL_Event e, std::vector<NodeQueue>& q) {
 	else if (&q == &queue) busy = 0;
 }
 
-void Text_Printer::handleRoutine(SDL_Event e)
-{
+void Text_Printer::handleRoutine(SDL_Event e) {
 	timerB = SDL_GetTicks();
 	if (queue.size() > 0) {
 		if (queue.front().showDialogBox) {
@@ -196,8 +201,7 @@ void Text_Printer::handleRoutine(SDL_Event e)
 	keepGoin(e, imQueue);
 }
 
-void Text_Printer::flush(int i)
-{
+void Text_Printer::flush(int i) {
 	if (i == 1) {
 		queue.erase(queue.begin(), queue.end());
 		standStill = 0;
@@ -208,7 +212,7 @@ void Text_Printer::flush(int i)
 }
 
 void Text_Printer::quit() {
-	for (std::array<SDL_Texture*, 127> & police : lettersVec) {
+	for (std::array<SDL_Texture*, 127> &police : lettersVec) {
 		for (SDL_Texture* texture : police) {
 			SDL_DestroyTexture(texture);
 		}
