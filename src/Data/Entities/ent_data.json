@@ -495,5 +495,434 @@
             "telTest"
         ],
         "type": "ENABLER"
+    },
+    {
+        "ID": 128,
+        "flags": [
+            "SOLID"
+        ],
+        "target": "shroom",
+        "targetnames": [
+            "dsh1"
+        ],
+        "texture": "shroom.png",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 129,
+        "content": "Gimme my fix man",
+        "target": "dsh1",
+        "type": "DIALOG"
+    },
+    {
+        "ID": 130,
+        "content": "CONTACT",
+        "target": "smolKnife",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 131,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 132,
+        "content": "0 131 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 133,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 134,
+        "content": "0 133 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 135,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 136,
+        "content": "0 135 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 137,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 138,
+        "content": "0 137 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 139,
+        "flags": [
+            "SOLID"
+        ],
+        "target": "buddy",
+        "type": "DIALOG"
+    },
+    {
+        "ID": 140,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 141,
+        "content": "0 140 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 142,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 143,
+        "content": "0 142 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 144,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 145,
+        "content": "0 144 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 146,
+        "content": "Is it what they call an \"open world\" ?",
+        "flags": [
+            "SOLID"
+        ],
+        "type": "DIALOG"
+    },
+    {
+        "ID": 147,
+        "content": "I WANT TO DIE. FIND A WAY TO END MY DAYS.",
+        "flags": [
+            "SOLID"
+        ],
+        "target": "shroomJR",
+        "type": "DIALOG"
+    },
+    {
+        "ID": 148,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 149,
+        "content": "0 148 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 150,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 151,
+        "content": "0 150 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 152,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 153,
+        "content": "0 152 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 154,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 155,
+        "content": "0 154 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 156,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 157,
+        "content": "0 156 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 158,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 159,
+        "content": "0 158 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 160,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 161,
+        "content": "0 160 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 162,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 163,
+        "content": "0 162 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 164,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 165,
+        "content": "0 164 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 166,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 167,
+        "content": "0 166 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 168,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 169,
+        "content": "0 168 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 170,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "texture": "A2.png",
+        "type": "DOOR"
+    },
+    {
+        "ID": 171,
+        "content": "0 170 shroomRoom",
+        "flags": [
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "texture": "A.png",
+        "type": "DOOR"
     }
 ]

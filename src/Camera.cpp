@@ -7,7 +7,7 @@
 
 SDL_Rect Camera::innerRect;
 SDL_Rect Camera::outerRect;
-bool Camera::FREEDOM = 0;
+bool Camera::FREEDOM = 1;
 int locked = false;
 int lockX = 0;
 

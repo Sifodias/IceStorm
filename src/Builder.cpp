@@ -264,8 +264,8 @@ void Builder::routine(SDL_Event& e) {
 		case SDLK_i: {
 			//Character::movingUnit.gravity_affected = checkKey(SDLK_i);
 			Character::movingUnit.noclip = !Character::movingUnit.noclip;
-			Camera::FREEDOM = !checkKey(SDLK_i);
-			setKey(SDLK_i);
+			// Camera::FREEDOM = !checkKey(SDLK_i);
+			// setKey(SDLK_i);
 			break;
 		}
 		case SDLK_0: {
