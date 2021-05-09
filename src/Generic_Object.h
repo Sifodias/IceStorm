@@ -33,8 +33,8 @@ type :
 	GENERIC,
 	TELEPORT,
 	ENEMY,
-	CAMBLOCKX,
-	CAMBLOCKY,
+	LOCKX,
+	LOCKY,
 	PATTERN,  //it's itself a pattern
 	DYNAMIC,   //Not present in the tilemap
 	SOUND,

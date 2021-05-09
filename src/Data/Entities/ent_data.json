@@ -6,6 +6,7 @@
     {
         "ID": 1,
         "flags": [
+            "DIALOG",
             "SOLID"
         ],
         "target": "wall_test",
@@ -838,6 +839,7 @@
         "ID": 163,
         "content": "0 162 shroomRoom",
         "flags": [
+            "LOCKX",
             "CONTACT",
             "INV",
             "PERMANENT"
@@ -858,6 +860,7 @@
         "ID": 165,
         "content": "0 164 shroomRoom",
         "flags": [
+            "LOCKY",
             "CONTACT",
             "INV",
             "PERMANENT"
@@ -878,6 +881,7 @@
         "ID": 167,
         "content": "0 166 shroomRoom",
         "flags": [
+            "LOCKY",
             "CONTACT",
             "INV",
             "PERMANENT"
@@ -924,5 +928,26 @@
         ],
         "texture": "A.png",
         "type": "DOOR"
+    },
+    {
+        "ID": 172,
+        "flags": [
+            "CONTACT"
+        ],
+        "targetnames": [
+            "dsh1"
+        ],
+        "type": "GENERIC"
+    },
+    {
+        "ID": 173,
+        "content": "\"I can't keep my eye off you\"",
+        "flags": [
+            "DIALOG",
+            "SOLID"
+        ],
+        "target": "jano",
+        "texture": "eye.png",
+        "type": "GENERIC"
     }
 ]

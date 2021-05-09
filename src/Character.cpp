@@ -5,6 +5,7 @@
 #include "Paths.h"
 #include "Objects_Manager.h"
 #include "Controller.h"
+#include "Text_Printer.h"
 
 SpritesHandler Character::textures;
 Moving_Unit Character::movingUnit;
@@ -24,6 +25,8 @@ void Character::lockMovements(bool lock) {
 
 void Character::characterRoutine(SDL_Event& e)
 {
+	lockMovements(Text_Printer::queue.size() > 0);
+	
 	movingUnit.move(e);
 	if (!movementLocked) {
 		switch (movingUnit.mainDirection) {

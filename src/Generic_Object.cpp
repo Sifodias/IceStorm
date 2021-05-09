@@ -66,13 +66,11 @@ void GObject::trigger() {
 
 			/* Teleportation */
 			Map::loadLevel(word);
-			Map::findOccurrence(stoi(target), &Character::movingUnit.hitBox.x, &Character::movingUnit.hitBox.y);
-			if (word == "flowey") {
-				Camera::lockCamX(160, true);
-			}
-			else {
-				Camera::lockCamX(0, false);
-			}
+			double x, y;
+			double* a = checkFlag("LOCKX") ? &x : &Character::movingUnit.hitBox.x;
+			double* b = checkFlag("LOCKY") ? &y : &Character::movingUnit.hitBox.y;
+			Map::findOccurrence(stoi(target), a, b);
+
 		}
 	}
 
