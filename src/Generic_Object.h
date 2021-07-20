@@ -33,44 +33,38 @@ type :
 	GENERIC,
 	TELEPORT,
 	ENEMY,
-	LOCKX,
-	LOCKY,
-	PATTERN,  //it's itself a pattern
-	DYNAMIC,   //Not present in the tilemap
+	PATTERN,
+	DYNAMIC,   // Only one instance at a time.
 	SOUND,
 	ENABLER
 
 flags :
 	CONTACT,	//triggered when contact
 	PERMANENT,	//can be triggered unlimited times
-	PATTERN,//follows a pattern
+	PATTERN,	//follows a pattern
 	SOLID,
-	INV
+	INV,
+	LOCKX,
+	LOCKY,
 
 */
 
 class GObject {
 public:
-	GObject() : ID(0), type("GENERIC"), x(0), y(0), flagTrigger(false), contact_triggered(false), imgIndex(0),
-		useSpritesHandler(false), enabled(true), default_enabled(true) {
+	GObject() : ID(0), type("GENERIC"), flagTrigger(false), contact_triggered(false),
+		enabled(true), default_enabled(true), textures() {
 	};
 	int ID;
 	std::string target;
 	std::vector<std::string> targetnames;
 	std::vector<std::string> flags;
 	std::string type;
-	
+
 	SpritesHandler textures;
-	bool useSpritesHandler;
-	std::string textureName;
 
-	int imgIndex; //index in vector of img_struct
-
-	int x;
-	int y;
 	bool enabled;
 	bool default_enabled;
-	std::string content;
+	std::string meta;
 	Moving_Unit movingUnit;
 
 	void routine(SDL_Event& e);
@@ -80,4 +74,7 @@ public:
 
 	void trigger();
 	bool checkFlag(std::string flag);
+	void setCoord(std::tuple<double, double> coord);
+	void blit(std::tuple<double, double> coord);
+	void blit();
 };

@@ -7,7 +7,6 @@
 #include "Text_Printer.h"
 #include "Camera.h"
 
-#define ob(...) Objects_Manager::findObject(__VA_ARGS__)
 
 std::vector<std::function<void()>> eventsQueue;
 bool busy = 0;
@@ -143,7 +142,6 @@ void waitLoop(cond c) {
 void Events_Manager::floweyCin() {
 	//	Character::lockMovements(true);
 	//Character::textures.setIdle(true);
-	ob(78).useSpritesHandler = true;
 	ob(78).textures.addGroup("t1.png", 20, 28, 0, 0, 0, 2, "hey", 60);
 	ob(78).textures.setCurrentGroup("hey");
 

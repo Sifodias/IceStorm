@@ -11,11 +11,13 @@
 
 SDL_Renderer* Renderer::g_Renderer = NULL;
 SDL_Window* Renderer::g_Window = NULL;
+SDL_GLContext Renderer::g_context;
+
 int Renderer::SCREEN_W = 320;
 int Renderer::SCREEN_H = 240;
+RenderMode Renderer::mode = SDL;
 
-
-void Renderer::initAll() {
+void Renderer::initSDL() {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC) < 0)
 		std::cout << "Can't load the SDL: " << SDL_GetError() << endl;
 
@@ -45,7 +47,7 @@ void Renderer::initAll() {
 			//((int)(current.h / SCREEN_H) ) * SCREEN_W,
 			current.w,
 			//((int)(current.h / SCREEN_H)) * SCREEN_H,
-			current.h-150,
+			current.h - 150,
 			flags);
 	}
 
@@ -59,6 +61,32 @@ void Renderer::initAll() {
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
 	SDL_RenderSetLogicalSize(g_Renderer, SCREEN_W, SCREEN_H);
 	SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+}
+
+void Renderer::initOpenGL(){
+	SDL_Init(SDL_INIT_VIDEO);
+
+	SDL_Window* g_Window = SDL_CreateWindow("OpenGL Test",
+		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, SDL_WINDOW_OPENGL);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+	g_context = SDL_GL_CreateContext(g_Window);
+}
+
+void Renderer::initAll(RenderMode m) {
+	mode = m;
+	switch (mode) {
+	case SDL:
+	initSDL();
+	break;
+
+	case OPENGL:
+	initOpenGL();
+	break;
+
+	}
 }
 
 

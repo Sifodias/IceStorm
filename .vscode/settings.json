@@ -87,6 +87,9 @@
         "queue": "cpp",
         "semaphore": "cpp",
         "stack": "cpp",
-        "forward_list": "cpp"
+        "forward_list": "cpp",
+        "future": "cpp",
+        "numbers": "cpp",
+        "__bits": "cpp"
     }
 }

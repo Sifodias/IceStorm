@@ -33,8 +33,7 @@
     {
         "ID": 69,
         "target": "characterMarkerMap",
-        "type": "GENERIC",
-        "x": 10
+        "type": "GENERIC"
     },
     {
         "ID": 21,
@@ -949,5 +948,100 @@
         "target": "jano",
         "texture": "eye.png",
         "type": "GENERIC"
+    },
+    {
+        "ID": 174,
+        "content": "You are not allowed to disturb the master of the universe.",
+        "flags": [
+            "CONTACT",
+            "SOLID"
+        ],
+        "target": "gateEye",
+        "type": "DIALOG"
+    },
+    {
+        "ID": 175,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "type": "DOOR"
+    },
+    {
+        "ID": 176,
+        "content": "0 175 yume",
+        "flags": [
+            "LOCKY",
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "type": "DOOR"
+    },
+    {
+        "ID": 177,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "type": "DOOR"
+    },
+    {
+        "ID": 178,
+        "content": "0 177 yume",
+        "flags": [
+            "LOCKX",
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "type": "DOOR"
+    },
+    {
+        "ID": 179,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "type": "DOOR"
+    },
+    {
+        "ID": 180,
+        "content": "0 179 yume",
+        "flags": [
+            "LOCKY",
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "type": "DOOR"
+    },
+    {
+        "ID": 181,
+        "content": "1",
+        "flags": [
+            "INV"
+        ],
+        "type": "DOOR"
+    },
+    {
+        "ID": 182,
+        "content": "0 181 yume",
+        "flags": [
+            "LOCKX",
+            "CONTACT",
+            "INV",
+            "PERMANENT"
+        ],
+        "type": "DOOR"
+    },
+    {
+        "ID": 183,
+        "flags": [
+            "DYNAMIC"
+        ],
+        "type": "GENERIC",
+        "x": 5658.0,
+        "y": 3331.0
     }
 ]

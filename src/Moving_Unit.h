@@ -2,6 +2,7 @@
 #include <vector>
 #include "Global_Flags.h"
 #include <SDL2/SDL.h>
+#include <tuple>
 
 class c_rect {
 public:
@@ -22,18 +23,21 @@ public:
 
 class Moving_Unit {
 public:
-	Moving_Unit(SDL_Rect hitbox_i = SDL_Rect{ 0, 0, 0, 0 }, bool inputControlled = false, int cspeed = CSPEED, int jspeed = JSPEED,
+	Moving_Unit(SDL_Rect hitbox_i = SDL_Rect{ 0, 0, GRID_W, GRID_H }, bool inputControlled = false, int cspeed = CSPEED, int jspeed = JSPEED,
 		int gravityEnabled = GRAVITY_ENABLED, int noclip_i = 0);
 
 	void move(SDL_Event& e);
 	void lockMovements(bool lock);
 	void teleport(int x, int y);
 	void setLinearMovement(int speed, int angle);
+	void followTarget(Moving_Unit& to_follow, int speed, tuple<double, double> center, double radius);
 	void followTarget(Moving_Unit& to_follow, int speed);
-	
+	tuple<double, double> getCoord();
+	void setCoord(tuple<double, double> coord);
+	c_rect hitBox;
+
 	double speedX;
 	double speedY;
-	c_rect hitBox;
 
 	std::vector<int> movesX;
 	std::vector<int> movesY;
@@ -50,13 +54,19 @@ public:
 	bool gravity_affected;
 	bool movementsLock;
 	bool follow_target;
+
+	bool circle;	// If true, when following target, will move only on the edge of a predefined circle
+	tuple<double, double> center;
+	double radius;
+
 	Moving_Unit* target;
 
 	bool isInputControlled;	// True if unit controlled by keyboard input
 
-private:
 	void handleMoves();
 	void addMoves(SDL_Event& e);
 	void doMoves();
+
+	void setPosOnCircle(int angle);
 	void updateFollow();
 };

@@ -13,17 +13,30 @@
 #include <algorithm>
 #include <filesystem>
 
-std::vector<img_struct> Textures_Manager::imgList;
+std::vector<img_struct*> Textures_Manager::imgList;
 bool Textures_Manager::showInvisibleEnts = SHOWINV;
 bool Textures_Manager::showGrid = false;
 
+void Textures_Manager::init(std::string str) {
+	if (!imgList.size()) {
+		switch (Renderer::mode) {
+		case SDL:
+		imgList.push_back(new img_sdl(NULL, NULL, ""));
+		break;
 
-void Textures_Manager::init() {
-	imgList.push_back({ NULL, NULL, "" });
+		}
+	}
+	std::string path = str.empty() ? Paths::texturesPath : str;
+	for (const auto& entry : std::filesystem::directory_iterator(path)) {
+		if (!std::filesystem::is_regular_file(entry) || entry.path().extension() != ".png") {
+			if (std::filesystem::is_directory(entry))
+				Textures_Manager::init(entry.path());
 
-	for (const auto& entry : std::filesystem::directory_iterator(Paths::texturesPath)) {
-		if (!std::filesystem::is_regular_file(entry) || entry.path().extension() != ".png")
 			continue;
+		}
+
+		switch (Renderer::mode) {
+		case SDL:
 
 		SDL_Surface* new_surface = IMG_Load(entry.path().c_str());
 		if (new_surface == NULL) {
@@ -36,14 +49,17 @@ void Textures_Manager::init() {
 			std::cout << "Texture not loaded ! Error: " << SDL_GetError() << std::endl;
 			continue;
 		}
-		imgList.push_back(img_struct(newTexture, new_surface, entry.path().filename()));
+		imgList.push_back(new img_sdl(newTexture, new_surface, entry.path().filename()));
+		
+		break;
+		}
 	}
 }
 
 int Textures_Manager::findIndex(std::string name) {
 	int i = 0;
-	for (img_struct& img : imgList) {
-		if (img.name == name) {
+	for (img_struct* img : imgList) {
+		if (img->name() == name) {
 			return i;
 		}
 		i++;
@@ -54,9 +70,9 @@ int Textures_Manager::findIndex(std::string name) {
 SDL_Texture* Textures_Manager::findTexture(std::string name) {
 	if (!name.size())
 		return NULL;
-	for (img_struct& img : imgList) {
-		if (img.name == name) {
-			return img.texture;
+	for (img_struct* img : imgList) {
+		if (img->name() == name) {
+			return ((img_sdl*)img)->texture;
 		}
 	}
 	return NULL;
@@ -65,9 +81,9 @@ SDL_Texture* Textures_Manager::findTexture(std::string name) {
 SDL_Surface* Textures_Manager::findSurface(std::string name) {
 	if (!name.size())
 		return NULL;
-	for (img_struct& img : imgList) {
-		if (img.name == name) {
-			return img.surface;
+	for (img_struct* img : imgList) {
+		if (img->name() == name) {
+			return ((img_sdl*)img)->surface;
 		}
 	}
 	return NULL;
@@ -79,19 +95,24 @@ void Textures_Manager::printFrame() {
 	/* For each map plan */
 	int i = 0;
 	for (std::vector<std::vector<int>>& plan : Map::matrix) {
-		rect_cursor.x = -Camera::getX();
-		rect_cursor.y = -Camera::getY();
+		auto [cam_x, cam_y] = Camera::getCoord();
+		rect_cursor.x = -cam_x;
+		rect_cursor.y = -cam_y;
 
 		/* We won't print further than those matrix indexes */
 		/* Note that we trim out only the maximal indexes */
-		int y_limit_index = std::min(Camera::getY() + Camera::outerRect.h + GRID_H, (int)(plan.size()) * GRID_H) / GRID_H;
-		int x_limit_index;
+		//int y_limit_index = std::min(Camera::getY() + Camera::outerRect.h + GRID_H, (int)(plan.size()) * GRID_H) / GRID_H;
+		int y_limit_index = plan.size();
+		int x_limit_index = 0;
+		// for (auto vec : plan)
+		// 	x_limit_index = std::max(x_limit_index, (int)vec.size());
 
 		for (int y = 0; y < y_limit_index; y++,
-			rect_cursor.x = -Camera::getX(), rect_cursor.y += rect_cursor.h) {
+			rect_cursor.x = -cam_x, rect_cursor.y += rect_cursor.h) {
 
 			/* Update the maximal index x for the current index y */
-			x_limit_index = std::min((Camera::getX() + Camera::outerRect.w + GRID_W) / GRID_W, (int)plan[y].size());
+			x_limit_index = std::min((cam_x + Camera::outerRect.w + GRID_W) / GRID_W, (int)plan[y].size());
+
 
 			for (int x = 0; x < x_limit_index; x++, rect_cursor.x += rect_cursor.w) {
 				if (!Map::getID(x, y, i)) {
@@ -103,30 +124,12 @@ void Textures_Manager::printFrame() {
 				}
 
 				GObject& currentObj = Objects_Manager::findObject(Map::getID(x, y, i));
-				SDL_Rect out = rect_cursor;
-
-				SDL_Surface* tempSrf = imgList[currentObj.imgIndex].surface;
-
-				if (tempSrf != NULL) {
-					out.w = tempSrf->w;
-					out.h = tempSrf->h;
-					// out.x += currentObj.x;
-					// out.y += currentObj.y;
+				if (!currentObj.checkFlag("DYNAMIC")) {
+					currentObj.blit({ rect_cursor.x, rect_cursor.y });
 				}
-
-				SDL_Texture* to_print = imgList[currentObj.imgIndex].texture;
-
-				/* If the object has no texture and we must display every ent, give generic texture */
-				to_print = to_print != NULL ? to_print : (showInvisibleEnts ? findTexture("inv.png") : NULL);
-				if (currentObj.useSpritesHandler) {
-					to_print = currentObj.textures.currentFrame();
-				}
-				if (!showInvisibleEnts && currentObj.checkFlag("INV")) {
-					to_print = NULL;
-				}
-				SDL_RenderCopy(Renderer::g_Renderer, to_print, NULL, &out);
 
 				if (showGrid) {
+					SDL_Rect out = rect_cursor;
 					out.w = GRID_W;
 					out.h = GRID_H;
 					SDL_RenderCopy(Renderer::g_Renderer, Textures_Manager::findTexture("grid.png"), NULL, &out);
@@ -142,11 +145,7 @@ void Textures_Manager::printFrame() {
 	for (GObject& obj : Objects_Manager::objects) {
 		if (!obj.checkFlag("DYNAMIC"))
 			continue;
-		rect_cursor = obj.movingUnit.hitBox.sdl();
-		rect_cursor.x -= Camera::getX();
-		rect_cursor.y -= Camera::getY();
-
-		SDL_RenderCopy(Renderer::g_Renderer, obj.textures.currentFrame(), NULL, &rect_cursor);
+		obj.blit();
 	}
 
 	/* Print the character */
@@ -166,7 +165,7 @@ void Textures_Manager::printFrame() {
 }
 
 void Textures_Manager::quit() {
-	for (auto& strct : imgList) {
-		strct.destroy_img_struct();
+	for (auto strct : imgList) {
+		strct->destroy();
 	}
 }

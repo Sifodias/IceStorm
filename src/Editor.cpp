@@ -164,12 +164,12 @@ static void showCurrentObj(const char* prefix) {
     addField("ID:", cur->ID);
     addField("target:", cur->target);
     addField("type:", cur->type);
-    addField("texture:", cur->textureName); // add button to the side UPDATE
-    addField("content:", cur->content);
+    // addField("texture:", cur->textureName); // add button to the side UPDATE
+    addField("meta:", cur->meta);
     addField("flags:", cur->flags);
     addField("targetnames:", cur->targetnames);
-    addField("x:", cur->x);
-    addField("y:", cur->y);
+    // addField("x:", cur->x);
+    // addField("y:", cur->y);
     addField("Enabled", cur->enabled);
     addField("Default enabled", cur->default_enabled);
 

@@ -2,24 +2,36 @@
 #include <vector>
 #include <SDL2/SDL.h>
 #include <string>
+#include <iostream>
 
 class img_struct {
 public:
-	img_struct(SDL_Texture* t, SDL_Surface* s, std::string n) : texture(t), surface(s), name(n) {}
-	void destroy_img_struct() {
+	virtual void destroy() {};
+	virtual void* data() { return NULL; };
+	virtual std::string name() { 
+		std::cout << "THIS SHOULD NEVER BE PRINTED, EVER" << std::endl;
+		return "";
+		 };
+};
+
+class img_sdl : public img_struct {
+public:
+	img_sdl(SDL_Texture* t, SDL_Surface* s, std::string n) : texture(t), surface(s), n(n) {}
+	void destroy() {
 		if (texture)
 			SDL_DestroyTexture(texture);
 		if (surface)
 			SDL_FreeSurface(surface);
 	}
+	std::string name() { return n; }
 
 	SDL_Texture* texture;
 	SDL_Surface* surface;
-	std::string name;
+	std::string n;
 };
 
 namespace Textures_Manager {
-	void init();	//Loads all the images
+	void init(std::string str = "");	//Loads all the images
 	void quit();
 	void printFrame(); //blits according to the matrix, the textures and the grid
 
@@ -29,5 +41,5 @@ namespace Textures_Manager {
 
 	extern bool showInvisibleEnts;
 	extern bool showGrid;
-	extern std::vector<img_struct> imgList;
+	extern std::vector<img_struct*> imgList;
 };

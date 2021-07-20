@@ -5,6 +5,8 @@
 #include "Controller.h"
 #include <math.h>
 
+using namespace std;
+
 bool rectEquals(SDL_Rect a, SDL_Rect b) {
 	if (a.x == b.x
 		&& a.y == b.y
@@ -43,30 +45,29 @@ Moving_Unit::Moving_Unit(SDL_Rect hitbox_i, bool inputControlled, int cspeed, in
 	target = NULL;
 }
 
-void Moving_Unit::handleMoves()
-{
+void Moving_Unit::handleMoves() {
 	int out = 0;
 	while (!out && movesY.size()) {
 		switch (movesY.back()) {
 		case -1:
-			if (Controller::checkActionState("up") && !jumpLock) {
-				if (gravity_affected && !noclip) {
-					speedY = -jump_speed;
-					jumpLock = 1;
-				}
-				else speedY = -move_speed;
-				out = 1;
+		if (Controller::checkActionState("up") && !jumpLock) {
+			if (gravity_affected && !noclip) {
+				speedY = -jump_speed;
+				jumpLock = 1;
 			}
-			else movesY.pop_back();
-			break;
+			else speedY = -move_speed;
+			out = 1;
+		}
+		else movesY.pop_back();
+		break;
 
 		case 1:
-			if (Controller::checkActionState("down")) {
-				speedY = move_speed;
-				out = 1;
-			}
-			else movesY.pop_back();
-			break;
+		if (Controller::checkActionState("down")) {
+			speedY = move_speed;
+			out = 1;
+		}
+		else movesY.pop_back();
+		break;
 		}
 	}
 
@@ -74,19 +75,19 @@ void Moving_Unit::handleMoves()
 	while (!out && movesX.size()) {
 		switch (movesX.back()) {
 		case 2:
-			if (Controller::checkActionState("right")) {
-				speedX = move_speed;
-				out = 1;
-			}
-			else movesX.pop_back();
-			break;
+		if (Controller::checkActionState("right")) {
+			speedX = move_speed;
+			out = 1;
+		}
+		else movesX.pop_back();
+		break;
 		case -2:
-			if (Controller::checkActionState("left")) {
-				speedX = -move_speed;
-				out = 1;
-			}
-			else movesX.pop_back();
-			break;
+		if (Controller::checkActionState("left")) {
+			speedX = -move_speed;
+			out = 1;
+		}
+		else movesX.pop_back();
+		break;
 		}
 	}
 
@@ -94,35 +95,35 @@ void Moving_Unit::handleMoves()
 	while (!out && direction.size()) {
 		switch (direction.back()) {
 		case -1:
-			if (Controller::checkActionState("up")) {
-				mainDirection = -1;
-				out = 1;
-			}
-			else direction.pop_back();
-			break;
+		if (Controller::checkActionState("up")) {
+			mainDirection = -1;
+			out = 1;
+		}
+		else direction.pop_back();
+		break;
 
 		case 1:
-			if (Controller::checkActionState("down")) {
-				mainDirection = 1;
-				out = 1;
-			}
-			else direction.pop_back();
-			break;
+		if (Controller::checkActionState("down")) {
+			mainDirection = 1;
+			out = 1;
+		}
+		else direction.pop_back();
+		break;
 
 		case 2:
-			if (Controller::checkActionState("right")) {
-				mainDirection = 2;
-				out = 1;
-			}
-			else direction.pop_back();
-			break;
+		if (Controller::checkActionState("right")) {
+			mainDirection = 2;
+			out = 1;
+		}
+		else direction.pop_back();
+		break;
 		case -2:
-			if (Controller::checkActionState("left")) {
-				mainDirection = -2;
-				out = 1;
-			}
-			else direction.pop_back();
-			break;
+		if (Controller::checkActionState("left")) {
+			mainDirection = -2;
+			out = 1;
+		}
+		else direction.pop_back();
+		break;
 		}
 	}
 	if (!movesX.size()) {
@@ -148,8 +149,7 @@ void Moving_Unit::handleMoves()
 	}
 }
 
-void Moving_Unit::addMoves(SDL_Event& e)
-{
+void Moving_Unit::addMoves(SDL_Event& e) {
 	if (Controller::checkAction(e, "up")) {
 		if (!movesY.size())
 			movesY.push_back(-1);
@@ -192,8 +192,7 @@ void Moving_Unit::addMoves(SDL_Event& e)
 	}
 }
 
-void Moving_Unit::doMoves()
-{
+void Moving_Unit::doMoves() {
 	c_rect tempReqt(hitBox);
 	c_rect backup(hitBox);
 	timerB = SDL_GetTicks();
@@ -276,8 +275,7 @@ void Moving_Unit::doMoves()
 	}
 }
 
-void Moving_Unit::move(SDL_Event& e)
-{
+void Moving_Unit::move(SDL_Event& e) {
 	if (movementsLock == 0) {
 		if (isInputControlled) {
 			addMoves(e);
@@ -294,22 +292,30 @@ void Moving_Unit::move(SDL_Event& e)
 	}
 }
 
-void Moving_Unit::lockMovements(bool lock)
-{
+void Moving_Unit::lockMovements(bool lock) {
 	movementsLock = lock;
 }
 
-void Moving_Unit::teleport(int x, int y)
-{
+void Moving_Unit::teleport(int x, int y) {
 	hitBox.x = x;
 	hitBox.y = y;
 
 }
 
-void Moving_Unit::setLinearMovement(int speed, int angle)
-{
+void Moving_Unit::setLinearMovement(int speed, int angle) {
 	speedX = speed * cos(3.14 * angle / 180);
 	speedY = -speed * sin(3.14 * angle / 180);
+}
+
+void Moving_Unit::setPosOnCircle(int angle) {
+	hitBox.x = radius * cos(3.14 * angle / 180) + std::get<0>(center);
+	hitBox.y = -radius * cos(3.14 * angle / 180) + std::get<1>(center);
+}
+
+void Moving_Unit::followTarget(Moving_Unit& to_follow, int speed, tuple<double, double> iCenter, double iRadius) {
+	circle = true;
+	center = iCenter; radius = iRadius;
+	followTarget(to_follow, speed);
 }
 
 void Moving_Unit::followTarget(Moving_Unit& to_follow, int speed) {
@@ -322,10 +328,24 @@ void Moving_Unit::updateFollow() {
 	int x_aim = target->hitBox.x + target->hitBox.w / 2 - hitBox.x - hitBox.w / 2;
 	int y_aim = target->hitBox.y + target->hitBox.h / 2 - hitBox.y - hitBox.h / 2;
 	int speed = (int)sqrt(speedX * speedX + speedY * speedY);
+
 	int angle = 0;
 	if (!y_aim && x_aim < 0)
 		angle = 180;
 	else if (y_aim)
 		angle = -(abs(y_aim) / y_aim) * 180 * acos(x_aim / sqrt((x_aim * x_aim + y_aim * y_aim))) / 3.14;
-	setLinearMovement(speed, angle);
+
+	if (!circle)
+		setLinearMovement(speed, angle);
+	else
+		setPosOnCircle(angle);
+}
+
+tuple<double, double> Moving_Unit::getCoord() {
+	return { hitBox.x, hitBox.y };
+}
+
+void Moving_Unit::setCoord(tuple<double, double> coord) {
+	hitBox.x = get<0>(coord);
+	hitBox.y = get<1>(coord);
 }

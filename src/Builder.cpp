@@ -152,16 +152,16 @@ void Builder::printInfo(GObject& printObject) {
 	}
 	if (printObject.type.size())
 		cout << "type: " << printObject.type << endl;
-	if (printObject.textureName.size())
-		cout << "texture: " << printObject.textureName << endl;
+	// if (printObject.textureName.size())
+		// cout << "texture: " << printObject.textureName << endl;
 	//if (printObject.rect.w > 0) {
 	//	cout << "width: " << printObject.rect.w << endl;
 	//	cout << "height: " << printObject.rect.h << endl;
 	//}
-	if (printObject.content.size())
-		cout << "content: " << printObject.content << endl;
-	if (printObject.x != 0 && printObject.y != 0)
-		cout << "x: " << printObject.x << ", y: " << printObject.y << endl;
+	if (printObject.meta.size())
+		cout << "meta: " << printObject.meta << endl;
+	// if (printObject.x != 0 && printObject.y != 0)
+		// cout << "x: " << printObject.x << ", y: " << printObject.y << endl;
 	cout << "-------------" << endl;
 }
 
@@ -245,6 +245,22 @@ void Builder::placeElement(int x, int y, int plan = 0, bool secondary = false) {
 
 }
 
+tuple<double, double> getCoord() {
+	int x = -1; int y = -1;
+	SDL_GetMouseState(&x, &y);
+	int width, height;
+	SDL_GetWindowSize(Renderer::g_Window, &width, &height);
+
+	double factor = (double)height / Renderer::SCREEN_H;
+
+	double offset = (width - factor * Renderer::SCREEN_W) / 2;
+	offset /= factor;
+
+	x = (x / factor) - offset;
+	y /= factor;
+	return { x, y };
+}
+
 void Builder::routine(SDL_Event& e) {
 	if (e.type == SDL_KEYDOWN) {
 		switch (e.key.keysym.sym) {
@@ -289,18 +305,7 @@ void Builder::routine(SDL_Event& e) {
 		case SDLK_g: {
 			// if (lastObject == NULL)
 			// 	break;
-			int x = -1; int y = -1;
-			SDL_GetMouseState(&x, &y);
-			int width, height;
-			SDL_GetWindowSize(Renderer::g_Window, &width, &height);
-
-			double factor = (double)height / Renderer::SCREEN_H;
-
-			double offset = (width - factor * Renderer::SCREEN_W) / 2;
-			offset /= factor;
-
-			x = (x / factor) - offset;
-			y /= factor;
+			auto [x, y] = getCoord();
 
 			placeElement(x, y, currentPlan, true);
 			// lastObject->movingUnit.hitBox.x = ((x + Camera::getX()) / GRID_W) * GRID_W;
@@ -311,18 +316,7 @@ void Builder::routine(SDL_Event& e) {
 		case SDLK_f: {
 			// if (currentObject == NULL)
 			// 	break;
-			int x = -1; int y = -1;
-			SDL_GetMouseState(&x, &y);
-			int width, height;
-			SDL_GetWindowSize(Renderer::g_Window, &width, &height);
-
-			double factor = (double)height / Renderer::SCREEN_H;
-
-			double offset = (width - factor * Renderer::SCREEN_W) / 2;
-			offset /= factor;
-
-			x = (x / factor) - offset;
-			y /= factor;
+			auto [x, y] = getCoord();
 
 			placeElement(x, y, currentPlan);
 			// currentObject->movingUnit.hitBox.x = ((x + Camera::getX()) / GRID_W) * GRID_W;
@@ -335,6 +329,11 @@ void Builder::routine(SDL_Event& e) {
 		}
 		case SDLK_q: {
 			trace(1, currentPlan);
+			break;
+		}
+		case SDLK_EQUALS: {
+			auto [x, y] = getCoord();
+			std::cout << x + Camera::getX() << " " << y + Camera::getY() << std::endl;
 			break;
 		}
 		case SDLK_c: {
@@ -426,5 +425,5 @@ void Builder::newDoor(string levelname) {
 	// lastObject = &b;
 	idToPlace = a;
 	lastIdToPlace = b;
-	std::cout << a  << " " << b << std::endl;
+	std::cout << a << " " << b << std::endl;
 }

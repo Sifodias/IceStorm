@@ -24,6 +24,7 @@ void init_game() {
 	Controller::init();
 	Audio_Manager::init();
 	Editor::init();
+	
 	// Events_Manager::addToQueue(Events_Manager::testTitle);
 }
 
@@ -57,10 +58,10 @@ int main_event_loop() {
 				break;
 			}
 
-			ImGui_ImplSDL2_ProcessEvent(&e); //Needs to be called only if the event is new
+			// ImGui_ImplSDL2_ProcessEvent(&e); //Needs to be called only if the event is new
 		}
-		if (Controller::checkAction(e, "jaja"))
-			Controller::rumbleTest();
+		// if (Controller::checkAction(e, "jaja"))
+		// 	Controller::rumbleTest();
 
 		handleRoutines(e);
 	}

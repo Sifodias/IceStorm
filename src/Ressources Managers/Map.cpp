@@ -10,8 +10,7 @@ std::ifstream* currentLevel;
 bool changed = 1;
 std::string Map::levelname = "";
 
-void Map::loadLevel(std::string name)
-{
+void Map::loadLevel(std::string name) {
 	saveMatrix();
 
 	for (int i = 0; i < matrix.size(); i++) {
@@ -95,8 +94,7 @@ int Map::getID(int ix, int iy, int plan) {
 	return 0;
 }
 
-bool Map::isItSolid(SDL_Rect reqt)
-{
+bool Map::isItSolid(SDL_Rect reqt) {
 	int x, y = 0;
 	for (std::vector<std::vector<int>>& plan : matrix) {
 		for (std::vector<int>& line : plan) {
@@ -108,10 +106,10 @@ bool Map::isItSolid(SDL_Rect reqt)
 				}
 				GObject& obj = Objects_Manager::findObject(id);
 				SDL_Rect obj_rect = { x, y, GRID_W, GRID_H };
-				if (obj.imgIndex) {
-					obj_rect.w = Textures_Manager::imgList[obj.imgIndex].surface->w;
-					obj_rect.h = Textures_Manager::imgList[obj.imgIndex].surface->h;
-				}
+				// if (obj.imgIndex) {
+				obj_rect.w = obj.movingUnit.hitBox.w;
+				obj_rect.h = obj.movingUnit.hitBox.h;
+				// }
 
 				if (SDL_HasIntersection(&obj_rect, &reqt) && obj.checkFlag("SOLID"))
 					return true;
@@ -144,10 +142,10 @@ void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> t
 
 				GObject& obj = Objects_Manager::findObject(id);
 				SDL_Rect obj_rect = { x, y, GRID_W, GRID_H };
-				if (obj.imgIndex) {
-					obj_rect.w = Textures_Manager::imgList[obj.imgIndex].surface->w;
-					obj_rect.h = Textures_Manager::imgList[obj.imgIndex].surface->h;
-				}
+				// if (obj.imgIndex) {
+				obj_rect.w = obj.movingUnit.hitBox.w;
+				obj_rect.h = obj.movingUnit.hitBox.h;
+				// }
 
 				if (SDL_HasIntersection(&obj_rect, &reqt)) {
 					if (contact) {
@@ -165,8 +163,7 @@ void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> t
 	}
 }
 
-void Map::findOccurrence(int charry, double* ix, double* iy)
-{
+void Map::findOccurrence(int charry, double* ix, double* iy) {
 	for (int i = 0; i < matrix.size(); i++) {
 		for (int j = 0; j < matrix[i].size(); j++) {
 			for (int k = 0; k < matrix[i][j].size(); k++) {
@@ -182,8 +179,7 @@ void Map::findOccurrence(int charry, double* ix, double* iy)
 	*ix = *iy = 0;
 }
 
-void Map::saveMatrix()
-{
+void Map::saveMatrix() {
 	if (currentLevel == NULL) return;
 	currentLevel->close();
 	std::ofstream ofs;
@@ -210,8 +206,7 @@ void Map::saveMatrix()
 }
 
 
-void Map::checkMate(int plan)
-{
+void Map::checkMate(int plan) {
 	for (int h = 0; h < matrix[plan].size(); h++) {
 		for (int w = 0; w < matrix[plan][h].size(); w++) {
 			printf("%d ", matrix[plan][h][w]);

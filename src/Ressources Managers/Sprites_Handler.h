@@ -42,7 +42,7 @@ public:
 	void setIdle(bool idle);
 	void setSingleFrame(std::string textureName);	//For objects with just a single texture
 	void clear();
-
+	std::string resource;
 	bool signalDone;	//true when the current playOnce sheet is done
 private:
 	int currentGroup;

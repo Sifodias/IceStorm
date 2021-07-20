@@ -3,7 +3,10 @@
 #include <vector>
 #include <map>
 #include <tuple>
+
 using namespace std;
+#define ob(...) Objects_Manager::findObject(__VA_ARGS__)
+
 
 namespace Objects_Manager {
 	void init();
@@ -43,7 +46,7 @@ texture ID: <int texture id>
 type: <string type>
 flags: <strings flags>
 crect: <h, w>
-content: <string content>
+meta: <string meta>
 
 Example :
 
@@ -54,5 +57,5 @@ texture: pannel.png
 type: BUTTON
 flags: SOLID
 crect: 20, 20
-content: Vive la bite !
+meta: Vive la bite !
 */

@@ -55,10 +55,10 @@ void Objects_Manager::loadObjects() {
 			}
 
 			if (field.key() == "texture") {
-				cur.textureName = ojs["texture"];
-				cur.imgIndex = Textures_Manager::findIndex(cur.textureName);
-				cur.useSpritesHandler = true;
-				cur.textures.setSingleFrame(cur.textureName);
+				// This is wrong.
+				// Allow metadata for non static sprites
+				cur.textures.setSingleFrame(ojs["texture"]);
+				cur.textures.resource = ojs["texture"];
 			}
 
 			if (field.key() == "type")
@@ -70,13 +70,15 @@ void Objects_Manager::loadObjects() {
 			}
 
 			if (field.key() == "content")
-				cur.content = ojs["content"];
+				cur.meta = ojs["content"];
 
-			if (field.key() == "x")
-				cur.x = ojs["x"];
+			if (field.key() == "x") {
+				cur.movingUnit.hitBox.x = ojs["x"];
+			}
 
-			if (field.key() == "y")
-				cur.y = ojs["y"];
+			if (field.key() == "y") {
+				cur.movingUnit.hitBox.y = ojs["y"];
+			}
 
 			if (field.key() == "enabled") {
 				cur.default_enabled = ojs["enabled"];
@@ -160,54 +162,54 @@ string getAndClear(string& str) {
 }
 
 void Objects_Manager::fillObject(GObject& obj, string data) {
-	while (!data.empty()) {
-		cleanSpaces(data);
+	// while (!data.empty()) {
+	// 	cleanSpaces(data);
 
-		if (identify(data, "target: ")) {
-			obj.target = getAndClear(data);
-			continue;
-		}
-		if (identify(data, "targetnames: ")) {
-			istringstream iss(getAndClear(data));
-			string word;
-			obj.targetnames.clear();
-			while (iss >> word) {
-				obj.targetnames.push_back(word);
-			}
-			continue;
-		}
-		if (identify(data, "texture: ")) {
-			obj.textureName = getAndClear(data);
-			obj.imgIndex = Textures_Manager::findIndex(obj.textureName);
-			obj.useSpritesHandler = true;
-			obj.textures.setSingleFrame(obj.textureName);
-			continue;
-		}
+	// 	if (identify(data, "target: ")) {
+	// 		obj.target = getAndClear(data);
+	// 		continue;
+	// 	}
+	// 	if (identify(data, "targetnames: ")) {
+	// 		istringstream iss(getAndClear(data));
+	// 		string word;
+	// 		obj.targetnames.clear();
+	// 		while (iss >> word) {
+	// 			obj.targetnames.push_back(word);
+	// 		}
+	// 		continue;
+	// 	}
+	// 	if (identify(data, "texture: ")) {
+	// 		obj.textureName = getAndClear(data);
+	// 		obj.imgIndex = Textures_Manager::findIndex(obj.textureName);
+	// 		obj.useSpritesHandler = true;
+	// 		obj.textures.setSingleFrame(obj.textureName);
+	// 		continue;
+	// 	}
 
-		if (identify(data, "type: ")) {
-			obj.type = getAndClear(data);
-			continue;
-		}
-		if (identify(data, "flags: ")) {
-			istringstream iss(getAndClear(data));
-			string word;
-			obj.flags.clear();
-			while (iss >> word) {
-				obj.flags.push_back(word);
-			}
-			continue;
-		}
-		if (identify(data, "crect: ")) {
-			continue;
-		}
-		if (identify(data, "content: ")) {
-			obj.content = getAndClear(data);
-			continue;
-		}
+	// 	if (identify(data, "type: ")) {
+	// 		obj.type = getAndClear(data);
+	// 		continue;
+	// 	}
+	// 	if (identify(data, "flags: ")) {
+	// 		istringstream iss(getAndClear(data));
+	// 		string word;
+	// 		obj.flags.clear();
+	// 		while (iss >> word) {
+	// 			obj.flags.push_back(word);
+	// 		}
+	// 		continue;
+	// 	}
+	// 	if (identify(data, "crect: ")) {
+	// 		continue;
+	// 	}
+	// 	if (identify(data, "content: ")) {
+	// 		obj.meta = getAndClear(data);
+	// 		continue;
+	// 	}
 
-		cout << "Error: Unknown field in: " << data << endl;
-		break;
-	}
+	// 	cout << "Error: Unknown field in: " << data << endl;
+	// 	break;
+	// }
 }
 
 void Objects_Manager::editObject(string data) {
@@ -251,8 +253,8 @@ void Objects_Manager::saveObjects() {
 	json objArray = json::array();
 
 	for (GObject& obj : objects) {
-		if (obj.checkFlag("DYNAMIC"))
-			continue;
+		// if (obj.checkFlag("DYNAMIC"))
+			// continue;
 		objArray.push_back(json::object());
 		auto& curOb = objArray.back();
 
@@ -277,17 +279,16 @@ void Objects_Manager::saveObjects() {
 
 		curOb["type"] = obj.type;
 
-		if (!obj.textureName.empty())
-			curOb["texture"] = obj.textureName;
+		if (!obj.meta.empty())
+			curOb["content"] = obj.meta;
 
-		if (!obj.content.empty())
-			curOb["content"] = obj.content;
+		if (!obj.textures.resource.empty())
+			curOb["texture"] = obj.textures.resource;
 
-		if (obj.x != 0)
-			curOb["x"] = obj.x;
-
-		if (obj.y != 0)
-			curOb["y"] = obj.y;
+		if (obj.checkFlag("DYNAMIC")) {
+			curOb["x"] = std::get<0>(obj.movingUnit.getCoord());
+			curOb["y"] = std::get<1>(obj.movingUnit.getCoord());
+		}
 
 		if (!obj.default_enabled) {
 			curOb["enabled"] = false;
