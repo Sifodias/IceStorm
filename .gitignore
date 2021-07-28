@@ -247,3 +247,4 @@ ModelManifest.xml
 src/IceStorm
 src/imgui.ini
 .vscode/settings.json
+.vscode/c_cpp_properties.json

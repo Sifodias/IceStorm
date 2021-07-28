@@ -150,10 +150,9 @@ void Events_Manager::floweyCin() {
 	Character::movingUnit.hitBox.h = Textures_Manager::findSurface("heart.png")->h;
 	Character::useMainOffsets = false;
 
-	int idFlow = Objects_Manager::createObject("flags: DYNAMIC").ID;
+	int idFlow = Objects_Manager::createObject("texture: flowey.png 21 23 3 15 2 8 dancing, flags: DYNAMIC").ID;
 	ob(idFlow).movingUnit.hitBox = { 150, 290, 21, 21 };
-	ob(idFlow).textures.clear();
-	ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 2, 8, "dancing", 125);
+	//ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 2, 8, "dancing", 125);
 	ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 1, 5, "appear", 80, true);
 	ob(idFlow).textures.setCurrentGroup("appear");
 

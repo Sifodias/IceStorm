@@ -34,6 +34,55 @@ bool Objects_Manager::identify(string& target, string wanted) {
 	else return false;
 }
 
+void loadSprite(GObject& obj, string meta) {
+	/* does not support playOnce and alpha yet */
+	istringstream iss(meta);
+	string word;
+	iss >> word;
+	string textName = word;
+	vector<int> args;
+
+	for (int i = 0; i < 6; i++) {
+		iss >> word;
+		if (word == textName && !i) {
+			obj.textures.setSingleFrame(meta);
+			obj.textures.resource = meta;
+			return;
+		}
+
+		try {
+			args.push_back(stoi(word));
+		}
+		catch (exception& e) {
+			cout << "Error: invalid texture metadata format: " << meta << endl;
+		}
+	}
+	if (!(iss >> word))
+		cout << "Error: invalid texture metadata format: " << meta << endl;
+
+	string groupName = word;
+	args.push_back(100);
+	if (iss >> word) {
+		try {
+			args.back() = stoi(word);
+		}
+		catch (exception& e) {
+			cout << "Error: invalid texture metadata format: " << meta << endl;
+		}
+	}
+	if (args.size() == 6)
+		obj.textures.addGroup(textName, args[0], args[1], args[2], args[3], args[4], args[5], groupName);
+
+	else if (args.size() == 7)
+		obj.textures.addGroup(textName, args[0], args[1], args[2], args[3], args[4], args[5], groupName, args[6]);
+
+	else
+		cout << "Error: unsupported texture metadata format: " << meta << endl;
+
+	obj.textures.setCurrentGroup(groupName);
+	obj.textures.resource = meta;
+}
+
 void Objects_Manager::loadObjects() {
 	tempStream->seekg(0);
 
@@ -55,10 +104,7 @@ void Objects_Manager::loadObjects() {
 			}
 
 			if (field.key() == "texture") {
-				// This is wrong.
-				// Allow metadata for non static sprites
-				cur.textures.setSingleFrame(ojs["texture"]);
-				cur.textures.resource = ojs["texture"];
+				loadSprite(cur, ojs["texture"]);
 			}
 
 			if (field.key() == "type")
@@ -179,14 +225,9 @@ void Objects_Manager::fillObject(GObject& obj, string data) {
 			continue;
 		}
 		if (identify(data, "texture: ")) {
-			// This is wrong.
-			// Allow metadata for non static sprites
-			istringstream iss(getAndClear(data));
-			string word;
-			iss >> word;
-
-			obj.textures.setSingleFrame(word);
-			obj.textures.resource = word;
+			/* does not support playOnce and alpha yet */
+			string meta = getAndClear(data);
+			loadSprite(obj, meta);
 			continue;
 		}
 
@@ -257,8 +298,8 @@ void Objects_Manager::saveObjects() {
 	json objArray = json::array();
 
 	for (GObject& obj : objects) {
-		// if (obj.checkFlag("DYNAMIC"))
-			// continue;
+		if (obj.checkFlag("DYNAMIC"))
+			continue;
 		objArray.push_back(json::object());
 		auto& curOb = objArray.back();
 
