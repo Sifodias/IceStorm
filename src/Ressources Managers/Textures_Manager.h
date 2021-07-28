@@ -8,10 +8,15 @@ class img_struct {
 public:
 	virtual void destroy() {};
 	virtual void* data() { return NULL; };
-	virtual std::string name() { 
+	virtual std::string name() {
 		std::cout << "THIS SHOULD NEVER BE PRINTED, EVER" << std::endl;
 		return "";
-		 };
+	};
+};
+
+class img_opengl : public img_struct {
+public:
+	img_opengl() {}
 };
 
 class img_sdl : public img_struct {

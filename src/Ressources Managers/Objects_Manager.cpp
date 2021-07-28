@@ -162,54 +162,58 @@ string getAndClear(string& str) {
 }
 
 void Objects_Manager::fillObject(GObject& obj, string data) {
-	// while (!data.empty()) {
-	// 	cleanSpaces(data);
+	while (!data.empty()) {
+		cleanSpaces(data);
 
-	// 	if (identify(data, "target: ")) {
-	// 		obj.target = getAndClear(data);
-	// 		continue;
-	// 	}
-	// 	if (identify(data, "targetnames: ")) {
-	// 		istringstream iss(getAndClear(data));
-	// 		string word;
-	// 		obj.targetnames.clear();
-	// 		while (iss >> word) {
-	// 			obj.targetnames.push_back(word);
-	// 		}
-	// 		continue;
-	// 	}
-	// 	if (identify(data, "texture: ")) {
-	// 		obj.textureName = getAndClear(data);
-	// 		obj.imgIndex = Textures_Manager::findIndex(obj.textureName);
-	// 		obj.useSpritesHandler = true;
-	// 		obj.textures.setSingleFrame(obj.textureName);
-	// 		continue;
-	// 	}
+		if (identify(data, "target: ")) {
+			obj.target = getAndClear(data);
+			continue;
+		}
+		if (identify(data, "targetnames: ")) {
+			istringstream iss(getAndClear(data));
+			string word;
+			obj.targetnames.clear();
+			while (iss >> word) {
+				obj.targetnames.push_back(word);
+			}
+			continue;
+		}
+		if (identify(data, "texture: ")) {
+			// This is wrong.
+			// Allow metadata for non static sprites
+			istringstream iss(getAndClear(data));
+			string word;
+			iss >> word;
 
-	// 	if (identify(data, "type: ")) {
-	// 		obj.type = getAndClear(data);
-	// 		continue;
-	// 	}
-	// 	if (identify(data, "flags: ")) {
-	// 		istringstream iss(getAndClear(data));
-	// 		string word;
-	// 		obj.flags.clear();
-	// 		while (iss >> word) {
-	// 			obj.flags.push_back(word);
-	// 		}
-	// 		continue;
-	// 	}
-	// 	if (identify(data, "crect: ")) {
-	// 		continue;
-	// 	}
-	// 	if (identify(data, "content: ")) {
-	// 		obj.meta = getAndClear(data);
-	// 		continue;
-	// 	}
+			obj.textures.setSingleFrame(word);
+			obj.textures.resource = word;
+			continue;
+		}
 
-	// 	cout << "Error: Unknown field in: " << data << endl;
-	// 	break;
-	// }
+		if (identify(data, "type: ")) {
+			obj.type = getAndClear(data);
+			continue;
+		}
+		if (identify(data, "flags: ")) {
+			istringstream iss(getAndClear(data));
+			string word;
+			obj.flags.clear();
+			while (iss >> word) {
+				obj.flags.push_back(word);
+			}
+			continue;
+		}
+		if (identify(data, "crect: ")) {
+			continue;
+		}
+		if (identify(data, "content: ")) {
+			obj.meta = getAndClear(data);
+			continue;
+		}
+
+		cout << "Error: Unknown field in: " << data << endl;
+		break;
+	}
 }
 
 void Objects_Manager::editObject(string data) {

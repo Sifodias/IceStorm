@@ -167,5 +167,6 @@ void Textures_Manager::printFrame() {
 void Textures_Manager::quit() {
 	for (auto strct : imgList) {
 		strct->destroy();
+		delete strct;
 	}
 }

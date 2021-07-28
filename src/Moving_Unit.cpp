@@ -4,6 +4,7 @@
 #include "Objects_Manager.h"
 #include "Controller.h"
 #include <math.h>
+#include "Camera.h"
 
 using namespace std;
 
@@ -341,8 +342,8 @@ void Moving_Unit::updateFollow() {
 		setPosOnCircle(angle);
 }
 
-tuple<double, double> Moving_Unit::getCoord() {
-	return { hitBox.x, hitBox.y };
+tuple<double, double> Moving_Unit::getCoord(bool relative) {
+	return { hitBox.x - (relative ? Camera::getX() : 0), hitBox.y - (relative ? Camera::getY() : 0) };
 }
 
 void Moving_Unit::setCoord(tuple<double, double> coord) {

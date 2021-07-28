@@ -24,8 +24,8 @@ using namespace std;
 
 #define SAVE_ENABLED 1
 
-#define ALPHAR 0
-#define ALPHAG 255
-#define ALPHAB 0
+#define ALPHAR 195
+#define ALPHAG 134
+#define ALPHAB 255
 
 #define SHOWINV false

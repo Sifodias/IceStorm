@@ -9,7 +9,7 @@
 class sprite_group {
 public:
 	sprite_group(std::vector<SDL_Texture*> t, int s, std::string n, bool playOnce = false) : speed(s), name(n), idle(false),
-																							playOnce(playOnce), done(false), index(0) {
+		playOnce(playOnce), done(false), index(0) {
 		for (int i = 0; i < t.size(); i++) {
 			textures.push_back(t[i]);
 		}

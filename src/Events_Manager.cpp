@@ -179,8 +179,8 @@ void Events_Manager::floweyCin() {
 					continue;
 				}
 			}
-			//wallID.push_back(Objects_Manager::createObject("texture: heart.png, flags: SOLID DYNAMIC").ID);
-			//ob(wallID.back()).movingUnit.hitBox = { 110.0 + b * GRID_W, 360.0 + a * GRID_H, GRID_W, GRID_H };
+			wallID.push_back(Objects_Manager::createObject("texture: heart.png, flags: SOLID DYNAMIC").ID);
+			ob(wallID.back()).movingUnit.hitBox = { 110.0 + b * GRID_W, 360.0 + a * GRID_H, GRID_W, GRID_H };
 		}
 	}
 

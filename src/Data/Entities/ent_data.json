@@ -137,6 +137,7 @@
     {
         "ID": 79,
         "content": "headspin.mp3",
+        "enabled": false,
         "target": "sampleSound",
         "type": "SOUND"
     },
@@ -1043,5 +1044,50 @@
         "type": "GENERIC",
         "x": 5658.0,
         "y": 3331.0
+    },
+    {
+        "ID": 184,
+        "flags": [
+            "DYNAMIC"
+        ],
+        "type": "GENERIC",
+        "x": 150.0,
+        "y": 290.0
+    },
+    {
+        "ID": 185,
+        "flags": [
+            "DYNAMIC"
+        ],
+        "type": "GENERIC",
+        "x": 150.0,
+        "y": 290.0
+    },
+    {
+        "ID": 186,
+        "flags": [
+            "DYNAMIC"
+        ],
+        "type": "GENERIC",
+        "x": 150.0,
+        "y": 290.0
+    },
+    {
+        "ID": 187,
+        "flags": [
+            "DYNAMIC"
+        ],
+        "type": "GENERIC",
+        "x": 150.0,
+        "y": 290.0
+    },
+    {
+        "ID": 188,
+        "flags": [
+            "DYNAMIC"
+        ],
+        "type": "GENERIC",
+        "x": 150.0,
+        "y": 290.0
     }
 ]

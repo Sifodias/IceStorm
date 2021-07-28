@@ -58,7 +58,7 @@ int main_event_loop() {
 				break;
 			}
 
-			// ImGui_ImplSDL2_ProcessEvent(&e); //Needs to be called only if the event is new
+			ImGui_ImplSDL2_ProcessEvent(&e); //Needs to be called only if the event is new
 		}
 		// if (Controller::checkAction(e, "jaja"))
 		// 	Controller::rumbleTest();

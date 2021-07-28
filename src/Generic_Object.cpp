@@ -106,7 +106,7 @@ void GObject::blit(std::tuple<double, double> coord) {
 }
 
 void GObject::blit() {
-	blit(movingUnit.getCoord());
+	blit(movingUnit.getCoord(true));
 }
 
 void GObject::setCoord(std::tuple<double, double> coord) {
