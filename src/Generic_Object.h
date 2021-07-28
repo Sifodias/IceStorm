@@ -65,6 +65,7 @@ public:
 	bool enabled;
 	bool default_enabled;
 	std::string meta;
+	std::string levelBound;
 	Moving_Unit movingUnit;
 
 	void routine(SDL_Event& e);
@@ -77,4 +78,5 @@ public:
 	void setCoord(std::tuple<double, double> coord);
 	void blit(std::tuple<double, double> coord);
 	void blit();
+	bool bounded();
 };

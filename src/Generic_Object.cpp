@@ -112,3 +112,7 @@ void GObject::blit() {
 void GObject::setCoord(std::tuple<double, double> coord) {
 	movingUnit.setCoord(coord);
 }
+
+bool GObject::bounded() {
+	return levelBound == Map::levelname || !checkFlag("DYNAMIC");
+}

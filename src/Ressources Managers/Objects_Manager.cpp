@@ -1,13 +1,15 @@
-#include "Objects_Manager.h"
-#include <sstream>
-#include <ostream>
 #include <iostream>
+#include <ostream>
+#include <sstream>
+#include <algorithm>
+#include "Objects_Manager.h"
 #include "Paths.h"
 #include "Engine_Manager.h"
 #include "Textures_Manager.h"
-#include <algorithm>
+#include "Map.h"
 #include <nlohmann/json.hpp>
 #include <iomanip>
+
 using json = nlohmann::json;
 
 vector<GObject> Objects_Manager::objects;
@@ -145,7 +147,7 @@ void Objects_Manager::objectsRoutine(SDL_Event& e) {
 void Objects_Manager::trigger(SDL_Rect rect, bool contact) {
 	for (GObject& obj : objects) {
 		SDL_Rect tempRect = obj.movingUnit.hitBox.sdl();
-		if (SDL_HasIntersection(&rect, &tempRect)) {
+		if (SDL_HasIntersection(&rect, &tempRect) && obj.bounded()) {
 			if (contact && obj.checkFlag("CONTACT") || !contact)
 				obj.trigger();
 		}
@@ -251,7 +253,7 @@ void Objects_Manager::fillObject(GObject& obj, string data) {
 			obj.meta = getAndClear(data);
 			continue;
 		}
-
+		obj.levelBound = Map::levelname;
 		cout << "Error: Unknown field in: " << data << endl;
 		break;
 	}

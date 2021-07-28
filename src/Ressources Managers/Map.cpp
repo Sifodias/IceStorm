@@ -141,13 +141,14 @@ void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> t
 				}
 
 				GObject& obj = Objects_Manager::findObject(id);
+				
 				SDL_Rect obj_rect = { x, y, GRID_W, GRID_H };
 				// if (obj.imgIndex) {
 				obj_rect.w = obj.movingUnit.hitBox.w;
 				obj_rect.h = obj.movingUnit.hitBox.h;
 				// }
 
-				if (SDL_HasIntersection(&obj_rect, &reqt)) {
+				if (SDL_HasIntersection(&obj_rect, &reqt) && obj.bounded()) {
 					if (contact) {
 						if (obj.checkFlag("CONTACT"))
 							obj.trigger();
@@ -155,7 +156,7 @@ void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> t
 					else
 						obj.trigger();
 				}
-
+				
 				x += GRID_W;
 			}
 			y += GRID_H;

@@ -143,7 +143,7 @@ void Textures_Manager::printFrame() {
 
 	/* Print the dynamic objects */
 	for (GObject& obj : Objects_Manager::objects) {
-		if (!obj.checkFlag("DYNAMIC"))
+		if (!obj.checkFlag("DYNAMIC") || obj.bounded())
 			continue;
 		obj.blit();
 	}
