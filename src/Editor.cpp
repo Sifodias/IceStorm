@@ -11,6 +11,7 @@
 #include <functional>
 #include <filesystem>
 #include "Paths.h"
+#include "Objects_Manager.h"
 
 using namespace ImGui;
 
@@ -30,7 +31,7 @@ static void addField(std::string field, bool& enabled) {
     ImGui::TableSetColumnIndex(1);
     ImGui::SetNextItemWidth(-FLT_MIN);
 
-    ImGui::Checkbox((field+"##value").c_str(), &enabled);
+    ImGui::Checkbox((field + "##value").c_str(), &enabled);
     ImGui::SetNextItemWidth(-FLT_MIN);
 
     ImGui::TableNextRow();
@@ -164,7 +165,31 @@ static void showCurrentObj(const char* prefix) {
     addField("ID:", cur->ID);
     addField("target:", cur->target);
     addField("type:", cur->type);
-    // addField("texture:", cur->textureName); // add button to the side UPDATE
+    //addField("texture:", cur->textureName); // add button to the side UPDATE
+    {   // It should be a function
+        ImGui::TableSetColumnIndex(0);
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("texture:");
+        ImGui::TableSetColumnIndex(1);
+        ImGui::Text(cur->textures.resource.c_str());
+        ImGui::SetNextItemWidth(-FLT_MIN);
+
+        if (ImGui::BeginTable(std::string("texty##value").c_str(), 2)) {
+            TableNextRow();
+            ImGui::TableSetColumnIndex(0);
+            ImGui::AlignTextToFramePadding();
+            static std::string meta;
+            ImGui::InputText("textyee##value", &meta);
+            ImGui::TableSetColumnIndex(1);
+            if (ImGui::Button("UPDATE")) {
+                Objects_Manager::fillObject(*cur, "texture: " + meta);
+            }
+            ImGui::SetNextItemWidth(-FLT_MIN);
+            EndTable();
+            ImGui::TableNextRow();
+            ImGui::NextColumn();
+        }
+    }
     addField("meta:", cur->meta);
     addField("flags:", cur->flags);
     addField("targetnames:", cur->targetnames);
@@ -236,7 +261,7 @@ void showActions() {
                 static std::string entLoad;
                 ImGui::InputText("yee##value", &entLoad);
                 ImGui::TableSetColumnIndex(1);
-                if (ImGui::Button("LOAD")){
+                if (ImGui::Button("LOAD")) {
                     Builder::currentObject = &Builder::fetchObject(entLoad);
                     Builder::lastIdToPlace = Builder::idToPlace;
                     Builder::idToPlace = Builder::currentObject->ID;

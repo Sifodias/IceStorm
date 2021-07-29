@@ -76,6 +76,11 @@ void GObject::trigger() {
 		if (meta == "|script1")
 			Events_Manager::addToQueue(Events_Manager::floweyCin);
 
+	if (type == "FOLLOWER"){
+		if (meta == "eye chara"){
+			movingUnit.followTarget(Character::movingUnit, 200, movingUnit.getCoord(), 4);
+		}
+	}
 	contact_triggered = true;
 	flagTrigger = 0;
 }

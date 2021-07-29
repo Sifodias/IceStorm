@@ -958,6 +958,9 @@
             "SOLID"
         ],
         "target": "gateEye",
+        "targetnames": [
+            "183"
+        ],
         "type": "DIALOG"
     },
     {
@@ -1035,5 +1038,24 @@
             "PERMANENT"
         ],
         "type": "DOOR"
+    },
+    {
+        "ID": 183,
+        "content": "eye chara",
+        "texture": "eye_pupil.png",
+        "type": "FOLLOWER",
+        "useMUnit": true,
+        "x": 5640.0,
+        "y": 3320.0
+    },
+    {
+        "ID": 184,
+        "flags": [
+            "CONTACT"
+        ],
+        "targetnames": [
+            "183"
+        ],
+        "type": "GENERIC"
     }
 ]

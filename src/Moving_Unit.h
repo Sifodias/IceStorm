@@ -34,6 +34,7 @@ public:
 	void followTarget(Moving_Unit& to_follow, int speed);
 	tuple<double, double> getCoord(bool relative = false);
 	void setCoord(tuple<double, double> coord);
+
 	c_rect hitBox;
 
 	double speedX;
@@ -42,6 +43,7 @@ public:
 	std::vector<int> movesX;
 	std::vector<int> movesY;
 	int mainDirection;
+	tuple<double, double> savedCoord;
 	std::vector<int> direction;		//1 = down	| -1 = up
 									//2 = right | -2 = left
 	int jump_speed;
@@ -67,6 +69,6 @@ public:
 	void addMoves(SDL_Event& e);
 	void doMoves();
 
-	void setPosOnCircle(int angle);
+	void setPosOnCircle(double angle);
 	void updateFollow();
 };

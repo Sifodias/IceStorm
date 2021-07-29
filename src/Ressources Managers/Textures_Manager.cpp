@@ -50,7 +50,7 @@ void Textures_Manager::init(std::string str) {
 			continue;
 		}
 		imgList.push_back(new img_sdl(newTexture, new_surface, entry.path().filename()));
-		
+
 		break;
 		}
 	}
@@ -113,7 +113,6 @@ void Textures_Manager::printFrame() {
 			/* Update the maximal index x for the current index y */
 			x_limit_index = std::min((cam_x + Camera::outerRect.w + GRID_W) / GRID_W, (int)plan[y].size());
 
-
 			for (int x = 0; x < x_limit_index; x++, rect_cursor.x += rect_cursor.w) {
 				if (!Map::getID(x, y, i)) {
 					if (showGrid) {
@@ -124,7 +123,7 @@ void Textures_Manager::printFrame() {
 				}
 
 				GObject& currentObj = Objects_Manager::findObject(Map::getID(x, y, i));
-				if (!currentObj.checkFlag("DYNAMIC")) {
+				if (!currentObj.checkFlag("DYNAMIC") && !currentObj.useMUnit) {
 					currentObj.blit({ rect_cursor.x, rect_cursor.y });
 				}
 
@@ -143,10 +142,11 @@ void Textures_Manager::printFrame() {
 
 	/* Print the dynamic objects */
 	for (GObject& obj : Objects_Manager::objects) {
-		if (!obj.checkFlag("DYNAMIC") || obj.bounded())
+		if (!obj.useMUnit || !obj.bounded())
 			continue;
 		obj.blit();
 	}
+
 
 	/* Print the character */
 	rect_cursor = Character::movingUnit.hitBox.sdl();

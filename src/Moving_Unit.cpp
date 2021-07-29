@@ -9,13 +9,10 @@
 using namespace std;
 
 bool rectEquals(SDL_Rect a, SDL_Rect b) {
-	if (a.x == b.x
+	return a.x == b.x
 		&& a.y == b.y
 		&& a.w == b.w
-		&& a.h == b.h
-		)
-		return true;
-	return false;
+		&& a.h == b.h;
 }
 
 void speedRestrainer(double& speedX, double& speedY, SDL_Rect rect) {
@@ -308,9 +305,9 @@ void Moving_Unit::setLinearMovement(int speed, int angle) {
 	speedY = -speed * sin(3.14 * angle / 180);
 }
 
-void Moving_Unit::setPosOnCircle(int angle) {
-	hitBox.x = radius * cos(3.14 * angle / 180) + std::get<0>(center);
-	hitBox.y = -radius * cos(3.14 * angle / 180) + std::get<1>(center);
+void Moving_Unit::setPosOnCircle(double angle) {
+	hitBox.x = radius * cos(3.14 * angle / 180) + (int)std::get<0>(center);
+	hitBox.y = -radius * sin(3.14 * angle / 180) + (int)std::get<1>(center);
 }
 
 void Moving_Unit::followTarget(Moving_Unit& to_follow, int speed, tuple<double, double> iCenter, double iRadius) {
@@ -326,11 +323,12 @@ void Moving_Unit::followTarget(Moving_Unit& to_follow, int speed) {
 }
 
 void Moving_Unit::updateFollow() {
-	int x_aim = target->hitBox.x + target->hitBox.w / 2 - hitBox.x - hitBox.w / 2;
-	int y_aim = target->hitBox.y + target->hitBox.h / 2 - hitBox.y - hitBox.h / 2;
+	double x_aim = target->hitBox.x + target->hitBox.w / 2 - hitBox.x - hitBox.w / 2;
+	double y_aim = target->hitBox.y + target->hitBox.h / 2 - hitBox.y - hitBox.h / 2;
 	int speed = (int)sqrt(speedX * speedX + speedY * speedY);
-
-	int angle = 0;
+	if (!x_aim && !y_aim)
+		return;
+	double angle = 0;
 	if (!y_aim && x_aim < 0)
 		angle = 180;
 	else if (y_aim)
@@ -338,8 +336,10 @@ void Moving_Unit::updateFollow() {
 
 	if (!circle)
 		setLinearMovement(speed, angle);
-	else
+	else {
 		setPosOnCircle(angle);
+		// cout << angle << endl;
+	}
 }
 
 tuple<double, double> Moving_Unit::getCoord(bool relative) {

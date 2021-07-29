@@ -122,11 +122,16 @@ void Objects_Manager::loadObjects() {
 
 			if (field.key() == "x") {
 				cur.movingUnit.hitBox.x = ojs["x"];
+				std::get<0>(cur.movingUnit.savedCoord) = ojs["x"];
 			}
 
 			if (field.key() == "y") {
 				cur.movingUnit.hitBox.y = ojs["y"];
+				std::get<1>(cur.movingUnit.savedCoord) = ojs["y"];
 			}
+
+			if (field.key() == "useMUnit")
+				cur.useMUnit = ojs["useMUnit"];
 
 			if (field.key() == "enabled") {
 				cur.default_enabled = ojs["enabled"];
@@ -253,7 +258,7 @@ void Objects_Manager::fillObject(GObject& obj, string data) {
 			obj.meta = getAndClear(data);
 			continue;
 		}
-		obj.levelBound = Map::levelname;
+
 		cout << "Error: Unknown field in: " << data << endl;
 		break;
 	}
@@ -284,6 +289,10 @@ GObject& Objects_Manager::createObject(string data) {
 	new_obj.ID = *std::max_element(idsVec.begin(), idsVec.end()) + 1;
 
 	fillObject(new_obj, data);
+
+	// Might need to be parametrized
+	new_obj.levelBound = Map::levelname;
+	new_obj.useMUnit = new_obj.checkFlag("DYNAMIC");
 
 	objects.push_back(new_obj);
 
@@ -332,14 +341,16 @@ void Objects_Manager::saveObjects() {
 		if (!obj.textures.resource.empty())
 			curOb["texture"] = obj.textures.resource;
 
-		if (obj.checkFlag("DYNAMIC")) {
-			curOb["x"] = std::get<0>(obj.movingUnit.getCoord());
-			curOb["y"] = std::get<1>(obj.movingUnit.getCoord());
+		if (obj.useMUnit) {
+			curOb["useMUnit"] = true;
+			curOb["x"] = std::get<0>(obj.movingUnit.savedCoord);
+			curOb["y"] = std::get<1>(obj.movingUnit.savedCoord);
 		}
 
 		if (!obj.default_enabled) {
 			curOb["enabled"] = false;
 		}
+
 		// If the object is useless, do not store it
 		if (curOb.size() == 2 && obj.ID != 0)
 			objArray.erase(objArray.size() - 1);
