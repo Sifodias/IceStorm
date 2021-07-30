@@ -319,12 +319,15 @@ void Builder::routine(SDL_Event& e) {
 			auto [x, y] = getCoord();
 
 			placeElement(x, y, currentPlan);
-			// currentObject->movingUnit.hitBox.x = ((x + Camera::getX()) / GRID_W) * GRID_W;
-			// currentObject->movingUnit.hitBox.y = ((y + Camera::getY()) / GRID_H) * GRID_H;
+			currentObject->movingUnit.hitBox.x = x + Camera::getX();
+			currentObject->movingUnit.hitBox.y = y + Camera::getY();
+			currentObject->movingUnit.savedCoord = currentObject->movingUnit.getCoord();
 			break;
 		}
 		case SDLK_r: {
-			trace(0, currentPlan);
+			currentObject = &(Objects_Manager::findObject(Objects_Manager::duplicate(*currentObject)));
+			lastIdToPlace = idToPlace;
+			idToPlace = currentObject->ID;
 			break;
 		}
 		case SDLK_q: {

@@ -959,6 +959,9 @@
         ],
         "target": "gateEye",
         "targetnames": [
+            "190",
+            "189",
+            "188",
             "183"
         ],
         "type": "DIALOG"
@@ -1057,5 +1060,57 @@
             "183"
         ],
         "type": "GENERIC"
+    },
+    {
+        "ID": 185,
+        "texture": "D.tga",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 186,
+        "flags": [
+            "DIALOG",
+            "SOLID"
+        ],
+        "target": "wall_test",
+        "texture": "tile.png",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 187,
+        "content": "\"I can't keep my eye off you\"",
+        "flags": [
+            "DIALOG"
+        ],
+        "target": "jano",
+        "texture": "eye.png",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 188,
+        "content": "eye chara",
+        "texture": "eye_pupil.png",
+        "type": "FOLLOWER",
+        "useMUnit": true,
+        "x": 5620.0,
+        "y": 3239.0
+    },
+    {
+        "ID": 189,
+        "content": "eye chara",
+        "texture": "eye_pupil.png",
+        "type": "FOLLOWER",
+        "useMUnit": true,
+        "x": 5540.0,
+        "y": 3159.0
+    },
+    {
+        "ID": 190,
+        "content": "eye chara",
+        "texture": "eye_pupil.png",
+        "type": "FOLLOWER",
+        "useMUnit": true,
+        "x": 5600.0,
+        "y": 3159.0
     }
 ]

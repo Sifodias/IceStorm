@@ -28,7 +28,7 @@ void Textures_Manager::init(std::string str) {
 	}
 	std::string path = str.empty() ? Paths::texturesPath : str;
 	for (const auto& entry : std::filesystem::directory_iterator(path)) {
-		if (!std::filesystem::is_regular_file(entry) || entry.path().extension() != ".png") {
+		if (!std::filesystem::is_regular_file(entry) || (entry.path().extension() != ".png" && entry.path().extension() != ".tga")) {
 			if (std::filesystem::is_directory(entry))
 				Textures_Manager::init(entry.path());
 

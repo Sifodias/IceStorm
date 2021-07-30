@@ -299,6 +299,14 @@ GObject& Objects_Manager::createObject(string data) {
 	return objects.back();
 }
 
+int Objects_Manager::duplicate(GObject& obj) {
+	GObject& new_obj = createObject("");
+	int id = new_obj.ID;
+	new_obj = obj; new_obj.ID = id;
+	return new_obj.ID;
+}
+
+
 void Objects_Manager::saveObjects() {
 	if (tempStream == NULL) return;
 	tempStream->close();

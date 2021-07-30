@@ -22,6 +22,7 @@ namespace Objects_Manager {
 	void editObject(string data);
 	void deleteObject(int id);
 	GObject& getObject(int index);
+	int duplicate(GObject& obj);
 
 	tuple<int, int> newDoors(string levelName);
 	void objectsRoutine(SDL_Event& e);

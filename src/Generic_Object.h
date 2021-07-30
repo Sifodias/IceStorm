@@ -1,23 +1,4 @@
 #pragma once
-/*
-Each object has :
-- ID (int)
-- target (string)		//current object
-- targetname (string)	//slave object
-- type (enum)
-- texture (sdl_texture)
-- CRect
-- flag solid
-- Content (differs depending on the type, it can be :
-. Message
-. Dialogue instance
-. Activating mechanisms
-. Door : <level> <front/back> <id>
-. ...	)
-All objects are stored in a .txt, which is loaded into a vector of objects
-
-Each object has a TRIGGER function
-*/
 #include <string>
 #include <SDL2/SDL.h>
 #include <vector>
@@ -28,13 +9,10 @@ Each object has a TRIGGER function
 type :
 	BUTTON,
 	DIALOG,
-	BREAKABLE,
 	DOOR,
 	GENERIC,
 	TELEPORT,
-	ENEMY,
-	PATTERN,
-	DYNAMIC,   // Only one instance at a time.
+	DYNAMIC,   //created in-game
 	SOUND,
 	ENABLER,
 	FOLLOWER
