@@ -13,7 +13,6 @@ bool Character::useMainOffsets;
 
 ifstream* saveFile = NULL;
 string charaMark;
-string map_name;
 bool movementLocked = false;
 
 
@@ -75,6 +74,7 @@ void Character::init()
 	loadSave();
 }
 
+// This should be somewhere else
 void Character::loadSave()
 {
 	std::string buffer;
@@ -84,7 +84,6 @@ void Character::loadSave()
 	while (buffer.compare("EOF")) {
 		if (Objects_Manager::identify(buffer, "map: ")) {
 			Map::loadLevel(buffer);
-			map_name = buffer;
 			goto next;
 		}
 		Map::findOccurrence(69, &Character::movingUnit.hitBox.x, &Character::movingUnit.hitBox.y);

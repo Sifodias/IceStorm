@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 find_package(nlohmann_json 3.2.0 REQUIRED)
 
+include_directories("libs/Quadtree-master/include")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "../src/")
 set(PROJECT_BINARY_DIR "src/")
 include_directories("libs/imgui-1.82")

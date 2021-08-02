@@ -34,7 +34,7 @@ public:
 	void followTarget(Moving_Unit& to_follow, int speed);
 	tuple<double, double> getCoord(bool relative = false);
 	void setCoord(tuple<double, double> coord);
-
+	// c_rect getBox();
 	c_rect hitBox;
 
 	double speedX;

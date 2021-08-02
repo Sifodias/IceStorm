@@ -10,7 +10,22 @@ std::ifstream* currentLevel;
 bool changed = 1;
 std::string Map::levelname = "";
 
+// auto getBox = [](mapNode node) {
+// 	return quadtree::Box<float>(node.rect.x, node.rect.y, node.rect.w, node.rect.h);
+// };
+// quadtree::Quadtree<mapNode, decltype(Map::getBox)> Map::quadTest(quadtree::Box(0.0f, 0.0f, 1.0f, 1.0f), Map::getBox);
+struct mapNode {
+	int id;
+	c_rect rect;
+};
+
 void Map::loadLevel(std::string name) {
+	auto getBox = [](mapNode node) {
+		return quadtree::Box<float>(node.rect.x, node.rect.y, node.rect.w, node.rect.h);
+	};
+	auto box = quadtree::Box(0.0f, 0.0f, (float)INT_MAX, (float)INT_MAX);
+	auto quadTest = quadtree::Quadtree<mapNode, decltype(getBox)>(box, getBox);
+
 	saveMatrix();
 
 	for (int i = 0; i < matrix.size(); i++) {
@@ -24,6 +39,12 @@ void Map::loadLevel(std::string name) {
 
 	loadMatrix();
 	levelname = name;
+
+	for (int i = 0; i < matrix[0].size(); i++) {
+		for (int j = 0; j < matrix[0][i].size(); j++) {
+			quadTest.add({ matrix[0][i][j], {(float)j * GRID_W, (float)i * GRID_H, GRID_W, GRID_H} });
+		}
+	}
 }
 
 void Map::loadMatrix() {
@@ -141,7 +162,7 @@ void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> t
 				}
 
 				GObject& obj = Objects_Manager::findObject(id);
-				
+
 				SDL_Rect obj_rect = { x, y, GRID_W, GRID_H };
 				// if (obj.imgIndex) {
 				obj_rect.w = obj.movingUnit.hitBox.w;
@@ -156,7 +177,7 @@ void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> t
 					else
 						obj.trigger();
 				}
-				
+
 				x += GRID_W;
 			}
 			y += GRID_H;

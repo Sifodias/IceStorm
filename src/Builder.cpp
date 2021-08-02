@@ -308,8 +308,9 @@ void Builder::routine(SDL_Event& e) {
 			auto [x, y] = getCoord();
 
 			placeElement(x, y, currentPlan, true);
-			// lastObject->movingUnit.hitBox.x = ((x + Camera::getX()) / GRID_W) * GRID_W;
-			// lastObject->movingUnit.hitBox.y = ((y + Camera::getY()) / GRID_H) * GRID_H;
+			lastObject->movingUnit.hitBox.x = x + Camera::getX();
+			lastObject->movingUnit.hitBox.y = y + Camera::getY();
+			lastObject->movingUnit.savedCoord = lastObject->movingUnit.getCoord();
 			break;
 		}
 

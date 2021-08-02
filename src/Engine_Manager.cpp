@@ -13,6 +13,8 @@
 #include "Audio_Manager.h"
 #include "Editor.h"
 #include "imgui_impl_sdl.h"
+#include "Quadtree.h"
+
 
 void init_game() {
 	Renderer::initAll();
@@ -24,7 +26,14 @@ void init_game() {
 	Controller::init();
 	Audio_Manager::init();
 	Editor::init();
-	
+
+ 
+	auto getBox = [](Moving_Unit* mu) {
+		return quadtree::Box<float>(mu->hitBox.x, mu->hitBox.y, mu->hitBox.w, mu->hitBox.h);
+	};
+	auto box = quadtree::Box(0.0f, 0.0f, (float)INT_MAX, (float)INT_MAX);
+	auto quadtree = quadtree::Quadtree<Moving_Unit*, decltype(getBox)>(box, getBox);
+
 	// Events_Manager::addToQueue(Events_Manager::testTitle);
 }
 

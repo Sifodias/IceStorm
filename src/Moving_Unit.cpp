@@ -350,3 +350,7 @@ void Moving_Unit::setCoord(tuple<double, double> coord) {
 	hitBox.x = get<0>(coord);
 	hitBox.y = get<1>(coord);
 }
+
+// c_rect Moving_Unit::getBox(){
+// 	return hitBox;
+// }

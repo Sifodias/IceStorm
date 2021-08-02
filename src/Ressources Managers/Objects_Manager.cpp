@@ -10,6 +10,7 @@
 #include <nlohmann/json.hpp>
 #include <iomanip>
 
+
 using json = nlohmann::json;
 
 vector<GObject> Objects_Manager::objects;
@@ -162,6 +163,8 @@ void Objects_Manager::trigger(SDL_Rect rect, bool contact) {
 bool Objects_Manager::solidIntersect(SDL_Rect rect) {
 	for (GObject& obj : objects) {
 		SDL_Rect tempRect = obj.movingUnit.hitBox.sdl();
+		if (!obj.useMUnit)
+			continue;
 		if (SDL_HasIntersection(&rect, &tempRect)) {
 			if (obj.checkFlag("SOLID"))
 				return true;
