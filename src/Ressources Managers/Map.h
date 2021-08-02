@@ -26,6 +26,12 @@ namespace Map {
 
 	extern std::vector<std::vector<std::vector<int>>> matrix;	//the matrix of the level	|  the pair indexes represent front plans, the odds back plans
 	extern std::string levelname;
-	// extern quadtree::Quadtree<mapNode, decltype(getBox)>* quadTest;
+
+	struct mapNode {
+		int id;
+		c_rect rect;
+	};
+	quadtree::Box<float> getBox(mapNode* node);
+	extern quadtree::Quadtree<mapNode*, decltype(getBox)> quadTest;
 	// quadtree::Quadtree<mapNode, decltype(getBox)> quadTest(quadtree::Box(0.0f, 0.0f, 1.0f, 1.0f), Map::getBox);
 };

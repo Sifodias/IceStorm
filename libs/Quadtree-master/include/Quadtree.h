@@ -5,6 +5,7 @@
 #include <memory>
 #include <type_traits>
 #include <vector>
+#include <functional>
 #include "Box.h"
 
 namespace quadtree {
@@ -18,6 +19,7 @@ namespace quadtree {
         static_assert(std::is_arithmetic_v<Float>);
 
     public:
+        Quadtree() {}
         Quadtree(const Box<Float>& box, const GetBox& getBox = GetBox(),
             const Equal& equal = Equal()) :
             mBox(box), mRoot(std::make_unique<Node>()), mGetBox(getBox), mEqual(equal) {
@@ -45,8 +47,8 @@ namespace quadtree {
         }
 
     private:
-        static constexpr auto Threshold = std::size_t(16);
-        static constexpr auto MaxDepth = std::size_t(8);
+        static constexpr auto Threshold = std::size_t(8);
+        static constexpr auto MaxDepth = std::size_t(64);
 
         struct Node {
             std::array<std::unique_ptr<Node>, 4> children;
@@ -55,7 +57,7 @@ namespace quadtree {
 
         Box<Float> mBox;
         std::unique_ptr<Node> mRoot;
-        GetBox mGetBox;
+        std::function<GetBox> mGetBox;
         Equal mEqual;
 
         bool isLeaf(const Node* node) const {

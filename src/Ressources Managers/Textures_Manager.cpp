@@ -92,52 +92,81 @@ SDL_Surface* Textures_Manager::findSurface(std::string name) {
 void Textures_Manager::printFrame() {
 	SDL_Rect rect_cursor = { 0, 0, GRID_W, GRID_H };
 
-	/* For each map plan */
-	int i = 0;
-	for (std::vector<std::vector<int>>& plan : Map::matrix) {
-		auto [cam_x, cam_y] = Camera::getCoord();
-		rect_cursor.x = -cam_x;
-		rect_cursor.y = -cam_y;
 
-		/* We won't print further than those matrix indexes */
-		/* Note that we trim out only the maximal indexes */
-		//int y_limit_index = std::min(Camera::getY() + Camera::outerRect.h + GRID_H, (int)(plan.size()) * GRID_H) / GRID_H;
-		int y_limit_index = plan.size();
-		int x_limit_index = 0;
-		// for (auto vec : plan)
-		// 	x_limit_index = std::max(x_limit_index, (int)vec.size());
+	// /* For each map plan */
+	// int i = 0;
+	// for (std::vector<std::vector<int>>& plan : Map::matrix) {
+	// 	auto [cam_x, cam_y] = Camera::getCoord();
+	// 	rect_cursor.x = -cam_x;
+	// 	rect_cursor.y = -cam_y;
 
-		for (int y = 0; y < y_limit_index; y++,
-			rect_cursor.x = -cam_x, rect_cursor.y += rect_cursor.h) {
+	// 	/* We won't print further than those matrix indexes */
+	// 	/* Note that we trim out only the maximal indexes */
+	// 	//int y_limit_index = std::min(Camera::getY() + Camera::outerRect.h + GRID_H, (int)(plan.size()) * GRID_H) / GRID_H;
+	// 	int y_limit_index = plan.size();
+	// 	int x_limit_index = 0;
+	// 	// for (auto vec : plan)
+	// 	// 	x_limit_index = std::max(x_limit_index, (int)vec.size());
 
-			/* Update the maximal index x for the current index y */
-			x_limit_index = std::min((cam_x + Camera::outerRect.w + GRID_W) / GRID_W, (int)plan[y].size());
+	// 	for (int y = 0; y < y_limit_index; y++,
+	// 		rect_cursor.x = -cam_x, rect_cursor.y += rect_cursor.h) {
 
-			for (int x = 0; x < x_limit_index; x++, rect_cursor.x += rect_cursor.w) {
-				if (!Map::getID(x, y, i)) {
-					if (showGrid) {
-						SDL_Rect out = { rect_cursor.x, rect_cursor.y, GRID_W, GRID_H };
-						SDL_RenderCopy(Renderer::g_Renderer, Textures_Manager::findTexture("grid.png"), NULL, &out);
-					}
-					continue;
-				}
+	// 		/* Update the maximal index x for the current index y */
+	// 		x_limit_index = std::min((cam_x + Camera::outerRect.w + GRID_W) / GRID_W, (int)plan[y].size());
 
-				GObject& currentObj = Objects_Manager::findObject(Map::getID(x, y, i));
-				if (!currentObj.checkFlag("DYNAMIC") && !currentObj.useMUnit) {
-					currentObj.blit({ rect_cursor.x, rect_cursor.y });
-				}
+	// 		for (int x = 0; x < x_limit_index; x++, rect_cursor.x += rect_cursor.w) {
+	// 			if (!Map::getID(x, y, i)) {
+	// 				if (showGrid) {
+	// 					SDL_Rect out = { rect_cursor.x, rect_cursor.y, GRID_W, GRID_H };
+	// 					SDL_RenderCopy(Renderer::g_Renderer, Textures_Manager::findTexture("grid.png"), NULL, &out);
+	// 				}
+	// 				continue;
+	// 			}
 
-				if (showGrid) {
-					SDL_Rect out = rect_cursor;
-					out.w = GRID_W;
-					out.h = GRID_H;
-					SDL_RenderCopy(Renderer::g_Renderer, Textures_Manager::findTexture("grid.png"), NULL, &out);
-				}
-			}
+	// 			GObject& currentObj = Objects_Manager::findObject(Map::getID(x, y, i));
+	// 			if (!currentObj.checkFlag("DYNAMIC") && !currentObj.useMUnit) {
+	// 				currentObj.blit({ rect_cursor.x, rect_cursor.y });
+	// 			}
+
+	// 			if (showGrid) {
+	// 				SDL_Rect out = rect_cursor;
+	// 				out.w = GRID_W;
+	// 				out.h = GRID_H;
+	// 				SDL_RenderCopy(Renderer::g_Renderer, Textures_Manager::findTexture("grid.png"), NULL, &out);
+	// 			}
+	// 		}
+	// 	}
+
+	// 	/* Update the index of the current plan */
+	// 	i++;
+	// }
+	// Uint32 timerA;
+	// Uint32 timerB;
+	// timerA = timerB = SDL_GetTicks();
+
+	std::vector<Map::mapNode*> toPrint = Map::quadTest.query(quadtree::Box<float>{Camera::getX(), Camera::getY(),
+		Camera::outerRect.w, Camera::outerRect.h});
+	// std::cout << toPrint.size() << std::endl;
+
+	// timerB = SDL_GetTicks();
+	// std::cout << "Query: " << timerB - timerA << std::endl;
+	// timerA = timerB = SDL_GetTicks();
+	// std::vector<int> titi;
+	// for (int i = 0; i < Map::matrix[0].size(); i++) {
+	// 	for (int j = 0; j < Map::matrix[0][i].size(); j++) {
+	// 		if (Map::matrix[0][i][j]) {
+	// 			titi.push_back(Map::matrix[0][i][j]);
+	// 		}
+	// 	}
+	// }
+	// timerB = SDL_GetTicks();
+	// std::cout << "Fullmap: " << timerB - timerA << std::endl;
+
+	for (Map::mapNode* node : toPrint) {
+		GObject& obj = Objects_Manager::findObject(node->id);
+		if (!obj.checkFlag("DYNAMIC") && !obj.useMUnit) {
+			obj.blit({ node->rect.x - Camera::getX(), node->rect.y - Camera::getY() });
 		}
-
-		/* Update the index of the current plan */
-		i++;
 	}
 
 	/* Print the dynamic objects */

@@ -10,21 +10,16 @@ std::ifstream* currentLevel;
 bool changed = 1;
 std::string Map::levelname = "";
 
-// auto getBox = [](mapNode node) {
-// 	return quadtree::Box<float>(node.rect.x, node.rect.y, node.rect.w, node.rect.h);
-// };
-// quadtree::Quadtree<mapNode, decltype(Map::getBox)> Map::quadTest(quadtree::Box(0.0f, 0.0f, 1.0f, 1.0f), Map::getBox);
-struct mapNode {
-	int id;
-	c_rect rect;
-};
+
+quadtree::Box<float> Map::getBox(mapNode* node) {
+	return quadtree::Box<float>(node->rect.x, node->rect.y, node->rect.w, node->rect.h);
+}
+
+quadtree::Quadtree<Map::mapNode*, decltype(Map::getBox)> Map::quadTest;
 
 void Map::loadLevel(std::string name) {
-	auto getBox = [](mapNode node) {
-		return quadtree::Box<float>(node.rect.x, node.rect.y, node.rect.w, node.rect.h);
-	};
 	auto box = quadtree::Box(0.0f, 0.0f, (float)INT_MAX, (float)INT_MAX);
-	auto quadTest = quadtree::Quadtree<mapNode, decltype(getBox)>(box, getBox);
+	quadTest = quadtree::Quadtree<mapNode*, quadtree::Box<float>(mapNode* node)>(box, getBox);
 
 	saveMatrix();
 
@@ -42,7 +37,10 @@ void Map::loadLevel(std::string name) {
 
 	for (int i = 0; i < matrix[0].size(); i++) {
 		for (int j = 0; j < matrix[0][i].size(); j++) {
-			quadTest.add({ matrix[0][i][j], {(float)j * GRID_W, (float)i * GRID_H, GRID_W, GRID_H} });
+			if (matrix[0][i][j]) {
+				mapNode* node = new mapNode{ matrix[0][i][j], {(float)j * GRID_W, (float)i * GRID_H, GRID_W, GRID_H} };
+				quadTest.add(node);
+			}
 		}
 	}
 }
@@ -116,33 +114,45 @@ int Map::getID(int ix, int iy, int plan) {
 }
 
 bool Map::isItSolid(SDL_Rect reqt) {
-	int x, y = 0;
-	for (std::vector<std::vector<int>>& plan : matrix) {
-		for (std::vector<int>& line : plan) {
-			x = 0;
-			for (int id : line) {
-				if (!id) {
-					x += GRID_W;
-					continue;
-				}
-				GObject& obj = Objects_Manager::findObject(id);
-				SDL_Rect obj_rect = { x, y, GRID_W, GRID_H };
-				// if (obj.imgIndex) {
-				obj_rect.w = obj.movingUnit.hitBox.w;
-				obj_rect.h = obj.movingUnit.hitBox.h;
-				// }
 
-				if (SDL_HasIntersection(&obj_rect, &reqt) && obj.checkFlag("SOLID"))
-					return true;
+	std::vector<mapNode*> check = quadTest.query(quadtree::Box<float>{reqt.x, reqt.y, reqt.w, reqt.h});
 
+	for (Map::mapNode* node : check) {
+		GObject& obj = Objects_Manager::findObject(node->id);
+		SDL_Rect obj_rect = { node->rect.x, node->rect.y, node->rect.w, node->rect.h };
 
-				x += GRID_W;
-			}
-			y += GRID_H;
-		}
+		if (SDL_HasIntersection(&obj_rect, &reqt) && obj.checkFlag("SOLID"))
+			return true;
 	}
-
 	return false;
+
+	// int x, y = 0;
+	// for (std::vector<std::vector<int>>& plan : matrix) {
+	// 	for (std::vector<int>& line : plan) {
+	// 		x = 0;
+	// 		for (int id : line) {
+	// 			if (!id) {
+	// 				x += GRID_W;
+	// 				continue;
+	// 			}
+	// 			GObject& obj = Objects_Manager::findObject(id);
+	// 			SDL_Rect obj_rect = { x, y, GRID_W, GRID_H };
+	// 			// if (obj.imgIndex) {
+	// 			obj_rect.w = obj.movingUnit.hitBox.w;
+	// 			obj_rect.h = obj.movingUnit.hitBox.h;
+	// 			// }
+
+	// 			if (SDL_HasIntersection(&obj_rect, &reqt) && obj.checkFlag("SOLID"))
+	// 				return true;
+
+
+	// 			x += GRID_W;
+	// 		}
+	// 		y += GRID_H;
+	// 	}
+	// }
+
+	// return false;
 }
 
 
@@ -150,6 +160,27 @@ void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> t
 {
 	/* Coat the reqt with 1 pixel large coating */
 	reqt.x -= 1; reqt.y -= 1; reqt.w += 2; reqt.h += 2;
+
+	std::vector<mapNode*> check = quadTest.query(quadtree::Box<float>{reqt.x, reqt.y, reqt.w, reqt.h});
+
+	for (Map::mapNode* node : check) {
+		GObject& obj = Objects_Manager::findObject(node->id);
+		SDL_Rect obj_rect = { node->rect.x, node->rect.y, node->rect.w, node->rect.h };
+
+		if (SDL_HasIntersection(&obj_rect, &reqt) && obj.bounded()) {
+			if (SDL_HasIntersection(&obj_rect, &reqt) && obj.bounded()) {
+				if (contact) {
+					if (obj.checkFlag("CONTACT"))
+						obj.trigger();
+				}
+				else
+					obj.trigger();
+			}
+		}
+
+	}
+
+	return;
 
 	int x, y = 0;
 	for (std::vector<std::vector<int>> plan : matrix) {

@@ -13,7 +13,6 @@
 #include "Audio_Manager.h"
 #include "Editor.h"
 #include "imgui_impl_sdl.h"
-#include "Quadtree.h"
 
 
 void init_game() {
@@ -27,31 +26,32 @@ void init_game() {
 	Audio_Manager::init();
 	Editor::init();
 
- 
-	auto getBox = [](Moving_Unit* mu) {
-		return quadtree::Box<float>(mu->hitBox.x, mu->hitBox.y, mu->hitBox.w, mu->hitBox.h);
-	};
-	auto box = quadtree::Box(0.0f, 0.0f, (float)INT_MAX, (float)INT_MAX);
-	auto quadtree = quadtree::Quadtree<Moving_Unit*, decltype(getBox)>(box, getBox);
-
 	// Events_Manager::addToQueue(Events_Manager::testTitle);
 }
 
 void handleRoutines(SDL_Event& e) {
 	SDL_RenderClear(Renderer::g_Renderer);
+	
+	Uint32 timerA;
+	Uint32 timerB;
+	timerA = timerB = SDL_GetTicks();
 
 	ImGuiIO& io = ImGui::GetIO();
 	Controller::blockInput = io.WantCaptureKeyboard;
 	if (!io.WantCaptureKeyboard) {
 		Builder::routine(e);
 	}
+
 	Character::characterRoutine(e);
 	Objects_Manager::objectsRoutine(e);
 	Events_Manager::routine();
 	Textures_Manager::printFrame();
+	Editor::routine(e);
 	Text_Printer::handleRoutine(e);
 
-	Editor::routine(e);
+	timerB = SDL_GetTicks();
+	// std::cout << timerB - timerA << std::endl;
+	timerA = timerB = SDL_GetTicks();
 
 	SDL_RenderPresent(Renderer::g_Renderer);
 }
@@ -71,8 +71,10 @@ int main_event_loop() {
 		}
 		// if (Controller::checkAction(e, "jaja"))
 		// 	Controller::rumbleTest();
+		
 
 		handleRoutines(e);
+
 	}
 	return 0;
 }
