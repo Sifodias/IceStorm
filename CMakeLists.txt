@@ -8,7 +8,7 @@ include_directories("libs/Quadtree-master/include")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "../src/")
 set(PROJECT_BINARY_DIR "src/")
 include_directories("libs/imgui-1.82")
-include_directories("src/Ressources Managers")
+include_directories("src/Resource_Managers")
 include_directories("src/")
 
 file(GLOB_RECURSE CPPS "src/*.cpp")

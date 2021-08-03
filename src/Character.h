@@ -10,8 +10,7 @@ namespace Character
 	void characterRoutine(SDL_Event& e);
 	void lockMovements(bool lock);
 
-	void loadSave();// string save = "save.txt");	//Move it somewhere else
-	void save();// string save = "save.txt");		//same
+	
 
 	extern SpritesHandler textures;
 	extern Moving_Unit movingUnit;

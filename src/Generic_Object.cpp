@@ -119,5 +119,5 @@ void GObject::setCoord(std::tuple<double, double> coord) {
 }
 
 bool GObject::bounded() {
-	return levelBound == Map::levelname || !checkFlag("DYNAMIC");
+	return levelBound == Map::levelname && checkFlag("DYNAMIC") && useMUnit;
 }

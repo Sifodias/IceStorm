@@ -2,7 +2,6 @@
 #include <iostream>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
-#include "Engine_Manager.h"
 #include <SDL2/SDL_ttf.h>
 #include <string>
 #include "Map.h"
@@ -91,7 +90,6 @@ void Renderer::initAll(RenderMode m) {
 
 
 void Renderer::quitAll() {
-	engineQuit();
 	SDL_DestroyRenderer(g_Renderer);
 	SDL_DestroyWindow(g_Window);
 	IMG_Quit();

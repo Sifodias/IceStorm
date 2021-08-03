@@ -90,6 +90,8 @@
         "forward_list": "cpp",
         "future": "cpp",
         "numbers": "cpp",
-        "__bits": "cpp"
-    }
+        "__bits": "cpp",
+        "filesystem": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

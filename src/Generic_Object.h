@@ -31,7 +31,7 @@ flags :
 class GObject {
 public:
 	GObject() : ID(0), type("GENERIC"), flagTrigger(false), contact_triggered(false),
-		enabled(true), default_enabled(true), textures(), useMUnit(false) {
+		enabled(true), default_enabled(true), textures(), useMUnit(false), isBlueprint(true) {
 	};
 	int ID;
 	std::string target;
@@ -44,6 +44,7 @@ public:
 	bool enabled;
 	bool default_enabled;
 	bool useMUnit;
+	bool isBlueprint;
 	std::string meta;
 	std::string levelBound;
 	Moving_Unit movingUnit;

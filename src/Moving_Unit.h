@@ -3,6 +3,7 @@
 #include "Global_Flags.h"
 #include <SDL2/SDL.h>
 #include <tuple>
+#include "Box.h"
 
 class c_rect {
 public:
@@ -14,6 +15,9 @@ public:
 	}
 	SDL_Rect sdl() {	// BEWARE : it returns a copy
 		return { (int)x, (int)y, w, h };
+	}
+	quadtree::Box<float> box() {
+		return quadtree::Box<float>((float)x, (float)y, (float)w, (float)h);
 	}
 	double x;
 	double y;
