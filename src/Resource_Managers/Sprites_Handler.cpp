@@ -21,7 +21,7 @@ void SpritesHandler::addGroup(std::string sheet_name, int width_per_sprite, int 
 
 	std::vector<SDL_Texture*> texturesVec;
 
-	SDL_Surface* surface = Textures_Manager::findSurface(sheet_name);
+	SDL_Surface* surface = Textures_m::findSurface(sheet_name);
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, alpha.r, alpha.g, alpha.b));
 
 	for (int i = 0; i < nb_of_frames; i++) {
@@ -37,7 +37,7 @@ void SpritesHandler::setIdle(bool idle) {
 }
 
 void SpritesHandler::setSingleFrame(std::string textureName) {
-	SDL_Texture* tex = Textures_Manager::findTexture(textureName);
+	SDL_Texture* tex = Textures_m::findTexture(textureName);
 	if (tex == NULL) {
 		cout << "No texture found with name: " << textureName << endl;
 		return;

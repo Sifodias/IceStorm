@@ -1,8 +1,8 @@
 #include "Character.h"
 #include "Map.h"
-#include "Textures_Manager.h"
+#include "Textures_m.h"
 #include "Paths.h"
-#include "Objects_Manager.h"
+#include "Objects_m.h"
 #include "Controller.h"
 #include "Text_Printer.h"
 
@@ -48,11 +48,11 @@ void Character::characterRoutine(SDL_Event& e) {
 	}
 	if (Controller::checkAction(e, "use")) {
 		Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, false);
-		Objects_Manager::trigger(movingUnit.hitBox.sdl(), false);
+		Objects_m::trigger(movingUnit.hitBox.sdl(), false);
 	}
 	else {
 		Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, true);
-		Objects_Manager::trigger(movingUnit.hitBox.sdl(), true);
+		Objects_m::trigger(movingUnit.hitBox.sdl(), true);
 	}
 
 }

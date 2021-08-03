@@ -3,7 +3,7 @@
 #include <tuple>
 #include <exception>
 #include "Builder.h"
-#include "Objects_Manager.h"
+#include "Objects_m.h"
 #include "Map.h"
 #include "Camera.h"
 #include "Character.h"
@@ -35,10 +35,10 @@ void Builder::setKey(int key) {
 
 GObject& Builder::fetchObject(string name) {
 	try {
-		return Objects_Manager::findObject(stoi(name));
+		return Objects_m::findObject(stoi(name));
 	}
 	catch (exception&) {
-		return Objects_Manager::findObject(name);
+		return Objects_m::findObject(name);
 	}
 }
 
@@ -46,11 +46,11 @@ void Builder::fetch() {
 	std::string buffer;
 	getline(std::cin, buffer);
 	while (buffer.compare("z")) {
-		if (Objects_Manager::identify(buffer, "new ")) {		////
-			if (Objects_Manager::identify(buffer, "level ")) {
+		if (Objects_m::identify(buffer, "new ")) {		////
+			if (Objects_m::identify(buffer, "level ")) {
 				newLevel(buffer);
 			}
-			else if (Objects_Manager::identify(buffer, "plan ")) {
+			else if (Objects_m::identify(buffer, "plan ")) {
 				int temp;
 				try {
 					temp = stoi(buffer);
@@ -59,18 +59,18 @@ void Builder::fetch() {
 				catch (exception&) {
 				}
 			}
-			else if (Objects_Manager::identify(buffer, "ent ")) {
+			else if (Objects_m::identify(buffer, "ent ")) {
 				createObject(buffer);
 			}
 			else
 				goto unknownCMD;
 		}
 
-		else if (Objects_Manager::identify(buffer, "load ")) {		////
-			if (Objects_Manager::identify(buffer, "ents")) {
+		else if (Objects_m::identify(buffer, "load ")) {		////
+			if (Objects_m::identify(buffer, "ents")) {
 				loadEnts();
 			}
-			else if (Objects_Manager::identify(buffer, "level ")) {
+			else if (Objects_m::identify(buffer, "level ")) {
 				loadLevel(buffer);
 			}
 			else
@@ -78,11 +78,11 @@ void Builder::fetch() {
 
 		}
 
-		else if (Objects_Manager::identify(buffer, "current ")) {		////
-			if (Objects_Manager::identify(buffer, "ent")) {
+		else if (Objects_m::identify(buffer, "current ")) {		////
+			if (Objects_m::identify(buffer, "ent")) {
 				printInfo(*currentObject);
 			}
-			else if (Objects_Manager::identify(buffer, "plan")) {
+			else if (Objects_m::identify(buffer, "plan")) {
 				std::cout << "Current plan : " << currentPlan << endl;
 			}
 			else
@@ -90,8 +90,8 @@ void Builder::fetch() {
 
 		}
 
-		else if (Objects_Manager::identify(buffer, "set ")) {			////
-			if (Objects_Manager::identify(buffer, "plan ")) {
+		else if (Objects_m::identify(buffer, "set ")) {			////
+			if (Objects_m::identify(buffer, "plan ")) {
 				int temp;
 				try {
 					temp = stoi(buffer);
@@ -100,22 +100,22 @@ void Builder::fetch() {
 				catch (exception&) {
 				}
 			}
-			else if (Objects_Manager::identify(buffer, "ent ")) {
+			else if (Objects_m::identify(buffer, "ent ")) {
 				lastObject = currentObject;
 				currentObject = &fetchObject(buffer);
 			}
 			else goto unknownCMD;
 		}
 
-		else if (Objects_Manager::identify(buffer, "info ")) {
+		else if (Objects_m::identify(buffer, "info ")) {
 			printInfo(fetchObject(buffer));
 		}
 
-		else if (Objects_Manager::identify(buffer, "edit ")) {
+		else if (Objects_m::identify(buffer, "edit ")) {
 			editObject(buffer);
 		}
 
-		else if (Objects_Manager::identify(buffer, "newdoor ")) {
+		else if (Objects_m::identify(buffer, "newdoor ")) {
 			newDoor(buffer);
 		}
 
@@ -128,7 +128,7 @@ void Builder::fetch() {
 }
 
 void Builder::loadEnts() {
-	Objects_Manager::init();
+	Objects_m::init();
 }
 
 void Builder::printInfo(GObject& printObject) {
@@ -166,13 +166,13 @@ void Builder::printInfo(GObject& printObject) {
 }
 
 void Builder::createObject(string buffer) {
-	currentObject = &Objects_Manager::createObject(buffer);
+	currentObject = &Objects_m::createObject(buffer);
 	lastIdToPlace = idToPlace;
 	idToPlace = currentObject->ID;
 }
 
 void Builder::editObject(string str) {
-	Objects_Manager::editObject(str);
+	Objects_m::editObject(str);
 }
 
 void Builder::newPlan(int plan) {
@@ -326,7 +326,7 @@ void Builder::routine(SDL_Event& e) {
 			break;
 		}
 		case SDLK_r: {
-			currentObject = &(Objects_Manager::findObject(Objects_Manager::duplicate(*currentObject)));
+			currentObject = &(Objects_m::findObject(Objects_m::duplicate(*currentObject)));
 			lastIdToPlace = idToPlace;
 			idToPlace = currentObject->ID;
 			break;
@@ -349,7 +349,7 @@ void Builder::routine(SDL_Event& e) {
 			break;
 		}
 		case SDLK_x: {
-			Textures_Manager::showInvisibleEnts = !Textures_Manager::showInvisibleEnts;
+			Textures_m::showInvisibleEnts = !Textures_m::showInvisibleEnts;
 			break;
 		}
 		case SDLK_z: {
@@ -357,12 +357,12 @@ void Builder::routine(SDL_Event& e) {
 			break;
 		}
 		case SDLK_v: {
-			Textures_Manager::showGrid = !Textures_Manager::showGrid;
+			Textures_m::showGrid = !Textures_m::showGrid;
 			break;
 		}
 		}
 	}
-	currentObject = &Objects_Manager::findObject(idToPlace);
+	currentObject = &Objects_m::findObject(idToPlace);
 }
 
 void Builder::zoom(int focus) {
@@ -423,7 +423,7 @@ void Builder::trace(int set, int plan) {
 }
 
 void Builder::newDoor(string levelname) {
-	auto [a, b] = Objects_Manager::newDoors(levelname);
+	auto [a, b] = Objects_m::newDoors(levelname);
 	// printInfo(a); printInfo(b);
 	// currentObject = &a;
 	// lastObject = &b;

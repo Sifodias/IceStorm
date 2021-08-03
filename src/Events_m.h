@@ -3,7 +3,7 @@
 #include "Text_Printer.h"
 #include <functional>
 
-namespace Events_Manager {
+namespace Events_m {
 	void routine();
 	void addToQueue(std::function<void()>);
 

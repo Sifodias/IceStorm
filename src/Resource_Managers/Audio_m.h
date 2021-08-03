@@ -18,7 +18,7 @@ public:
 	std::string name;
 };
 
-namespace Audio_Manager {
+namespace Audio_m {
 	void init();
 	void play(Mix_Music* mus);
 	void play(Mix_Chunk* mus, int loops);

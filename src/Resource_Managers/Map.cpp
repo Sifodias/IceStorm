@@ -1,7 +1,7 @@
 #include "Map.h"
 #include <iostream>
 #include "Paths.h"
-#include "Objects_Manager.h"
+#include "Objects_m.h"
 
 std::vector<std::vector<std::vector<int>>> Map::matrix;
 
@@ -117,7 +117,7 @@ bool Map::isItSolid(SDL_Rect reqt) {
 	std::vector<mapNode> check = quadTest.query(c_rect(reqt).box());
 
 	for (Map::mapNode node : check) {
-		GObject& obj = Objects_Manager::findObject(node.id);
+		GObject& obj = Objects_m::findObject(node.id);
 		SDL_Rect obj_rect = node.rect.sdl();
 
 		if (SDL_HasIntersection(&obj_rect, &reqt) && obj.checkFlag("SOLID"))
@@ -135,7 +135,7 @@ void Map::trigger(SDL_Rect reqt, int direction, bool contact)	//contact = 1 -> t
 	std::vector<mapNode> check = quadTest.query(c_rect(reqt).box());
 
 	for (Map::mapNode node : check) {
-		GObject& obj = Objects_Manager::findObject(node.id);
+		GObject& obj = Objects_m::findObject(node.id);
 		SDL_Rect obj_rect = node.rect.sdl();
 
 		if (SDL_HasIntersection(&obj_rect, &reqt) && obj.bounded()) {

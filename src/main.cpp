@@ -1,34 +1,34 @@
 #include "Renderer.h"
 #include "Map.h"
-#include "Textures_Manager.h"
+#include "Textures_m.h"
 #include "Character.h"
 #include <iostream>
 #include "Text_Printer.h"
-#include "Objects_Manager.h"
+#include "Objects_m.h"
 #include "Camera.h"
 #include "Builder.h"
-#include "Events_Manager.h"
+#include "Events_m.h"
 #include "Controller.h"
-#include "Audio_Manager.h"
+#include "Audio_m.h"
 #include "Editor.h"
 #include "imgui_impl_sdl.h"
-#include "Save_Manager.h"
+#include "Save_m.h"
 
 void init_game() {
 	Renderer::initAll();
-	Textures_Manager::init();
-	Objects_Manager::init();
+	Textures_m::init();
+	Objects_m::init();
 	Text_Printer::init();
 	Camera::init();
 	Character::init();
 	Controller::init();
-	Audio_Manager::init();
-	Save_Manager::loadSave();
+	Audio_m::init();
+	Save_m::loadSave();
 
 	Editor::init();
 
 	
-	// Events_Manager::addToQueue(Events_Manager::testTitle);
+	// Events_m::addToQueue(Events_m::testTitle);
 }
 
 void handleRoutines(SDL_Event& e) {
@@ -45,9 +45,9 @@ void handleRoutines(SDL_Event& e) {
 	}
 
 	Character::characterRoutine(e);
-	Objects_Manager::objectsRoutine(e);
-	Events_Manager::routine();
-	Textures_Manager::printFrame();
+	Objects_m::objectsRoutine(e);
+	Events_m::routine();
+	Textures_m::printFrame();
 	Editor::routine(e);
 	Text_Printer::handleRoutine(e);
 
@@ -61,11 +61,11 @@ void handleRoutines(SDL_Event& e) {
 void engineQuit() {
 	if (SAVE_ENABLED) {
 		Map::saveMatrix();
-		Objects_Manager::saveObjects();
+		Objects_m::saveObjects();
 	}
 	Text_Printer::quit();
-	Textures_Manager::quit();
-	Audio_Manager::quit();
+	Textures_m::quit();
+	Audio_m::quit();
 }
 
 int main_event_loop() {

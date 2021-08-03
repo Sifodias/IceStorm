@@ -1,7 +1,7 @@
-#include "Events_Manager.h"
+#include "Events_m.h"
 #include "Renderer.h"
 #include "Sprites_Handler.h"
-#include "Objects_Manager.h"
+#include "Objects_m.h"
 #include "Character.h"
 #include "Builder.h"
 #include "Text_Printer.h"
@@ -24,7 +24,7 @@ void condQuit(SDL_Event& e) {
 		}
 	}
 }
-void Events_Manager::routine() {
+void Events_m::routine() {
 	if (busy)
 		return;
 
@@ -34,7 +34,7 @@ void Events_Manager::routine() {
 	}
 }
 
-void Events_Manager::addToQueue(std::function<void()> event) {
+void Events_m::addToQueue(std::function<void()> event) {
 	eventsQueue.push_back(event);
 }
 
@@ -42,7 +42,7 @@ int choiceMenu(int numchoices, int xFirstChoice, int offset) {
 	return 0;
 }
 
-void Events_Manager::testTitle() {
+void Events_m::testTitle() {
 	SDL_Rect container{ Renderer::SCREEN_W / 2 - 32, Renderer::SCREEN_H / 2 - 32, 500, 500 };
 	Text_Printer::addToQueue("IceStorm", &container, 1, 0, NULL, 0);
 	SDL_Event e{};
@@ -64,7 +64,7 @@ void Events_Manager::testTitle() {
 	Text_Printer::addToQueue("QUIT", &container, 1, 0, NULL, 0);
 
 	int choice = 0;
-	GObject choiceTick = Objects_Manager::findObject("choiceTick");
+	GObject choiceTick = Objects_m::findObject("choiceTick");
 	SDL_Rect choiceRect{ container.x - 20, container.y - 32, 5, 10 };
 	int lock = 0;
 	while (1) {
@@ -113,8 +113,8 @@ void routinesBlock(SDL_Event& e) {
 	SDL_RenderClear(Renderer::g_Renderer);
 	Builder::routine(e);
 	Character::characterRoutine(e);
-	Objects_Manager::objectsRoutine(e);
-	Textures_Manager::printFrame();
+	Objects_m::objectsRoutine(e);
+	Textures_m::printFrame();
 	Text_Printer::handleRoutine(e);
 
 	SDL_RenderPresent(Renderer::g_Renderer);
@@ -139,18 +139,18 @@ void waitLoop(cond c) {
 	}
 }
 
-void Events_Manager::floweyCin() {
+void Events_m::floweyCin() {
 	//	Character::lockMovements(true);
 	//Character::textures.setIdle(true);
 	ob(78).textures.addGroup("t1.png", 20, 28, 0, 0, 0, 2, "hey", 60);
 	ob(78).textures.setCurrentGroup("hey");
 
 	Character::textures.setSingleFrame("heart.png");
-	Character::movingUnit.hitBox.w = Textures_Manager::findSurface("heart.png")->w;
-	Character::movingUnit.hitBox.h = Textures_Manager::findSurface("heart.png")->h;
+	Character::movingUnit.hitBox.w = Textures_m::findSurface("heart.png")->w;
+	Character::movingUnit.hitBox.h = Textures_m::findSurface("heart.png")->h;
 	Character::useMainOffsets = false;
 
-	int idFlow = Objects_Manager::createObject("texture: flowey.png 21 23 3 15 2 8 dancing 125, flags: DYNAMIC").ID;
+	int idFlow = Objects_m::createObject("texture: flowey.png 21 23 3 15 2 8 dancing 125, flags: DYNAMIC").ID;
 	ob(idFlow).movingUnit.hitBox = { 150, 290, 21, 21 };
 	//ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 2, 8, "dancing", 125);
 	ob(idFlow).textures.addGroup("flowey.png", 21, 23, 3, 15, 1, 5, "appear", 80, true);
@@ -178,7 +178,7 @@ void Events_Manager::floweyCin() {
 					continue;
 				}
 			}
-			wallID.push_back(Objects_Manager::createObject("texture: heart.png, flags: SOLID DYNAMIC").ID);
+			wallID.push_back(Objects_m::createObject("texture: heart.png, flags: SOLID DYNAMIC").ID);
 			ob(wallID.back()).movingUnit.hitBox = { 110.0 + b * GRID_W, 360.0 + a * GRID_H, GRID_W, GRID_H };
 		}
 	}
@@ -187,10 +187,10 @@ void Events_Manager::floweyCin() {
 	std::vector<int> pelleksID;
 
 	for (int i = 0; i < 4; i++)
-		pelleksID.push_back(Objects_Manager::createObject("flags: CONTACT DYNAMIC").ID);
+		pelleksID.push_back(Objects_m::createObject("flags: CONTACT DYNAMIC").ID);
 
 	for (int id : pelleksID) {
-		GObject& obj = Objects_Manager::findObject(id);
+		GObject& obj = Objects_m::findObject(id);
 		obj.movingUnit.noclip = true;
 		obj.movingUnit.followTarget(Character::movingUnit, 50);
 		obj.textures.clear();
@@ -214,9 +214,9 @@ void Events_Manager::floweyCin() {
 	}
 out:
 	for (int id : pelleksID)
-		Objects_Manager::deleteObject(id);
+		Objects_m::deleteObject(id);
 	for (int id : wallID)
-		Objects_Manager::deleteObject(id);
+		Objects_m::deleteObject(id);
 
 	print("I hope it hurts.");
 	waitLoop(TEXT_FLUSHED);
@@ -233,7 +233,7 @@ out:
 	//Character::lockMovements(false);
 }
 
-void Events_Manager::etalonage() {
+void Events_m::etalonage() {
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_Event e;
 	std::vector<Uint32> time_values = { 6000, 4000, 2000, 1000, 500 };

@@ -1,14 +1,14 @@
-#include "Objects_Manager.h"
+#include "Objects_m.h"
 #include "Generic_Object.h"
 #include "Text_Printer.h"
 #include "Dialog_Engine.h"
 #include "Character.h"
 #include "Map.h"
 #include "Camera.h"
-#include "Events_Manager.h"
-#include "Audio_Manager.h"
+#include "Events_m.h"
+#include "Audio_m.h"
 #include "Renderer.h"
-#include "Textures_Manager.h"
+#include "Textures_m.h"
 
 using namespace std;
 
@@ -28,9 +28,9 @@ void GObject::trigger() {
 	flagTrigger = 1;
 	for (string& name : targetnames)
 		if (type == "ENABLER")
-			Objects_Manager::findObject(name).enabled = true;
-		else if (!Objects_Manager::findObject(name).flagTrigger)
-			Objects_Manager::findObject(name).trigger();
+			Objects_m::findObject(name).enabled = true;
+		else if (!Objects_m::findObject(name).flagTrigger)
+			Objects_m::findObject(name).trigger();
 
 	if (type == "BUTTON")
 		if (checkFlag("CONTACT"))
@@ -70,11 +70,11 @@ void GObject::trigger() {
 	}
 
 	if (type == "SOUND")
-		Audio_Manager::play(meta);
+		Audio_m::play(meta);
 
 	if (type == "EVENT_SCRIPTED")
 		if (meta == "|script1")
-			Events_Manager::addToQueue(Events_Manager::floweyCin);
+			Events_m::addToQueue(Events_m::floweyCin);
 
 	if (type == "FOLLOWER"){
 		if (meta == "eye chara"){
@@ -94,12 +94,12 @@ bool GObject::checkFlag(string flag) {
 }
 
 void GObject::blit(std::tuple<double, double> coord) {
-	if (!Textures_Manager::showInvisibleEnts && checkFlag("INV"))
+	if (!Textures_m::showInvisibleEnts && checkFlag("INV"))
 		return;
 	SDL_Texture* sprite = textures.currentFrame();
 	if (!sprite)
-		if (Textures_Manager::showInvisibleEnts)
-			sprite = Textures_Manager::findTexture("inv.png");
+		if (Textures_m::showInvisibleEnts)
+			sprite = Textures_m::findTexture("inv.png");
 		else
 			return;
 

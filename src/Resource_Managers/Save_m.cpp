@@ -1,5 +1,5 @@
-#include "Save_Manager.h"
-#include "Objects_Manager.h"
+#include "Save_m.h"
+#include "Objects_m.h"
 #include "Map.h"
 #include "Character.h"
 #include "Paths.h"
@@ -10,7 +10,7 @@ ifstream* saveFile = NULL;
 
 
 
-void Save_Manager::loadSave() {
+void Save_m::loadSave() {
     saveFile = loadFile(Paths::saveData + "save.txt");
 
     std::string buffer;
@@ -18,13 +18,13 @@ void Save_Manager::loadSave() {
     std::getline(*saveFile, buffer);
 
     while (buffer.compare("EOF")) {
-        if (Objects_Manager::identify(buffer, "map: ")) {
+        if (Objects_m::identify(buffer, "map: ")) {
             Map::loadLevel(buffer);
             Map::findOccurrence(69, &Character::movingUnit.hitBox.x, &Character::movingUnit.hitBox.y);
         }
 
-        /*if (Objects_Manager::identify(buffer, "charaMark: ")) {
-            GObject tempObj = Objects_Manager::findObject(buffer);
+        /*if (Objects_m::identify(buffer, "charaMark: ")) {
+            GObject tempObj = Objects_m::findObject(buffer);
             movingUnit.teleport(tempObj.x, tempObj.y);
             charaMark = buffer;
             goto next;
@@ -34,7 +34,7 @@ void Save_Manager::loadSave() {
     }
 }
 
-void Save_Manager::save() {
+void Save_m::save() {
     //write all the fields loaded by loadSavem in the saveFile
 }
 

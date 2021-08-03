@@ -1,12 +1,12 @@
-#include "Audio_Manager.h"
+#include "Audio_m.h"
 #include <filesystem>
 #include "Paths.h"
 #include <iostream>
 
-std::vector<music_struct> Audio_Manager::musics;
-std::vector<sound_struct> Audio_Manager::sounds;
+std::vector<music_struct> Audio_m::musics;
+std::vector<sound_struct> Audio_m::sounds;
 
-void Audio_Manager::init() {
+void Audio_m::init() {
 	for (const auto& entry : std::filesystem::directory_iterator(Paths::musicPath)) {
 		if (!std::filesystem::is_regular_file(entry))
 			continue;
@@ -33,15 +33,15 @@ void Audio_Manager::init() {
 	}
 }
 
-void Audio_Manager::play(Mix_Music* mus) {
+void Audio_m::play(Mix_Music* mus) {
 	Mix_PlayMusic(mus, -1);
 }
 
-void Audio_Manager::play(Mix_Chunk* chunk, int loops = 0) {
+void Audio_m::play(Mix_Chunk* chunk, int loops = 0) {
 	Mix_PlayChannel(-1, chunk, loops);
 }
 
-void Audio_Manager::play(std::string music) {
+void Audio_m::play(std::string music) {
 	for (auto sound : musics) {
 		if (sound.name == music) {
 			play(sound.music);
@@ -57,7 +57,7 @@ void Audio_Manager::play(std::string music) {
 	std::cout << "No music/sound found with name: " << music << std::endl;
 }
 
-void Audio_Manager::quit() {
+void Audio_m::quit() {
 	for (auto& m : musics) {
 		if (m.music)
 			Mix_FreeMusic(m.music);

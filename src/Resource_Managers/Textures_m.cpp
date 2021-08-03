@@ -1,4 +1,4 @@
-#include "Textures_Manager.h"
+#include "Textures_m.h"
 #include <string>
 #include <iostream>
 #include "Character.h"
@@ -7,16 +7,16 @@
 #include "Paths.h"
 #include "Map.h"
 #include <SDL2/SDL_image.h>
-#include "Objects_Manager.h"
+#include "Objects_m.h"
 #include "Camera.h"
 #include <algorithm>
 #include <filesystem>
 
-std::vector<img_struct*> Textures_Manager::imgList;
-bool Textures_Manager::showInvisibleEnts = SHOWINV;
-bool Textures_Manager::showGrid = false;
+std::vector<img_struct*> Textures_m::imgList;
+bool Textures_m::showInvisibleEnts = SHOWINV;
+bool Textures_m::showGrid = false;
 
-void Textures_Manager::init(std::string str) {
+void Textures_m::init(std::string str) {
 	if (!imgList.size()) {
 		switch (Renderer::mode) {
 		case SDL:
@@ -29,7 +29,7 @@ void Textures_Manager::init(std::string str) {
 	for (const auto& entry : std::filesystem::directory_iterator(path)) {
 		if (!std::filesystem::is_regular_file(entry) || (entry.path().extension() != ".png" && entry.path().extension() != ".tga")) {
 			if (std::filesystem::is_directory(entry))
-				Textures_Manager::init(entry.path());
+				Textures_m::init(entry.path());
 
 			continue;
 		}
@@ -55,7 +55,7 @@ void Textures_Manager::init(std::string str) {
 	}
 }
 
-int Textures_Manager::findIndex(std::string name) {
+int Textures_m::findIndex(std::string name) {
 	int i = 0;
 	for (img_struct* img : imgList) {
 		if (img->name() == name) {
@@ -66,7 +66,7 @@ int Textures_Manager::findIndex(std::string name) {
 	return 0;
 }
 
-SDL_Texture* Textures_Manager::findTexture(std::string name) {
+SDL_Texture* Textures_m::findTexture(std::string name) {
 	if (!name.size())
 		return NULL;
 	for (img_struct* img : imgList) {
@@ -77,7 +77,7 @@ SDL_Texture* Textures_Manager::findTexture(std::string name) {
 	return NULL;
 }
 
-SDL_Surface* Textures_Manager::findSurface(std::string name) {
+SDL_Surface* Textures_m::findSurface(std::string name) {
 	if (!name.size())
 		return NULL;
 	for (img_struct* img : imgList) {
@@ -88,7 +88,7 @@ SDL_Surface* Textures_Manager::findSurface(std::string name) {
 	return NULL;
 }
 
-void Textures_Manager::printFrame() {
+void Textures_m::printFrame() {
 	SDL_Rect rect_cursor = { 0, 0, GRID_W, GRID_H };
 
 	std::vector<Map::mapNode> toPrint = Map::quadTest.query(quadtree::Box<float>{(float)Camera::getX(), (float)Camera::getY(),
@@ -96,14 +96,14 @@ void Textures_Manager::printFrame() {
 
 
 	for (Map::mapNode node : toPrint) {
-		GObject& obj = Objects_Manager::findObject(node.id);
+		GObject& obj = Objects_m::findObject(node.id);
 		if (!obj.checkFlag("DYNAMIC") && !obj.useMUnit) {
 			obj.blit({ node.rect.x - Camera::getX(), node.rect.y - Camera::getY() });
 		}
 	}
 
 	/* Print the dynamic objects */
-	for (GObject& obj : Objects_Manager::objects) {
+	for (GObject& obj : Objects_m::objects) {
 		if (!obj.useMUnit || !obj.bounded())
 			continue;
 		obj.blit();
@@ -126,7 +126,7 @@ void Textures_Manager::printFrame() {
 	SDL_RenderCopy(Renderer::g_Renderer, Character::textures.currentFrame(), NULL, &rect_cursor);
 }
 
-void Textures_Manager::quit() {
+void Textures_m::quit() {
 	for (auto strct : imgList) {
 		strct->destroy();
 		delete strct;

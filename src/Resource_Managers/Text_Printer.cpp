@@ -2,7 +2,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <ostream>
 #include <iostream>
-#include "Textures_Manager.h"
+#include "Textures_m.h"
 #include "Renderer.h"
 #include "Paths.h"
 #include "Controller.h"
@@ -53,7 +53,7 @@ void Text_Printer::init() {
 	defaultContainer.h = 28; defaultContainer.x = 20; // For icon included, 79;
 	defaultContainer.w = 220; defaultContainer.y = 208;
 	flagOverflow = 0;
-	dialogBox = Textures_Manager::findTexture("dialog_box_clean.png");
+	dialogBox = Textures_m::findTexture("dialog_box_clean.png");
 	dialogRect.x = 0; dialogRect.y = 200;
 	dialogRect.h = 40; dialogRect.w = 320;
 }
@@ -193,7 +193,7 @@ void Text_Printer::handleRoutine(SDL_Event e) {
 			SDL_RenderCopy(Renderer::g_Renderer, dialogBox,
 				NULL, &dialogRect);
 			//SDL_Rect bite = { 2, 202, 55, 36 };
-			//SDL_RenderCopy(Renderer::g_Renderer, Textures_Manager::findTexture("testc.png"), NULL, &bite);
+			//SDL_RenderCopy(Renderer::g_Renderer, Textures_m::findTexture("testc.png"), NULL, &bite);
 		}
 	}
 	keepGoin(e, queue);

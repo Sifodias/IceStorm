@@ -1,5 +1,5 @@
 #pragma once
-#include "Objects_Manager.h"
+#include "Objects_m.h"
 
 namespace Fight_Handler {
 	void startFight(GObject* ennemy);

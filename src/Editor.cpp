@@ -11,7 +11,7 @@
 #include <functional>
 #include <filesystem>
 #include "Paths.h"
-#include "Objects_Manager.h"
+#include "Objects_m.h"
 
 using namespace ImGui;
 
@@ -182,7 +182,7 @@ static void showCurrentObj(const char* prefix) {
             ImGui::InputText("textyee##value", &meta);
             ImGui::TableSetColumnIndex(1);
             if (ImGui::Button("UPDATE")) {
-                Objects_Manager::fillObject(*cur, "texture: " + meta);
+                Objects_m::fillObject(*cur, "texture: " + meta);
             }
             ImGui::SetNextItemWidth(-FLT_MIN);
             EndTable();

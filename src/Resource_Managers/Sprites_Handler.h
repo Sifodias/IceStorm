@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
-#include "Textures_Manager.h"
+#include "Textures_m.h"
 #include "Global_Flags.h"
 
 class sprite_group {

@@ -5,10 +5,10 @@
 #include <tuple>
 
 using namespace std;
-#define ob(...) Objects_Manager::findObject(__VA_ARGS__)
+#define ob(...) Objects_m::findObject(__VA_ARGS__)
 
 
-namespace Objects_Manager {
+namespace Objects_m {
 	void init();
 
 	GObject& findObject(string target);

@@ -35,7 +35,7 @@ public:
 	std::string n;
 };
 
-namespace Textures_Manager {
+namespace Textures_m {
 	void init(std::string str = "");	//Loads all the images
 	void quit();
 	void printFrame(); //blits according to the matrix, the textures and the grid

@@ -31,7 +31,7 @@ int waitInput(int bound1 = -1, int bound2 = 255) {
 		}
 		SDL_RenderClear(Renderer::g_Renderer);
 		SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-		Textures_Manager::printFrame();
+		Textures_m::printFrame();
 
 		Text_Printer::handleRoutine(e);
 		SDL_RenderPresent(Renderer::g_Renderer);
@@ -67,7 +67,7 @@ int DialogEngine::choiceMode(string a, string b, string c = "", string d = "") {
 
 		SDL_RenderClear(Renderer::g_Renderer);
 		SDL_SetRenderDrawColor(Renderer::g_Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-		Textures_Manager::printFrame();
+		Textures_m::printFrame();
 		Text_Printer::handleRoutine(e);
 		SDL_RenderPresent(Renderer::g_Renderer);
 	}

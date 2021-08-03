@@ -2,20 +2,20 @@
 #include <ostream>
 #include <sstream>
 #include <algorithm>
-#include "Objects_Manager.h"
+#include "Objects_m.h"
 #include "Paths.h"
-#include "Textures_Manager.h"
+#include "Textures_m.h"
 #include "Map.h"
 #include <nlohmann/json.hpp>
 #include <iomanip>
 
 using json = nlohmann::json;
 
-vector<GObject> Objects_Manager::objects;
+vector<GObject> Objects_m::objects;
 ifstream* tempStream = NULL;
 
 
-void Objects_Manager::init() {
+void Objects_m::init() {
 	tempStream = loadFile(Paths::entData);
 	objects.clear();
 	if (tempStream == NULL) {
@@ -25,7 +25,7 @@ void Objects_Manager::init() {
 	loadObjects();
 }
 
-bool Objects_Manager::identify(string& target, string wanted) {
+bool Objects_m::identify(string& target, string wanted) {
 	string tempTarget = target;
 	if (target.size() < wanted.size()) return false;
 	tempTarget.erase(wanted.size(), target.size());
@@ -85,7 +85,7 @@ void loadSprite(GObject& obj, string meta) {
 	obj.textures.resource = meta;
 }
 
-void Objects_Manager::loadObjects() {
+void Objects_m::loadObjects() {
 	tempStream->seekg(0);
 
 	json objArray;
@@ -143,13 +143,13 @@ void Objects_Manager::loadObjects() {
 	}
 }
 
-void Objects_Manager::objectsRoutine(SDL_Event& e) {
+void Objects_m::objectsRoutine(SDL_Event& e) {
 	for (int i = 0; i < objects.size(); i++) {
 		objects[i].routine(e);
 	}
 }
 
-void Objects_Manager::trigger(SDL_Rect rect, bool contact) {
+void Objects_m::trigger(SDL_Rect rect, bool contact) {
 	for (GObject& obj : objects) {
 		SDL_Rect tempRect = obj.movingUnit.hitBox.sdl();
 		if (SDL_HasIntersection(&rect, &tempRect) && obj.bounded()) {
@@ -159,7 +159,7 @@ void Objects_Manager::trigger(SDL_Rect rect, bool contact) {
 	}
 }
 
-bool Objects_Manager::solidIntersect(SDL_Rect rect) {
+bool Objects_m::solidIntersect(SDL_Rect rect) {
 	for (GObject& obj : objects) {
 		SDL_Rect tempRect = obj.movingUnit.hitBox.sdl();
 		if (!obj.useMUnit)
@@ -172,7 +172,7 @@ bool Objects_Manager::solidIntersect(SDL_Rect rect) {
 	return false;
 }
 
-GObject& Objects_Manager::findObject(string target) {
+GObject& Objects_m::findObject(string target) {
 	int temp;
 	try {
 		temp = stoi(target);
@@ -187,7 +187,7 @@ GObject& Objects_Manager::findObject(string target) {
 	return objects[0];
 }
 
-GObject& Objects_Manager::findObject(int id) {
+GObject& Objects_m::findObject(int id) {
 	for (GObject& obj : objects) {
 		if (obj.ID == id)
 			return obj;
@@ -216,7 +216,7 @@ string getAndClear(string& str) {
 	return ret;
 }
 
-void Objects_Manager::fillObject(GObject& obj, string data) {
+void Objects_m::fillObject(GObject& obj, string data) {
 	while (!data.empty()) {
 		cleanSpaces(data);
 
@@ -266,7 +266,7 @@ void Objects_Manager::fillObject(GObject& obj, string data) {
 	}
 }
 
-void Objects_Manager::editObject(string data) {
+void Objects_m::editObject(string data) {
 	cleanSpaces(data);
 	string target = "";
 	for (int i = 0; i < data.size(); i++) {
@@ -281,7 +281,7 @@ void Objects_Manager::editObject(string data) {
 }
 
 //syntax in console : new ent <field1>: <value1>, <field2>: <value2> ...
-GObject& Objects_Manager::createObject(string data) {
+GObject& Objects_m::createObject(string data) {
 	GObject new_obj;
 
 	std::vector<int> idsVec;
@@ -301,7 +301,7 @@ GObject& Objects_Manager::createObject(string data) {
 	return objects.back();
 }
 
-int Objects_Manager::duplicate(GObject& obj) {
+int Objects_m::duplicate(GObject& obj) {
 	GObject& new_obj = createObject("");
 	int id = new_obj.ID;
 	new_obj = obj; new_obj.ID = id;
@@ -309,7 +309,7 @@ int Objects_Manager::duplicate(GObject& obj) {
 }
 
 
-void Objects_Manager::saveObjects() {
+void Objects_m::saveObjects() {
 	if (tempStream == NULL) return;
 	tempStream->close();
 
@@ -370,7 +370,7 @@ void Objects_Manager::saveObjects() {
 	ojs.close();
 }
 
-GObject& Objects_Manager::getObject(int index) {
+GObject& Objects_m::getObject(int index) {
 	if (index < 0 || index >= objects.size()) {
 		std::cout << "Error: Invalid index " << index << std::endl;
 		return objects[0];
@@ -378,13 +378,13 @@ GObject& Objects_Manager::getObject(int index) {
 	return objects[index];
 }
 
-tuple<int, int> Objects_Manager::newDoors(string levelName) {
+tuple<int, int> Objects_m::newDoors(string levelName) {
 	GObject& dest = createObject("texture: A2.png, type: DOOR, flags: INV, content: 1");
 	GObject& from = createObject("texture: A.png, type: DOOR, flags: CONTACT INV PERMANENT, content: 0 " + to_string(dest.ID) + " " + levelName);
 	return { from.ID, dest.ID };
 }
 
-void Objects_Manager::deleteObject(int id) {
+void Objects_m::deleteObject(int id) {
 	int i = 0;
 	for (GObject& obj : objects) {
 		if (obj.ID == id) {
