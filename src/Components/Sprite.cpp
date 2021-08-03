@@ -1,4 +1,4 @@
-#include "Sprites_Handler.h"
+#include "Sprite.h"
 #include "Renderer.h"
 
 SDL_Texture* crop_surface(SDL_Surface* sprite_sheet, int x, int y, int width, int height) {
@@ -11,12 +11,12 @@ SDL_Texture* crop_surface(SDL_Surface* sprite_sheet, int x, int y, int width, in
 	return newTexture;
 }
 
-SpritesHandler::SpritesHandler() {
+Sprite::Sprite() {
 	currentGroup = 0;
 	signalDone = false;
 }
 
-void SpritesHandler::addGroup(std::string sheet_name, int width_per_sprite, int height_per_sprite, int offsetX, int offsetY, int row_index, int nb_of_frames,
+void Sprite::addGroup(std::string sheet_name, int width_per_sprite, int height_per_sprite, int offsetX, int offsetY, int row_index, int nb_of_frames,
 	std::string group_name, int speed, bool playOnce, SDL_Color alpha) {
 
 	std::vector<SDL_Texture*> texturesVec;
@@ -32,11 +32,11 @@ void SpritesHandler::addGroup(std::string sheet_name, int width_per_sprite, int 
 	groups.push_back(sprite_group(texturesVec, speed, group_name, playOnce));
 }
 
-void SpritesHandler::setIdle(bool idle) {
+void Sprite::setIdle(bool idle) {
 	groups[currentGroup].idle = idle;
 }
 
-void SpritesHandler::setSingleFrame(std::string textureName) {
+void Sprite::setSingleFrame(std::string textureName) {
 	SDL_Texture* tex = Textures_m::findTexture(textureName);
 	if (tex == NULL) {
 		cout << "No texture found with name: " << textureName << endl;
@@ -52,7 +52,7 @@ void SpritesHandler::setSingleFrame(std::string textureName) {
 
 
 
-SDL_Texture* SpritesHandler::currentFrame() {
+SDL_Texture* Sprite::currentFrame() {
 	if (groups.size() < currentGroup + 1) {
 		return NULL;
 	}
@@ -81,7 +81,7 @@ SDL_Texture* SpritesHandler::currentFrame() {
 	return cg.textures[cg.index];
 }
 
-void SpritesHandler::setCurrentGroup(std::string group_name) {
+void Sprite::setCurrentGroup(std::string group_name) {
 	for (int i = 0; i < groups.size(); i++) {
 		groups[i].done = false;
 		if (groups[i].name == group_name) {
@@ -94,6 +94,6 @@ void SpritesHandler::setCurrentGroup(std::string group_name) {
 	//std::cout << "ERROR: SPRITE GROUP NOT FOUND (name: " << group_name << ")" << std::endl;
 }
 
-void SpritesHandler::clear() {
+void Sprite::clear() {
 	groups.clear();
 }

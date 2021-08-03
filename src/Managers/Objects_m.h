@@ -11,12 +11,15 @@ using namespace std;
 namespace Objects_m {
 	void init();
 
+	vector<int> getIntersections(c_rect rect);
 	GObject& findObject(string target);
 	GObject& findObject(int id);
 
 	bool identify(string& target, string wanted);
-	void loadObjects();
-	void saveObjects();
+	void loadLevel(string path);
+	void loadEnts(ifstream* file, map<int, GObject>& container);
+
+	void saveObjects(string path, map<int, GObject>& ents);
 	GObject& createObject(string data);
 	void fillObject(GObject& obj, string data);
 	void editObject(string data);
@@ -25,12 +28,15 @@ namespace Objects_m {
 	int duplicate(GObject& obj);
 
 	tuple<int, int> newDoors(string levelName);
-	void objectsRoutine(SDL_Event& e);
+	void routine(SDL_Event& e);
 
 	void trigger(SDL_Rect rect, bool contact);
 	bool solidIntersect(SDL_Rect rect);
 
-	extern vector<GObject> objects;
+	// extern vector<GObject> objects;
+	// extern map<int, GObject> objects;
+	extern string levelName;
+
 };
 
 

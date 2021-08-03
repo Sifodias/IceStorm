@@ -16,6 +16,10 @@ quadtree::Box<float> Map::getBox(mapNode node) {
 
 quadtree::Quadtree<Map::mapNode, decltype(Map::getBox)> Map::quadTest;
 
+void Map::tilemapToEnts() {
+	
+
+}
 void Map::loadLevel(std::string name) {
 	auto box = quadtree::Box(0.0f, 0.0f, (float)INT_MAX, (float)INT_MAX);
 	quadTest = quadtree::Quadtree<mapNode, quadtree::Box<float>(mapNode node)>(box, getBox);
@@ -37,7 +41,7 @@ void Map::loadLevel(std::string name) {
 	for (int i = 0; i < matrix[0].size(); i++) {
 		for (int j = 0; j < matrix[0][i].size(); j++) {
 			if (matrix[0][i][j]) {
-				mapNode node { matrix[0][i][j], {(float)j * GRID_W, (float)i * GRID_H, GRID_W, GRID_H} };
+				mapNode node{ matrix[0][i][j], {(float)j * GRID_W, (float)i * GRID_H, GRID_W, GRID_H} };
 				quadTest.add(node);
 			}
 		}

@@ -5,7 +5,7 @@
 #include "imgui_stdlib.h"
 #include "imgui_impl_sdl.h"
 #include "Builder.h"
-#include "Map.h"
+ 
 #include <string>
 #include <vector>
 #include <functional>
@@ -161,7 +161,7 @@ static void showCurrentObj(const char* prefix) {
     // Text and Tree nodes are less high than framed widgets, using AlignTextToFramePadding() we add vertical spacing to make the tree lines equal high.
     ImGui::AlignTextToFramePadding();
 
-    // // bool useSpritesHandler;  checkbox
+    // // bool useSprite;  checkbox
     addField("ID:", cur->ID);
     addField("target:", cur->target);
     addField("type:", cur->type);
@@ -244,7 +244,7 @@ void showActions() {
 
         ImGui::TableNextRow();
         addField("Current plan:", Builder::currentPlan);
-        std::string dummy = Map::levelname;
+        std::string dummy = Objects_m::levelName;
         addField("Current level:", dummy);
         addField("Load level:", toLoad, "LOAD", Builder::loadLevel);
 

@@ -2,27 +2,62 @@
 #include <ostream>
 #include <sstream>
 #include <algorithm>
-#include "Objects_m.h"
-#include "Paths.h"
-#include "Textures_m.h"
-#include "Map.h"
 #include <nlohmann/json.hpp>
 #include <iomanip>
+#include <map>
+#include "Paths.h"
+#include "Textures_m.h"
+
+#include "Objects_m.h"
+#include "Quadtree.h"
+#include "Save_m.h"
 
 using json = nlohmann::json;
+using namespace quadtree;
 
-vector<GObject> Objects_m::objects;
-ifstream* tempStream = NULL;
+map<int, GObject> blueprints;	// ents which cannot be placed on a map
+map<int, GObject> levelEnts;	// ents of the current level
+string Objects_m::levelName;
+
+struct quadNode {
+	int id;
+	c_rect rect;
+	bool operator==(const quadNode& rhs) const {
+		return (id == rhs.id) && (rect == rhs.rect);
+	}
+};
+
+Box<float> getBox(quadNode node) {
+	return Box<float>(node.rect.x, node.rect.y, node.rect.w, node.rect.h);
+}
+
+auto quadEnts = Quadtree<quadNode, Box<float>(quadNode node)>(Box(-(float)INT_MAX/2, -(float)INT_MAX/2, (float)INT_MAX, (float)INT_MAX), getBox);
+
+// map<int, GObject> objects;
+ifstream* bpFile = NULL;
+ifstream* levelFile = NULL;
+
+auto load = [](ifstream* file, string path, map<int, GObject>& container) {
+	file = loadFile(path);
+	if (file == NULL) {
+		std::cout << "Error: Couldn't load the file at path " << path << std::endl;
+		return;
+	}
+	container.clear();
+	Objects_m::loadEnts(file, container);
+};
 
 
 void Objects_m::init() {
-	tempStream = loadFile(Paths::entData);
-	objects.clear();
-	if (tempStream == NULL) {
-		printf("Error: Couldn't load data objects file\n");
-		return;
+	load(bpFile, Paths::blueprintsPath, blueprints);
+}
+
+void Objects_m::loadLevel(string name) {
+	load(levelFile, Paths::levelPath + name, levelEnts);
+	levelName = name;
+	for (auto& [id, obj] : levelEnts) {
+		quadEnts.add({ id, obj.movingUnit.hitBox });
 	}
-	loadObjects();
 }
 
 bool Objects_m::identify(string& target, string wanted) {
@@ -85,11 +120,11 @@ void loadSprite(GObject& obj, string meta) {
 	obj.textures.resource = meta;
 }
 
-void Objects_m::loadObjects() {
-	tempStream->seekg(0);
+void Objects_m::loadEnts(ifstream* file, map<int, GObject>& container) {
+	file->seekg(0);
 
 	json objArray;
-	*tempStream >> objArray;
+	*file >> objArray;
 	for (auto& ojs : objArray) {
 		GObject cur;
 
@@ -139,28 +174,43 @@ void Objects_m::loadObjects() {
 			}
 		}
 
-		objects.push_back(cur);
+		container[cur.ID] = cur;
 	}
 }
 
-void Objects_m::objectsRoutine(SDL_Event& e) {
-	for (int i = 0; i < objects.size(); i++) {
-		objects[i].routine(e);
+void Objects_m::routine(SDL_Event& e) {
+	for (auto& [id, obj] : levelEnts) {
+		obj.routine(e);
 	}
 }
 
 void Objects_m::trigger(SDL_Rect rect, bool contact) {
-	for (GObject& obj : objects) {
+	rect.x -= 1; rect.y -= 1; rect.w += 2; rect.h += 2;
+
+	for (auto& [id, obj] : levelEnts) {
 		SDL_Rect tempRect = obj.movingUnit.hitBox.sdl();
-		if (SDL_HasIntersection(&rect, &tempRect) && obj.bounded()) {
-			if (contact && obj.checkFlag("CONTACT") || !contact)
+		if (SDL_HasIntersection(&rect, &tempRect)) {
+			if ((contact && obj.checkFlag("CONTACT")) || !contact)
 				obj.trigger();
 		}
 	}
 }
 
+vector<int> Objects_m::getIntersections(c_rect rect) {
+	std::vector<quadNode> intersections = quadEnts.query(quadtree::Box<float>{(float)rect.x, (float)rect.y,
+		(float)rect.w, (float)rect.h});
+
+	vector<int> ret;
+
+	for (auto& node : intersections) {
+		ret.push_back(node.id);
+	}
+
+	return ret;
+}
+
 bool Objects_m::solidIntersect(SDL_Rect rect) {
-	for (GObject& obj : objects) {
+	for (auto& [id, obj] : levelEnts) {
 		SDL_Rect tempRect = obj.movingUnit.hitBox.sdl();
 		if (!obj.useMUnit)
 			continue;
@@ -179,20 +229,16 @@ GObject& Objects_m::findObject(string target) {
 		return findObject(temp);
 	}
 	catch (exception&) {
-		for (GObject& obj : objects) {
+		for (auto& [id, obj] : levelEnts) {
 			if (obj.target == target)
 				return obj;
 		}
 	}
-	return objects[0];
+	return levelEnts[0];
 }
 
 GObject& Objects_m::findObject(int id) {
-	for (GObject& obj : objects) {
-		if (obj.ID == id)
-			return obj;
-	}
-	return objects[0];
+	return levelEnts.contains(id) ? levelEnts[id] : levelEnts[0];
 }
 
 void cleanSpaces(string& str) {
@@ -285,7 +331,7 @@ GObject& Objects_m::createObject(string data) {
 	GObject new_obj;
 
 	std::vector<int> idsVec;
-	for (GObject& obj : objects) {
+	for (auto& [id, obj] : levelEnts) {
 		idsVec.push_back(obj.ID);
 	}
 	new_obj.ID = *std::max_element(idsVec.begin(), idsVec.end()) + 1;
@@ -293,12 +339,12 @@ GObject& Objects_m::createObject(string data) {
 	fillObject(new_obj, data);
 
 	// Might need to be parametrized
-	new_obj.levelBound = Map::levelname;
+	// new_obj.levelBound = Map::levelname;
 	new_obj.useMUnit = new_obj.checkFlag("DYNAMIC");
 
-	objects.push_back(new_obj);
+	levelEnts[new_obj.ID] = new_obj;
 
-	return objects.back();
+	return levelEnts[new_obj.ID];
 }
 
 int Objects_m::duplicate(GObject& obj) {
@@ -309,16 +355,16 @@ int Objects_m::duplicate(GObject& obj) {
 }
 
 
-void Objects_m::saveObjects() {
-	if (tempStream == NULL) return;
-	tempStream->close();
+void Objects_m::saveObjects(string path, map<int, GObject>& ents) {
+	// if (entsFile == NULL) return;
+	// entsFile->close();
 
 	std::ofstream ojs;
-	ojs.open(Paths::entData, std::ofstream::out | std::ofstream::trunc);
+	ojs.open(path, std::ofstream::out | std::ofstream::trunc);
 
 	json objArray = json::array();
 
-	for (GObject& obj : objects) {
+	for (auto& [id, obj] : ents) {
 		if (obj.checkFlag("DYNAMIC"))
 			continue;
 		objArray.push_back(json::object());
@@ -370,12 +416,8 @@ void Objects_m::saveObjects() {
 	ojs.close();
 }
 
-GObject& Objects_m::getObject(int index) {
-	if (index < 0 || index >= objects.size()) {
-		std::cout << "Error: Invalid index " << index << std::endl;
-		return objects[0];
-	}
-	return objects[index];
+GObject& Objects_m::getObject(int id) {
+	return levelEnts[id];
 }
 
 tuple<int, int> Objects_m::newDoors(string levelName) {
@@ -385,12 +427,6 @@ tuple<int, int> Objects_m::newDoors(string levelName) {
 }
 
 void Objects_m::deleteObject(int id) {
-	int i = 0;
-	for (GObject& obj : objects) {
-		if (obj.ID == id) {
-			objects.erase(objects.begin() + i);
-			return;
-		}
-		i++;
-	}
+	quadEnts.remove(quadNode{ id, levelEnts[id].movingUnit.hitBox });
+	levelEnts.erase(id);
 }

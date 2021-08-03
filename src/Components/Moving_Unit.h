@@ -23,6 +23,10 @@ public:
 	double y;
 	int w;
 	int h;
+	bool operator==(const c_rect& rhs) const {
+		return (w == rhs.w) && (h == rhs.h)
+			&& (abs(x - rhs.x) < 0.000000001) && (abs(y - rhs.y) < 0.000000001);
+	}
 };
 
 class Moving_Unit {

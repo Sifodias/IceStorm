@@ -1,6 +1,6 @@
 #include "Events_m.h"
 #include "Renderer.h"
-#include "Sprites_Handler.h"
+#include "Sprite.h"
 #include "Objects_m.h"
 #include "Character.h"
 #include "Builder.h"
@@ -113,7 +113,7 @@ void routinesBlock(SDL_Event& e) {
 	SDL_RenderClear(Renderer::g_Renderer);
 	Builder::routine(e);
 	Character::characterRoutine(e);
-	Objects_m::objectsRoutine(e);
+	Objects_m::routine(e);
 	Textures_m::printFrame();
 	Text_Printer::handleRoutine(e);
 

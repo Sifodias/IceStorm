@@ -32,9 +32,9 @@ public:
 };
 
 
-class SpritesHandler {
+class Sprite {
 public:
-	SpritesHandler();
+	Sprite();
 	SDL_Texture* currentFrame();
 	void setCurrentGroup(std::string group);
 	void addGroup(std::string sheet_name, int width_per_sprite, int height_per_sprite, int offsetX, int offsetY, int row_index, int nb_of_frames,

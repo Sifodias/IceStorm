@@ -1,12 +1,12 @@
 #include "Character.h"
-#include "Map.h"
+ 
 #include "Textures_m.h"
 #include "Paths.h"
 #include "Objects_m.h"
 #include "Controller.h"
 #include "Text_Printer.h"
 
-SpritesHandler Character::textures;
+Sprite Character::textures;
 Moving_Unit Character::movingUnit;
 bool Character::useMainOffsets;
 
@@ -47,11 +47,11 @@ void Character::characterRoutine(SDL_Event& e) {
 		}
 	}
 	if (Controller::checkAction(e, "use")) {
-		Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, false);
+		// Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, false);
 		Objects_m::trigger(movingUnit.hitBox.sdl(), false);
 	}
 	else {
-		Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, true);
+		// Map::trigger(movingUnit.hitBox.sdl(), movingUnit.mainDirection, true);
 		Objects_m::trigger(movingUnit.hitBox.sdl(), true);
 	}
 

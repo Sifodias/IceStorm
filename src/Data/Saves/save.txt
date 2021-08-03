@@ -1,7 +1,0 @@
-map: meaning
-charaMark: characterMarkerMap
-
-
-
-
-EOF

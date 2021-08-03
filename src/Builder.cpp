@@ -4,7 +4,7 @@
 #include <exception>
 #include "Builder.h"
 #include "Objects_m.h"
-#include "Map.h"
+ 
 #include "Camera.h"
 #include "Character.h"
 #include "Renderer.h"
@@ -176,18 +176,18 @@ void Builder::editObject(string str) {
 }
 
 void Builder::newPlan(int plan) {
-	while (Map::matrix.size() <= plan) {
-		std::vector<std::vector<int>> bitre;
-		Map::matrix.push_back(bitre);
-	}
+	// while (Map::matrix.size() <= plan) {
+	// 	std::vector<std::vector<int>> bitre;
+	// 	Map::matrix.push_back(bitre);
+	// }
 }
 
 void Builder::setPlan(int plan) {
-	if (Map::matrix.size() > plan) {
-		currentPlan = plan;
-	}
-	else
-		cout << "Error: The requested plan doesn't exist\n";
+	// if (Map::matrix.size() > plan) {
+	// 	currentPlan = plan;
+	// }
+	// else
+	// 	cout << "Error: The requested plan doesn't exist\n";
 
 }
 
@@ -198,25 +198,25 @@ void Builder::newLevel(std::string name) {
 }
 
 void Builder::clean() {
-	for (std::vector<std::vector<int>>& plan : Map::matrix) {
-		int toPop = 0;
-		int flaggy = 0;
-		for (int i = (int)plan.size() - 1; i >= 0; i--) {
-			for (int j = (int)plan[i].size() - 1; j >= 0; j--) {
-				if (plan[i][j] != 0) {
-					flaggy = 1;
-					break;
-				}
-				toPop++;
-			}
-			plan[i].erase(plan[i].end() - toPop, plan[i].end());
-			toPop = 0;
-			if (flaggy == 0) {
-				if (plan[i].size() == 0)
-					plan.erase(plan.begin() + i, plan.begin() + i + 1);
-			}
-		}
-	}
+	// for (std::vector<std::vector<int>>& plan : Map::matrix) {
+	// 	int toPop = 0;
+	// 	int flaggy = 0;
+	// 	for (int i = (int)plan.size() - 1; i >= 0; i--) {
+	// 		for (int j = (int)plan[i].size() - 1; j >= 0; j--) {
+	// 			if (plan[i][j] != 0) {
+	// 				flaggy = 1;
+	// 				break;
+	// 			}
+	// 			toPop++;
+	// 		}
+	// 		plan[i].erase(plan[i].end() - toPop, plan[i].end());
+	// 		toPop = 0;
+	// 		if (flaggy == 0) {
+	// 			if (plan[i].size() == 0)
+	// 				plan.erase(plan.begin() + i, plan.begin() + i + 1);
+	// 		}
+	// 	}
+	// }
 }
 
 void Builder::loadLevel(std::string name) {
@@ -224,24 +224,25 @@ void Builder::loadLevel(std::string name) {
 		std::cout << "ERROR: level name empty" << std::endl;
 		return;
 	}
-	Map::loadLevel(name);
-	Map::findOccurrence(69, &Character::movingUnit.hitBox.x, &Character::movingUnit.hitBox.y);
+	Objects_m::loadLevel(name);
+	// Map::loadLevel(name);
+	// Map::findOccurrence(69, &Character::movingUnit.hitBox.x, &Character::movingUnit.hitBox.y);
 }
 
 void Builder::placeElement(int x, int y, int plan = 0, bool secondary = false) {
-	if ((x + Camera::getX()) / GRID_W < 0
-		|| (y + Camera::getY()) / GRID_H < 0) return;
+	// if ((x + Camera::getX()) / GRID_W < 0
+	// 	|| (y + Camera::getY()) / GRID_H < 0) return;
 
-	std::vector<int> jaja(1, 0);
-	while (Map::matrix[plan].size() <= (int)((y + Camera::getY()) / GRID_H))
-		Map::matrix[plan].push_back(jaja);
+	// std::vector<int> jaja(1, 0);
+	// while (Map::matrix[plan].size() <= (int)((y + Camera::getY()) / GRID_H))
+	// 	Map::matrix[plan].push_back(jaja);
 
 
-	while (Map::matrix[plan][(int)((y + Camera::getY()) / GRID_H)].size() <= (int)((x + Camera::getX()) / GRID_W))
-		Map::matrix[plan][(int)((y + Camera::getY()) / GRID_H)].push_back(0);
+	// while (Map::matrix[plan][(int)((y + Camera::getY()) / GRID_H)].size() <= (int)((x + Camera::getX()) / GRID_W))
+	// 	Map::matrix[plan][(int)((y + Camera::getY()) / GRID_H)].push_back(0);
 
-	Map::matrix[plan][(int)((y + Camera::getY()) / GRID_H)]
-		[(int)((x + Camera::getX()) / GRID_W)] = secondary ? lastIdToPlace : idToPlace;
+	// Map::matrix[plan][(int)((y + Camera::getY()) / GRID_H)]
+	// 	[(int)((x + Camera::getX()) / GRID_W)] = secondary ? lastIdToPlace : idToPlace;
 
 }
 
@@ -345,7 +346,7 @@ void Builder::routine(SDL_Event& e) {
 			break;
 		}
 		case SDLK_n: {
-			Map::checkMate(currentPlan);
+			// Map::checkMate(currentPlan);
 			break;
 		}
 		case SDLK_x: {
@@ -375,51 +376,51 @@ void Builder::zoom(int focus) {
 }
 
 void Builder::trace(int set, int plan) {
-	int retObj = 0;
-	switch (Character::movingUnit.mainDirection) {
-	case 1:
-	for (int i = 0; i < 100; i++) {
-		if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan)) {
-			retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan);
-			break;
-		}
-	}
-	break;
+	// int retObj = 0;
+	// switch (Character::movingUnit.mainDirection) {
+	// case 1:
+	// for (int i = 0; i < 100; i++) {
+	// 	if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan)) {
+	// 		retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan);
+	// 		break;
+	// 	}
+	// }
+	// break;
 
-	case -1:
-	for (int i = 0; i > -100; i--) {
-		if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan)) {
-			retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan);
-			break;
-		}
-	}
-	break;
+	// case -1:
+	// for (int i = 0; i > -100; i--) {
+	// 	if (Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan)) {
+	// 		retObj = Map::getIdObject(Character::movingUnit.hitBox.y, i, Character::movingUnit.hitBox.x, 0, plan);
+	// 		break;
+	// 	}
+	// }
+	// break;
 
-	case 2:
-	for (int i = 0; i < 100; i++) {
-		if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan)) {
-			retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan);
-			break;
-		}
-	}
-	break;
+	// case 2:
+	// for (int i = 0; i < 100; i++) {
+	// 	if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan)) {
+	// 		retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan);
+	// 		break;
+	// 	}
+	// }
+	// break;
 
-	case -2:
-	for (int i = 0; i > -100; i--) {
-		if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan)) {
-			retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan);
-			break;
-		}
-	}
-	break;
-	}
-	printInfo(fetchObject(std::to_string(retObj)));
-	if (set) {
-		currentObject = &fetchObject(std::to_string(retObj));
-		lastIdToPlace = idToPlace;
-		idToPlace = currentObject->ID;
+	// case -2:
+	// for (int i = 0; i > -100; i--) {
+	// 	if (Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan)) {
+	// 		retObj = Map::getIdObject(Character::movingUnit.hitBox.y, 0, Character::movingUnit.hitBox.x, i, plan);
+	// 		break;
+	// 	}
+	// }
+	// break;
+	// }
+	// printInfo(fetchObject(std::to_string(retObj)));
+	// if (set) {
+	// 	currentObject = &fetchObject(std::to_string(retObj));
+	// 	lastIdToPlace = idToPlace;
+	// 	idToPlace = currentObject->ID;
 
-	}
+	// }
 }
 
 void Builder::newDoor(string levelname) {

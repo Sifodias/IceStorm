@@ -18,6 +18,7 @@ namespace Map {
 	void findOccurrence(int charry, double* ix, double* iy);
 	void saveMatrix();
 	void checkMate(int plan);
+	void tilemapToEnts();
 
 	extern std::vector<std::vector<std::vector<int>>> matrix;	//the matrix of the level	|  the pair indexes represent front plans, the odds back plans
 	extern std::string levelname;
@@ -28,5 +29,6 @@ namespace Map {
 	};
 	quadtree::Box<float> getBox(mapNode node);
 	extern quadtree::Quadtree<mapNode, decltype(getBox)> quadTest;
+
 	// quadtree::Quadtree<mapNode, decltype(getBox)> quadTest(quadtree::Box(0.0f, 0.0f, 1.0f, 1.0f), Map::getBox);
 };

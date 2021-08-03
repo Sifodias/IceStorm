@@ -5,7 +5,6 @@
 #include "Renderer.h"
 #include <iostream>
 #include "Paths.h"
-#include "Map.h"
 #include <SDL2/SDL_image.h>
 #include "Objects_m.h"
 #include "Camera.h"
@@ -91,23 +90,30 @@ SDL_Surface* Textures_m::findSurface(std::string name) {
 void Textures_m::printFrame() {
 	SDL_Rect rect_cursor = { 0, 0, GRID_W, GRID_H };
 
-	std::vector<Map::mapNode> toPrint = Map::quadTest.query(quadtree::Box<float>{(float)Camera::getX(), (float)Camera::getY(),
-		(float)Camera::outerRect.w, (float)Camera::outerRect.h});
+	
+	c_rect tati = c_rect((double)Camera::getX(), (double)Camera::getY(),
+		Camera::outerRect.w, Camera::outerRect.h);
 
-
-	for (Map::mapNode node : toPrint) {
-		GObject& obj = Objects_m::findObject(node.id);
-		if (!obj.checkFlag("DYNAMIC") && !obj.useMUnit) {
-			obj.blit({ node.rect.x - Camera::getX(), node.rect.y - Camera::getY() });
-		}
+	std::vector<int> ret = Objects_m::getIntersections(tati);
+		 
+	for (int id : ret) {
+		ob(id).blit();
 	}
 
-	/* Print the dynamic objects */
-	for (GObject& obj : Objects_m::objects) {
-		if (!obj.useMUnit || !obj.bounded())
-			continue;
-		obj.blit();
-	}
+
+	// for (Map::mapNode node : toPrint) {
+	// 	GObject& obj = Objects_m::findObject(node.id);
+	// 	if (!obj.checkFlag("DYNAMIC") && !obj.useMUnit) {
+	// 		obj.blit({ node.rect.x - Camera::getX(), node.rect.y - Camera::getY() });
+	// 	}
+	// }
+
+	// /* Print the dynamic objects */
+	// for (auto& [id, obj] : Objects_m::objects) {
+	// 	if (!obj.useMUnit || !obj.bounded())
+	// 		continue;
+	// 	obj.blit();
+	// }
 
 
 	/* Print the character */

@@ -3,7 +3,6 @@
 #include "Text_Printer.h"
 #include "Dialog_Engine.h"
 #include "Character.h"
-#include "Map.h"
 #include "Camera.h"
 #include "Events_m.h"
 #include "Audio_m.h"
@@ -60,11 +59,12 @@ void GObject::trigger() {
 			iss >> word;
 
 			/* Teleportation */
-			Map::loadLevel(word);
+			// Map::loadLevel(word);
+			Objects_m::loadLevel(word);
 			double x, y;
 			double* a = checkFlag("LOCKX") ? &x : &Character::movingUnit.hitBox.x;
 			double* b = checkFlag("LOCKY") ? &y : &Character::movingUnit.hitBox.y;
-			Map::findOccurrence(stoi(target), a, b);
+			// Map::findOccurrence(stoi(target), a, b);
 
 		}
 	}
@@ -119,5 +119,6 @@ void GObject::setCoord(std::tuple<double, double> coord) {
 }
 
 bool GObject::bounded() {
-	return levelBound == Map::levelname && checkFlag("DYNAMIC") && useMUnit;
+	// return levelBound == Map::levelname && checkFlag("DYNAMIC") && useMUnit;
+	return true;
 }

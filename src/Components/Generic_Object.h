@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include "Moving_Unit.h"
-#include "Sprites_Handler.h"
+#include "Sprite.h"
 
 /*
 type :
@@ -39,7 +39,7 @@ public:
 	std::vector<std::string> flags;
 	std::string type;
 
-	SpritesHandler textures;
+	Sprite textures;
 
 	bool enabled;
 	bool default_enabled;

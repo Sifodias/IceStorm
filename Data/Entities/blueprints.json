@@ -31,8 +31,71 @@
         "type": "DIALOG"
     },
     {
-        "ID": 69,
-        "target": "characterMarkerMap",
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
         "type": "GENERIC"
     },
     {
@@ -45,6 +108,195 @@
         "ID": 22,
         "target": "bck",
         "texture": "entry.png",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 69,
+        "target": "characterMarkerMap",
         "type": "GENERIC"
     },
     {
@@ -152,6 +404,50 @@
             "meaning1"
         ],
         "texture": "gateway.png",
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
+        "type": "GENERIC"
+    },
+    {
+        "ID": 0,
         "type": "GENERIC"
     },
     {

@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include "Moving_Unit.h"
-#include "Sprites_Handler.h"
+#include "Sprite.h"
 #include <fstream>
 
 namespace Character
@@ -12,7 +12,7 @@ namespace Character
 
 	
 
-	extern SpritesHandler textures;
+	extern Sprite textures;
 	extern Moving_Unit movingUnit;
 	
 

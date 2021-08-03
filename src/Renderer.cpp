@@ -4,9 +4,10 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include <string>
-#include "Map.h"
 
-#define FULLSCREEN 0
+#define FULLSCREEN 1
+
+using namespace std;
 
 SDL_Renderer* Renderer::g_Renderer = NULL;
 SDL_Window* Renderer::g_Window = NULL;

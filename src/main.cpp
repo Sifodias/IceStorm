@@ -1,5 +1,5 @@
 #include "Renderer.h"
-#include "Map.h"
+ 
 #include "Textures_m.h"
 #include "Character.h"
 #include <iostream>
@@ -45,7 +45,7 @@ void handleRoutines(SDL_Event& e) {
 	}
 
 	Character::characterRoutine(e);
-	Objects_m::objectsRoutine(e);
+	Objects_m::routine(e);
 	Events_m::routine();
 	Textures_m::printFrame();
 	Editor::routine(e);
@@ -59,10 +59,10 @@ void handleRoutines(SDL_Event& e) {
 }
 
 void engineQuit() {
-	if (SAVE_ENABLED) {
-		Map::saveMatrix();
-		Objects_m::saveObjects();
-	}
+	// if (SAVE_ENABLED) {
+	// 	Map::saveMatrix();
+	// Objects_m::saveObjects();
+	// }
 	Text_Printer::quit();
 	Textures_m::quit();
 	Audio_m::quit();
