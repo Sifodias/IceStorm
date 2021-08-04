@@ -119,7 +119,10 @@ namespace quadtree {
 
         void add(Node* node, std::size_t depth, const Box<Float>& box, const T& value) {
             assert(node != nullptr);
-            assert(box.contains(mGetBox(value)));
+            if (!box.contains(mGetBox(value))){
+                std::cout << "Out of bounds box" << std::endl;
+                return;
+            }
             if (isLeaf(node)) {
                 // Insert the value in this node if possible
                 if (depth >= MaxDepth || node->values.size() < Threshold)
@@ -161,7 +164,10 @@ namespace quadtree {
 
         void remove(Node* node, Node* parent, const Box<Float>& box, const T& value) {
             assert(node != nullptr);
-            assert(box.contains(mGetBox(value)));
+            if (!box.contains(mGetBox(value))) {
+                std::cout << "Out of bounds box" << std::endl;
+                return;
+            }
             if (isLeaf(node)) {
                 // Remove the value from node
                 removeValue(node, value);

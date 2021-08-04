@@ -31,7 +31,7 @@ Box<float> getBox(quadNode node) {
 	return Box<float>(node.rect.x, node.rect.y, node.rect.w, node.rect.h);
 }
 
-auto quadEnts = Quadtree<quadNode, Box<float>(quadNode node)>(Box(-(float)INT_MAX/2, -(float)INT_MAX/2, (float)INT_MAX, (float)INT_MAX), getBox);
+auto quadEnts = Quadtree<quadNode, Box<float>(quadNode node)>(Box(-(float)INT_MAX / 2, -(float)INT_MAX / 2, (float)INT_MAX, (float)INT_MAX), getBox);
 
 // map<int, GObject> objects;
 ifstream* bpFile = NULL;
@@ -47,7 +47,6 @@ auto load = [](ifstream* file, string path, map<int, GObject>& container) {
 	Objects_m::loadEnts(file, container);
 };
 
-
 void Objects_m::init() {
 	load(bpFile, Paths::blueprintsPath, blueprints);
 }
@@ -55,7 +54,7 @@ void Objects_m::init() {
 void Objects_m::loadLevel(string name) {
 	load(levelFile, Paths::levelPath + name, levelEnts);
 	levelName = name;
-	for (auto& [id, obj] : levelEnts) {
+	for (auto [id, obj] : levelEnts) {
 		quadEnts.add({ id, obj.movingUnit.hitBox });
 	}
 }

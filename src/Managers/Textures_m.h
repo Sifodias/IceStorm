@@ -38,7 +38,7 @@ public:
 namespace Textures_m {
 	void init(std::string str = "");	//Loads all the images
 	void quit();
-	void printFrame(); //blits according to the matrix, the textures and the grid
+	void printFrame();
 
 	SDL_Texture* findTexture(std::string name);
 	SDL_Surface* findSurface(std::string name);
